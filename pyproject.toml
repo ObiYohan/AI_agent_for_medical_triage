@@ -1,0 +1,20 @@
+[project]
+name = "AI_agent_for_medical_triage"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Johan", email = "obiyohan@free.fr" }
+]
+requires-python = ">=3.14"
+dependencies = []
+
+[tool.uv.build-backend]
+module-name = "projet_14"
+
+[project.scripts]
+projet-14 = "projet_14:main"
+
+[build-system]
+requires = ["uv_build>=0.12.6,<0.13.0"]
+build-backend = "uv_build"
