@@ -8,3 +8,18 @@ wheels/
 
 # Virtual environments
 .venv
+
+# AI agent
+CLAUDE.md
+# Échantillons de contrôle RGPD (contiennent les valeurs d'origine)
+reports/rgpd/*.review.txt
+reports/rgpd/
+
+# perso 
+Notes.md
+
+# outputs
+outputs/
+
+# data
+data/
