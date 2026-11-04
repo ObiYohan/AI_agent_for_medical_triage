@@ -8,13 +8,19 @@ authors = [
 ]
 requires-python = ">=3.14"
 dependencies = [
+    "accelerate>=1.15.0",
     "datasets>=5.1.0",
     "en-core-web-md",
     "fr-core-news-md",
     "ipykernel>=7.4.0",
+    "mlflow>=3.18.0",
     "pandas>=3.0.6",
+    "peft>=0.21.2",
     "presidio-analyzer>=2.2.366",
     "presidio-anonymizer>=2.2.366",
+    "torch>=2.15.0",
+    "transformers>=5.22.1",
+    "trl>=1.17.1",
 ]
 
 [tool.uv.build-backend]
