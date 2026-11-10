@@ -26,6 +26,9 @@ from presidio_anonymizer.entities import OperatorConfig
 
 SPACY_MODELS = {"fr": "fr_core_news_md", "en": "en_core_web_md"}
 
+# Champs conversationnels anonymisés : `messages` (SFT) ou `prompt` / `chosen` / `rejected` (DPO).
+MESSAGE_FIELDS = ("messages", "prompt", "chosen", "rejected")
+
 # Chaque nom détecté est remplacé par cette balise.
 OPERATORS = {"PERSON": OperatorConfig("replace", {"new_value": "<PERSON>"})}
 
@@ -125,19 +128,34 @@ def anonymize_text(text, lang, analyzer, anonymizer, threshold, discarded: Count
 
 
 def run(
-    input_path: Path, lang: str = "fr", threshold: float = 0.5, output_dir: Path = Path("data/anonymized")
+    input_path: Path,
+    lang: str = "fr",
+    threshold: float = 0.5,
+    output_dir: Path = Path("data/anonymized"),
+    sources: list[str] | None = None,
+    fields: list[str] | None = None,
 ) -> dict:
-    """Anonymise un fichier JSONL, écrit le fichier anonymisé et le rapport, et renvoie le rapport."""
+    """Anonymise un fichier JSONL, écrit le fichier anonymisé et le rapport, et renvoie le rapport.
+
+    `sources` : si fourni, seuls les enregistrements dont le champ `source` est dans cette liste sont
+    anonymisés (sources contenant des échanges réels) ; les autres sont recopiés tels quels.
+    `fields` : champs conversationnels à anonymiser (par défaut tous ceux de MESSAGE_FIELDS).
+    """
+    fields = list(fields or MESSAGE_FIELDS)
     input_path, output_dir = Path(input_path), Path(output_dir)
     analyzer = build_analyzer(lang)
     anonymizer = AnonymizerEngine()
     records = [json.loads(line) for line in input_path.read_text(encoding="utf-8").splitlines() if line.strip()]
 
-    replaced, modified_records, discarded = 0, 0, Counter()
+    replaced, modified_records, scanned_records, discarded = 0, 0, 0, Counter()
     for record in records:
         record_count = 0
+        if sources is not None and record.get("source") not in sources:
+            record["persons_replaced"] = 0
+            continue
+        scanned_records += 1
         # Le message system est un gabarit commun, sans donnée personnelle.
-        for message in record["messages"]:
+        for message in (m for field in fields for m in record.get(field, [])):
             if message["role"] != "system":
                 message["content"], count = anonymize_text(
                     message["content"], lang, analyzer, anonymizer, threshold, discarded
@@ -159,7 +177,10 @@ def run(
         "lang": lang,
         "spacy_model": SPACY_MODELS[lang],
         "threshold": threshold,
+        "sources": sources,
+        "fields": fields,
         "records": len(records),
+        "records_scanned": scanned_records,
         "records_modified": modified_records,
         "persons_replaced": replaced,
         "detections_discarded": dict(discarded),
@@ -172,7 +193,7 @@ def run(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Anonymisation simplifiée des noms de personnes d'un JSONL.")
-    parser.add_argument("input", type=Path, help="Fichier JSONL au format `messages`")
+    parser.add_argument("input", type=Path, help="Fichier JSONL au format `messages` (SFT) ou `prompt`/`chosen`/`rejected` (DPO)")
     parser.add_argument("--lang", default="fr", choices=sorted(SPACY_MODELS))
     parser.add_argument("--threshold", type=float, default=0.5, help="Score minimal de détection")
     parser.add_argument("--output-dir", type=Path, default=Path("data/anonymized"))
