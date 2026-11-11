@@ -134,12 +134,15 @@ def run(
     output_dir: Path = Path("data/anonymized"),
     sources: list[str] | None = None,
     fields: list[str] | None = None,
+    roles: list[str] | None = None,
 ) -> dict:
     """Anonymise un fichier JSONL, écrit le fichier anonymisé et le rapport, et renvoie le rapport.
 
     `sources` : si fourni, seuls les enregistrements dont le champ `source` est dans cette liste sont
     anonymisés (sources contenant des échanges réels) ; les autres sont recopiés tels quels.
     `fields` : champs conversationnels à anonymiser (par défaut tous ceux de MESSAGE_FIELDS).
+    `roles` : rôles des messages à anonymiser (par défaut tous, sauf system), par exemple ["user"] pour ne pas
+    toucher aux réponses de l'assistant quand ce sont des énoncés médicaux sans donnée patient.
     """
     fields = list(fields or MESSAGE_FIELDS)
     input_path, output_dir = Path(input_path), Path(output_dir)
@@ -156,7 +159,7 @@ def run(
         scanned_records += 1
         # Le message system est un gabarit commun, sans donnée personnelle.
         for message in (m for field in fields for m in record.get(field, [])):
-            if message["role"] != "system":
+            if message["role"] != "system" and (roles is None or message["role"] in roles):
                 message["content"], count = anonymize_text(
                     message["content"], lang, analyzer, anonymizer, threshold, discarded
                 )
@@ -179,6 +182,7 @@ def run(
         "threshold": threshold,
         "sources": sources,
         "fields": fields,
+        "roles": roles,
         "records": len(records),
         "records_scanned": scanned_records,
         "records_modified": modified_records,
