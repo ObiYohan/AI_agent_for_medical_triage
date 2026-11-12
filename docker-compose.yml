@@ -1,0 +1,47 @@
+# Démonstration locale : vLLM (GPU) + API FastAPI
+# Lancement : docker compose up -d   (le premier démarrage télécharge l'image vLLM, ~10 Go)
+services:
+  vllm:
+    image: vllm/vllm-openai:v0.32.0
+    command:
+      - --model=/model
+      - --served-model-name=qwen3-medical
+      - --chat-template=/model/chat_template.jinja  # même gabarit qu'à l'entraînement
+      - --max-model-len=2048
+      - --gpu-memory-utilization=0.8                # ~1 Go du GPU est déjà pris par l'affichage Windows
+    volumes:
+      # Modèle fusionné (SFT + DPO) produit par la section 7.5 de sft_lora.ipynb
+      - ${MODEL_DIR:-./outputs/dpo-lora-r16-v3-beta0.1-lr5e-05-seed42/merged}:/model:ro
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    # Pas de port publié : vLLM n'est joignable que par l'API, sur le réseau interne de compose
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 300s  # chargement du modèle au démarrage
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    environment:
+      API_KEY: ${API_KEY:?Définir API_KEY dans le fichier .env}
+      VLLM_URL: http://vllm:8000
+      MODEL_NAME: qwen3-medical
+      AUDIT_LOG: /logs/audit.jsonl
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./logs:/logs  # journal d'audit, conservé hors du conteneur
+    depends_on:
+      vllm:
+        condition: service_healthy
+    restart: unless-stopped

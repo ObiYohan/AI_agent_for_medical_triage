@@ -23,3 +23,6 @@ outputs/
 
 # data
 data/
+# Phase 3 : secrets et journal d'audit
+.env
+logs/

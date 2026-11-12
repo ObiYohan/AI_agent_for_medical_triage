@@ -1,0 +1,25 @@
+# Intégration continue : tests de l'API (sans GPU, vLLM simulé) et construction de son image Docker
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # Dépendances de l'API seulement : pas de torch ni de Presidio
+      - run: pip install -r api/requirements.txt pytest
+      - run: pytest tests -v
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: tests
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -f api/Dockerfile -t triage-api .
