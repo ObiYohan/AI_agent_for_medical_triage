@@ -90,6 +90,25 @@ def user_content(row, *, multiple_answers: bool) -> str:
     return f"{context}\n\n{OPTIONS_HEADER}\n{options_text(row)}\n\n{instruction}"
 
 
+def parse_user_content(text: str) -> dict:
+    """Inverse de `user_content` : cas clinique, question, propositions et type de QCM d'un message user.
+
+    Sert à rejouer les QCM du jeu de test contre l'API (tests d'intégration, mesures de latence). La question est
+    le dernier paragraphe avant les propositions ; ce qui précède est le cas clinique.
+    """
+    context, rest = text.split(f"\n\n{OPTIONS_HEADER}\n")
+    options, instruction = rest.rsplit("\n\n", 1)
+    *case, question = context.split("\n\n")
+    # « A. texte » en début de ligne ; une proposition peut s'étendre sur plusieurs lignes
+    parts = re.split(rf"^([{LETTERS}])\. ", options, flags=re.MULTILINE)[1:]
+    return {
+        "cas_clinique": "\n\n".join(case) or None,
+        "question": question,
+        "propositions": {letter: option.rstrip("\n") for letter, option in zip(parts[::2], parts[1::2])},
+        "reponses_multiples": instruction == MULTIPLE_ANSWERS,
+    }
+
+
 def correct_letters(row) -> list[str]:
     """Lettres des bonnes réponses d'après le corrigé, dans l'ordre A à E."""
     return sorted(letter.strip().upper() for letter in row["correct_answers"].split(","))

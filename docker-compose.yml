@@ -1,17 +1,19 @@
 # Démonstration locale : vLLM (GPU) + API FastAPI
-# Lancement : docker compose up -d   (le premier démarrage télécharge l'image vLLM, ~10 Go)
+# Lancement : docker compose up -d   (premier démarrage : image vLLM ~10 Go, puis modèle 3,4 Go depuis le Hub)
 services:
   vllm:
     image: vllm/vllm-openai:v0.32.0
     command:
-      - --model=/model
+      # Modèle fusionné SFT + DPO v3, sur Hugging Face Hub (dépôt privé), à une révision fixe : reproductible
+      - --model=${MODEL:-0biyohan/qwen3-1.7b-medical-qcm-fr}
+      - --revision=${MODEL_REVISION:-476fed3104b92d446e5c915a6adea7338825c255}
       - --served-model-name=qwen3-medical
-      - --chat-template=/model/chat_template.jinja  # même gabarit qu'à l'entraînement
       - --max-model-len=2048
-      - --gpu-memory-utilization=0.8                # ~1 Go du GPU est déjà pris par l'affichage Windows
+      - --gpu-memory-utilization=0.8  # ~1 Go du GPU est déjà pris par l'affichage Windows
+    environment:
+      HF_TOKEN: ${HF_TOKEN:?Définir HF_TOKEN (jeton Hugging Face en lecture) dans le fichier .env}
     volumes:
-      # Modèle fusionné (SFT + DPO) produit par la section 7.5 de sft_lora.ipynb
-      - ${MODEL_DIR:-./outputs/dpo-lora-r16-v3-beta0.1-lr5e-05-seed42/merged}:/model:ro
+      - hf-cache:/root/.cache/huggingface  # le modèle n'est téléchargé qu'une fois
     deploy:
       resources:
         reservations:
@@ -25,7 +27,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
-      start_period: 300s  # chargement du modèle au démarrage
+      start_period: 600s  # téléchargement (premier démarrage) et chargement du modèle
     restart: unless-stopped
 
   api:
@@ -45,3 +47,6 @@ services:
       vllm:
         condition: service_healthy
     restart: unless-stopped
+
+volumes:
+  hf-cache:

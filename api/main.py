@@ -13,17 +13,18 @@ Variables d'environnement :
 import hashlib
 import json
 import os
+import re
 import secrets
 import time
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Literal
+from typing import Annotated, Literal
 
 import httpx
 from fastapi import Depends, FastAPI, HTTPException, Security
 from fastapi.security import APIKeyHeader
-from pydantic import BaseModel, Field
+from pydantic import AfterValidator, BaseModel, Field, StringConstraints
 
 from projet_14.mediqal import LETTERS, SYSTEM_PROMPT, answer_letters, user_content
 
@@ -45,13 +46,31 @@ def settings() -> dict:
 def check_api_key(key: str | None = Security(APIKeyHeader(name="X-API-Key", auto_error=False))) -> None:
     expected = settings()["api_key"]
     if not expected or not key or not secrets.compare_digest(key, expected):
+        # Accès refusé : tracé aussi (sans la clé reçue)
+        write_audit({"timestamp": datetime.now(timezone.utc).isoformat(), "status": "unauthorized"})
         raise HTTPException(status_code=401, detail="Clé d'API absente ou invalide")
 
 
+SPECIAL_TOKEN = re.compile(r"<\|[^|<>]*\|>")
+
+
+def no_special_tokens(text: str) -> str:
+    # Les balises du gabarit (<|im_start|>, <|im_end|>, <|endoftext|>…) écrites dans le texte deviennent de vrais
+    # tokens spéciaux : l'utilisateur pourrait fermer son message et injecter un faux message système
+    if SPECIAL_TOKEN.search(text):
+        raise ValueError("balise de gabarit interdite (<|…|>)")
+    return text
+
+
+Safe = AfterValidator(no_special_tokens)
+# Proposition : texte non vide après suppression des espaces
+Option = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=1_000), Safe]
+
+
 class QCMRequest(BaseModel):
-    cas_clinique: str | None = Field(default=None, max_length=10_000)
-    question: str = Field(min_length=1, max_length=2_000)
-    propositions: dict[Literal["A", "B", "C", "D", "E"], str] = Field(min_length=2)
+    cas_clinique: Annotated[str, Safe] | None = Field(default=None, max_length=10_000)
+    question: Annotated[str, Safe] = Field(min_length=1, max_length=2_000)
+    propositions: dict[Literal["A", "B", "C", "D", "E"], Option] = Field(min_length=2)
     reponses_multiples: bool = False
 
 
@@ -59,9 +78,16 @@ class QCMResponse(BaseModel):
     request_id: str
     lettres: list[str]
     reponse: str
+    # Réponse exploitable : au moins une lettre, seulement des lettres proposées, en nombre conforme à la consigne
+    format_valide: bool
     modele: str
     latence_ms: int
     avertissement: str = WARNING
+
+
+def valid_format(letters: list[str], request: QCMRequest) -> bool:
+    expected_count_ok = len(letters) >= 2 if request.reponses_multiples else len(letters) == 1
+    return bool(letters) and set(letters) <= set(request.propositions) and expected_count_ok
 
 
 def build_messages(request: QCMRequest) -> list[dict]:
@@ -116,12 +142,27 @@ async def qcm(request: QCMRequest) -> QCMResponse:
     }
     try:
         answer = await call_vllm(build_messages(request), max_tokens=192 if request.reponses_multiples else 64)
+    except httpx.HTTPStatusError as error:
+        if error.response.status_code != 400:
+            raise_unavailable(audit, start, error)
+        # vLLM refuse la requête : le prompt dépasse la longueur maximale du modèle (--max-model-len)
+        write_audit(audit | {"status": "rejected", "error": "input_too_long", "latency_ms": elapsed_ms(start)})
+        raise HTTPException(status_code=422, detail="Entrée trop longue pour le modèle") from error
     except httpx.HTTPError as error:
-        write_audit(audit | {"status": "error", "error": type(error).__name__,
-                             "latency_ms": round((time.perf_counter() - start) * 1000)})
-        raise HTTPException(status_code=503, detail="Serveur d'inférence indisponible") from error
+        raise_unavailable(audit, start, error)
 
-    latency_ms = round((time.perf_counter() - start) * 1000)
+    latency_ms = elapsed_ms(start)
     letters = sorted(answer_letters(answer))
-    write_audit(audit | {"status": "ok", "letters": letters, "latency_ms": latency_ms})
-    return QCMResponse(request_id=request_id, lettres=letters, reponse=answer, modele=model, latence_ms=latency_ms)
+    format_ok = valid_format(letters, request)
+    write_audit(audit | {"status": "ok", "letters": letters, "format_valide": format_ok, "latency_ms": latency_ms})
+    return QCMResponse(request_id=request_id, lettres=letters, reponse=answer, format_valide=format_ok,
+                       modele=model, latence_ms=latency_ms)
+
+
+def elapsed_ms(start: float) -> int:
+    return round((time.perf_counter() - start) * 1000)
+
+
+def raise_unavailable(audit: dict, start: float, error: Exception):
+    write_audit(audit | {"status": "error", "error": type(error).__name__, "latency_ms": elapsed_ms(start)})
+    raise HTTPException(status_code=503, detail="Serveur d'inférence indisponible") from error

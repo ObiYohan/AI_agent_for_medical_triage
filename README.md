@@ -28,12 +28,13 @@ décrites dans le rapport généré.
 Le modèle fusionné (SFT + DPO, section 7.5 de `notebook/sft_lora.ipynb`) est servi par **vLLM** et exposé par une
 API **FastAPI**. Les deux services tournent dans Docker (`docker-compose.yml`).
 
-Prérequis : Docker avec accès au GPU (NVIDIA Container Toolkit) et le modèle dans
-`outputs/dpo-lora-r16-v3-beta0.1-lr5e-05-seed42/merged` (autre dossier : variable `MODEL_DIR`).
+Prérequis : Docker avec accès au GPU (NVIDIA Container Toolkit) et un jeton Hugging Face en lecture. Le modèle
+est téléchargé depuis le dépôt privé [`0biyohan/qwen3-1.7b-medical-qcm-fr`](https://huggingface.co/0biyohan/qwen3-1.7b-medical-qcm-fr),
+à une révision fixée dans `docker-compose.yml` (variables `MODEL` et `MODEL_REVISION` pour en changer).
 
 ```bash
-cp .env.example .env          # puis définir API_KEY
-docker compose up -d          # premier lancement : téléchargement de l'image vLLM (~10 Go) et chargement du modèle
+cp .env.example .env          # puis définir API_KEY et HF_TOKEN
+docker compose up -d          # premier lancement : image vLLM (~10 Go) et modèle (3,4 Go), mis en cache ensuite
 curl localhost:8080/health
 ```
 
@@ -54,7 +55,9 @@ curl -X POST localhost:8080/qcm -H "X-API-Key: $API_KEY" -H "Content-Type: appli
 | `POST /qcm` | QCM au format de l'entraînement → lettre(s) et texte de la réponse. Clé d'API obligatoire (`X-API-Key`) |
 | `GET /health` | état de l'API et de vLLM |
 | `logs/audit.jsonl` | une ligne par requête : identifiant, horodatage, modèle, latence, lettres, empreinte SHA-256 de l'entrée (le texte du cas n'est pas conservé) |
-| `tests/` | tests de l'API sans GPU (vLLM simulé) : `uv run --with-requirements api/requirements.txt --with pytest pytest tests` |
+| `tests/test_api.py` | tests de l'API sans GPU (vLLM simulé), lancés aussi par la CI : `uv run --with-requirements api/requirements.txt --with pytest pytest tests` |
+| `tests/integration/` | robustesse et audit de traçabilité contre la pile démarrée : `INTEGRATION_API_URL=http://localhost:8080 API_KEY=<clé> uv run --with-requirements api/requirements.txt --with pytest pytest tests/integration` (arrêt / redémarrage de vLLM avec `ROBUSTESSE_ARRET_VLLM=1`) |
+| `scripts/latency.py` | latence et débit à 1, 10 et 50 requêtes simultanées (API de bout en bout, puis vLLM seul : TTFT, TPOT), exactitude des réponses ; résultats dans MLflow (expérience `qwen3-1.7b-serving`) : `API_KEY=<clé> uv run python scripts/latency.py [--mlflow dagshub]` |
 | `.github/workflows/ci.yml` | à chaque push : tests, puis construction de l'image de l'API |
 
 Le port de vLLM n'est pas publié : seule l'API est accessible. Démonstration technique, ne remplace pas un avis médical.
