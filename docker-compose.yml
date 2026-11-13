@@ -1,5 +1,8 @@
 # Démonstration locale : vLLM (GPU) + API FastAPI
-# Lancement : docker compose up -d   (premier démarrage : image vLLM ~10 Go, puis modèle 3,4 Go depuis le Hub)
+# Lancement : docker compose up -d --build   (premier démarrage : image vLLM ~10 Go, puis modèle 3,4 Go depuis le Hub)
+# Nom fixe : la pile lancée à la main et celle déployée par la CD sont la même (un seul GPU, un seul port 8080)
+name: p14
+
 services:
   vllm:
     image: vllm/vllm-openai:v0.32.0
@@ -31,6 +34,9 @@ services:
     restart: unless-stopped
 
   api:
+    # En développement : image construite localement (docker compose up -d --build)
+    # En déploiement (CD) : image publiée par la CI sur GHCR, à la version du commit (API_IMAGE)
+    image: ${API_IMAGE:-p14-api}
     build:
       context: .
       dockerfile: api/Dockerfile

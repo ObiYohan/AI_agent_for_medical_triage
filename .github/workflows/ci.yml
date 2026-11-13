@@ -1,9 +1,16 @@
-# Intégration continue : tests de l'API (sans GPU, vLLM simulé) et construction de son image Docker
-name: CI
+# CI/CD
+# - À chaque push et pull request : tests de l'API (sans GPU, vLLM simulé), puis construction de son image Docker
+# - Sur master : publication de l'image sur GHCR, puis déploiement sur la machine GPU (runner auto-hébergé)
+#   et tests d'intégration contre la pile déployée
+name: CI/CD
 
 on:
   push:
   pull_request:
+  workflow_dispatch:  # relance manuelle depuis l'onglet Actions
+
+env:
+  IMAGE: ghcr.io/obiyohan/triage-api  # GHCR exige un nom en minuscules
 
 jobs:
   tests:
@@ -17,9 +24,62 @@ jobs:
       - run: pip install -r api/requirements.txt pytest
       - run: pytest tests -v
 
-  docker:
+  image:
     runs-on: ubuntu-latest
     needs: tests
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v4
-      - run: docker build -f api/Dockerfile -t triage-api .
+      - name: Construction
+        run: >
+          docker build -f api/Dockerfile
+          -t "$IMAGE:${{ github.sha }}" -t "$IMAGE:latest"
+          --label "org.opencontainers.image.source=https://github.com/${{ github.repository }}"
+          --label "org.opencontainers.image.revision=${{ github.sha }}" .
+      - name: Publication sur GHCR (master seulement)
+        if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+          docker push "$IMAGE:${{ github.sha }}"
+          docker push "$IMAGE:latest"
+
+  deploy:
+    # Machine GPU : runner auto-hébergé, étiquette « gpu ». Jamais pour une pull request : le code d'un tiers
+    # ne doit pas s'exécuter sur cette machine
+    if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
+    runs-on: [self-hosted, gpu]
+    needs: image
+    concurrency: deploy  # un seul déploiement à la fois
+    permissions:
+      contents: read
+      packages: read
+    env:
+      API_IMAGE: ghcr.io/obiyohan/triage-api:${{ github.sha }}
+      API_KEY: ${{ secrets.API_KEY }}
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Déploiement
+        # Dossier de déploiement fixe, hors du dossier de travail du runner : le journal d'audit y est conservé
+        run: |
+          deploy_dir="$HOME/p14-deploy"
+          mkdir -p "$deploy_dir"
+          cp docker-compose.yml "$deploy_dir/"
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+          cd "$deploy_dir"
+          docker compose pull api
+          docker compose up -d --no-build --remove-orphans
+      - name: Attente de vLLM
+        run: |
+          for i in $(seq 1 90); do
+            curl -fs localhost:8080/health | grep -q '"vllm":"ok"' && exit 0
+            sleep 10
+          done
+          echo "vLLM n'est pas prêt après 15 min" && exit 1
+      - name: Tests d'intégration
+        run: |
+          export AUDIT_LOG="$HOME/p14-deploy/logs/audit.jsonl" INTEGRATION_API_URL=http://localhost:8080
+          "$HOME/.local/bin/uv" run --no-project --python 3.12 --with-requirements api/requirements.txt --with pytest \
+            pytest tests/integration -v

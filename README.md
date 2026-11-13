@@ -58,6 +58,11 @@ curl -X POST localhost:8080/qcm -H "X-API-Key: $API_KEY" -H "Content-Type: appli
 | `tests/test_api.py` | tests de l'API sans GPU (vLLM simulé), lancés aussi par la CI : `uv run --with-requirements api/requirements.txt --with pytest pytest tests` |
 | `tests/integration/` | robustesse et audit de traçabilité contre la pile démarrée : `INTEGRATION_API_URL=http://localhost:8080 API_KEY=<clé> uv run --with-requirements api/requirements.txt --with pytest pytest tests/integration` (arrêt / redémarrage de vLLM avec `ROBUSTESSE_ARRET_VLLM=1`) |
 | `scripts/latency.py` | latence et débit à 1, 10 et 50 requêtes simultanées (API de bout en bout, puis vLLM seul : TTFT, TPOT), exactitude des réponses ; résultats dans MLflow (expérience `qwen3-1.7b-serving`) : `API_KEY=<clé> uv run python scripts/latency.py [--mlflow dagshub]` |
-| `.github/workflows/ci.yml` | à chaque push : tests, puis construction de l'image de l'API |
+| `.github/workflows/ci.yml` | CI/CD : à chaque push, tests puis construction de l'image de l'API ; sur `master`, publication sur GHCR (`ghcr.io/obiyohan/triage-api:<commit>`), déploiement sur la machine GPU (runner auto-hébergé, étiquette `gpu`, dossier `~/p14-deploy`) et tests d'intégration contre la pile déployée |
+
+**Déploiement continu** : secrets `API_KEY` et `HF_TOKEN` dans GitHub (*Settings → Secrets and variables → Actions*),
+runner auto-hébergé avec l'étiquette `gpu` sur la machine qui sert la démonstration. Un nouveau commit sur `master`
+remplace le conteneur de l'API sans redémarrer vLLM. Retour à une version précédente : relancer (*Re-run all jobs*)
+le workflow d'un commit antérieur dans l'onglet *Actions*.
 
 Le port de vLLM n'est pas publié : seule l'API est accessible. Démonstration technique, ne remplace pas un avis médical.
