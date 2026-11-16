@@ -1,5 +1,18 @@
 # Agent IA de triage médical : POC
 
+## Sources des données et licences
+
+| Source | Contenu utilisé | Langue | Licence | Usage dans le projet |
+|---|---|---|---|---|
+| [ANR-MALADES/MediQAl](https://huggingface.co/datasets/ANR-MALADES/MediQAl) | QCM médicaux rédigés par des enseignants en médecine, avec ou sans cas clinique : configurations `mcqu` (une bonne réponse) et `mcqm` (plusieurs bonnes réponses), avec leur corrigé | fr | CC-BY-4.0 | SFT (`mcqu`, `mcqm`) et DPO (`mcqm` : `rejected` construit à partir des distracteurs et du corrigé) |
+| [TsinghuaC3I/UltraMedical-Preference](https://huggingface.co/datasets/TsinghuaC3I/UltraMedical-Preference) | Questions biomédicales (examens, ChatDoctor, MedQuad, Wikipédia…) et réponses de plusieurs LLM notées par GPT-4 ; split `test` revu par des experts (Medical RewardBench) | en | MIT | SFT (meilleure réponse vérifiée) et DPO (paires vérifiées par le corrigé ou par l'écart de note) |
+| [Qwen/Qwen3-1.7B-Base](https://huggingface.co/Qwen/Qwen3-1.7B-Base) | Modèle de base | — | Apache 2.0 | Point de départ du SFT LoRA puis du DPO |
+
+- **Préparation** : un notebook par jeu dans `notebook/` (`data_prep_MediQAl`, `data_prep_SFT_MediQAl_mcqm`, `data_prep_DPO_MediQAl_mcqm`, `data_prep_SFT_UltraMedical`, `data_prep_DPO_UltraMedical`), avec les filtres, les contrôles et les limites de chaque source.
+- **Données dérivées** : nettoyées, filtrées et anonymisées (Presidio), au format JSONL (`messages` pour le SFT, `prompt` / `chosen` / `rejected` pour le DPO). Elles ne sont pas versionnées dans git (`data/` est ignoré) et se régénèrent avec les notebooks.
+- **Obligations** : CC-BY-4.0 et MIT imposent de citer la source et sa licence, ce que fait ce tableau et la fiche du modèle publié.
+- **Modèle publié** : [`0biyohan/qwen3-1.7b-medical-qcm-fr`](https://huggingface.co/0biyohan/qwen3-1.7b-medical-qcm-fr) (dépôt privé, Apache 2.0).
+
 ## Anonymisation RGPD
 
 Le script `rgpd-anonymize` anonymise un dataset JSONL au format SFT (`messages`) ou DPO

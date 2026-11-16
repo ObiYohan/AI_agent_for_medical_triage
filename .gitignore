@@ -26,3 +26,7 @@ data/
 # Phase 3 : secrets et journal d'audit
 .env
 logs/
+
+# Suivi MLflow local (résultats d'exécution : runs et artefacts)
+mlflow.db
+mlruns/
