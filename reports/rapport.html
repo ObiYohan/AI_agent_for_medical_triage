@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr-FR" xml:lang="fr-FR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Johan" />
+  <title>Agent IA de triage médical : preuve de concept</title>
+  <style>
+
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+  <style type="text/css">
+@page { size: A4; margin: 2.2cm; @bottom-center { content: counter(page); font-size: 9pt; } }
+body { font-family: "DejaVu Serif"; font-size: 10.5pt; line-height: 1.4; }
+h1, h2, h3 { font-family: "DejaVu Sans"; } h1 { page-break-before: always; font-size: 17pt; } h2 { font-size: 13pt; }
+table { border-collapse: collapse; width: 100%; font-size: 9pt; margin: 0.6em 0; page-break-inside: avoid; }
+th, td { border: 1px solid #999; padding: 3px 5px; vertical-align: top; } th { background: #eee; }
+pre { font-family: "DejaVu Sans Mono"; font-size: 7.8pt; background: #f6f6f6; padding: 6px; page-break-inside: avoid; white-space: pre; }
+code { font-family: "DejaVu Sans Mono"; font-size: 8.5pt; }
+nav#TOC { page-break-after: always; }
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Agent IA de triage médical : preuve de concept</h1>
+<p class="subtitle">Rapport technique et recommandations
+stratégiques</p>
+<p class="author">Johan</p>
+<p class="date">Novembre 2026</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#contexte-et-périmètre" id="toc-contexte-et-périmètre">1.
+Contexte et périmètre</a>
+<ul>
+<li><a href="#le-besoin" id="toc-le-besoin">1.1 Le besoin</a></li>
+<li><a href="#la-démarche-en-trois-phases" id="toc-la-démarche-en-trois-phases">1.2 La démarche en trois
+phases</a></li>
+<li><a href="#ce-que-le-poc-couvre-et-ce-quil-ne-couvre-pas" id="toc-ce-que-le-poc-couvre-et-ce-quil-ne-couvre-pas">1.3 Ce que le POC
+couvre, et ce qu’il ne couvre pas</a></li>
+<li><a href="#environnement" id="toc-environnement">1.4
+Environnement</a></li>
+</ul></li>
+<li><a href="#architecture-lenchaînement-des-briques" id="toc-architecture-lenchaînement-des-briques">2. Architecture :
+l’enchaînement des briques</a>
+<ul>
+<li><a href="#vue-densemble" id="toc-vue-densemble">2.1 Vue
+d’ensemble</a></li>
+<li><a href="#les-briques" id="toc-les-briques">2.2 Les briques</a></li>
+<li><a href="#le-fil-conducteur-un-seul-format-de-bout-en-bout" id="toc-le-fil-conducteur-un-seul-format-de-bout-en-bout">2.3 Le fil
+conducteur : un seul format, de bout en bout</a></li>
+<li><a href="#traçabilité-et-reproductibilité" id="toc-traçabilité-et-reproductibilité">2.4 Traçabilité et
+reproductibilité</a></li>
+<li><a href="#le-parcours-dune-requête" id="toc-le-parcours-dune-requête">2.5 Le parcours d’une requête</a></li>
+<li><a href="#le-déploiement-automatisé" id="toc-le-déploiement-automatisé">2.6 Le déploiement
+automatisé</a></li>
+</ul></li>
+<li><a href="#constitution-des-datasets-sft-et-dpo" id="toc-constitution-des-datasets-sft-et-dpo">3. Constitution des
+datasets SFT et DPO</a>
+<ul>
+<li><a href="#sources-et-critères-de-choix" id="toc-sources-et-critères-de-choix">3.1 Sources et critères de
+choix</a></li>
+<li><a href="#principes-de-construction" id="toc-principes-de-construction">3.2 Principes de
+construction</a></li>
+<li><a href="#les-jeux-sft" id="toc-les-jeux-sft">3.3 Les jeux
+SFT</a></li>
+<li><a href="#les-jeux-dpo" id="toc-les-jeux-dpo">3.4 Les jeux
+DPO</a></li>
+<li><a href="#anonymisation-et-conformité-rgpd" id="toc-anonymisation-et-conformité-rgpd">3.5 Anonymisation et
+conformité RGPD</a></li>
+<li><a href="#trois-itérations-sur-les-données" id="toc-trois-itérations-sur-les-données">3.6 Trois itérations sur les
+données</a></li>
+<li><a href="#schéma-des-métadonnées" id="toc-schéma-des-métadonnées">3.7 Schéma des métadonnées</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="contexte-et-périmètre">1. Contexte et périmètre</h1>
+<h2 id="le-besoin">1.1 Le besoin</h2>
+<p>Le service des urgences du CHSA est en surcharge constante, surtout
+aux heures de pointe. Le manque d’effectifs infirmiers et de triage
+allonge les temps d’attente et augmente le risque de ne pas identifier
+assez tôt un cas critique.</p>
+<p>Le projet étudie la faisabilité d’un <strong>agent IA de triage
+médical</strong>, chargé à terme de :</p>
+<ul>
+<li>collecter les symptômes des patients par un questionnaire adaptatif
+;</li>
+<li>évaluer un niveau de priorité (urgence maximale, modérée ou
+différée) selon les protocoles médicaux ;</li>
+<li>expliquer son évaluation et ses recommandations ;</li>
+<li>s’intégrer au système d’information hospitalier (SIH) ;</li>
+<li>tracer chaque interaction pour les audits médicaux.</li>
+</ul>
+<h2 id="la-démarche-en-trois-phases">1.2 La démarche en trois
+phases</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Objectif</th>
+<th>Réalisé dans ce POC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Validation conceptuelle</td>
+<td>Corpus médical bilingue, anonymisé, prêt pour l’entraînement</td>
+<td>3 jeux SFT et 2 jeux DPO, en français et en anglais, anonymisés avec
+Presidio</td>
+</tr>
+<tr>
+<td>2. Optimisation ciblée</td>
+<td>Adapter Qwen3-1.7B-Base par SFT LoRA, puis l’aligner par DPO</td>
+<td>Modèle SFT + DPO, publié sur Hugging Face Hub</td>
+</tr>
+<tr>
+<td>3. Projection industrielle</td>
+<td>Servir le modèle (vLLM, FastAPI, Docker), automatiser le
+déploiement</td>
+<td>API servie par vLLM sur GPU, CI/CD GitHub Actions, tests de latence
+et de robustesse</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ce-que-le-poc-couvre-et-ce-quil-ne-couvre-pas">1.3 Ce que le POC
+couvre, et ce qu’il ne couvre pas</h2>
+<p>Aucun jeu de données de triage aux urgences (description d’un patient
+associée à un niveau de priorité validé) n’est disponible sous une
+licence ouverte. Le POC s’appuie donc sur une tâche intermédiaire,
+mesurable automatiquement : <strong>répondre à des questions
+médicales</strong>.</p>
+<ul>
+<li>En <strong>français</strong>, des QCM sur des cas cliniques
+(MediQAl), avec un corrigé officiel. Le modèle doit choisir la ou les
+bonnes propositions.</li>
+<li>En <strong>anglais</strong>, des questions biomédicales avec des
+réponses rédigées et raisonnées (UltraMedical).</li>
+</ul>
+<p>Ce choix permet de valider toute la chaîne technique (données,
+entraînement, alignement, mise en service, traçabilité) et de mesurer
+les connaissances médicales du modèle. Il ne permet <strong>pas</strong>
+d’évaluer la capacité de triage : le modèle n’a jamais appris à
+attribuer un niveau de priorité. Constituer un jeu de triage est la
+première étape de la feuille de route (partie 8).</p>
+<h2 id="environnement">1.4 Environnement</h2>
+<p>Tout le projet a été réalisé sur un poste de travail : carte
+graphique NVIDIA RTX 3080 (10 Go), sous Linux (WSL 2). Cette contrainte
+a guidé plusieurs choix : LoRA plutôt qu’un fine-tuning complet, limite
+de longueur des exemples, modèle de 1,7 milliard de paramètres.</p>
+<h1 id="architecture-lenchaînement-des-briques">2. Architecture :
+l’enchaînement des briques</h1>
+<h2 id="vue-densemble">2.1 Vue d’ensemble</h2>
+<p>Le schéma suit le parcours des données, des sources publiques jusqu’à
+la réponse de l’API.</p>
+<pre><code> Sources publiques (Hugging Face)
+   MediQAl (fr, QCM)       UltraMedical-Preference (en)
+        |                            |
+        v                            v
+ [1] Préparation des données (notebooks Python)
+     nettoyage, filtres qualité, répartition par cas clinique,
+     anonymisation Presidio
+        |
+        v
+     JSONL anonymisés : SFT (messages), DPO (prompt/chosen/rejected)
+        |
+        v
+ [2] Entraînement (PyTorch, Transformers, PEFT, TRL)
+     SFT LoRA  -&gt;  DPO LoRA  -&gt;  fusion des poids
+        |                  suivi des runs : MLflow (DagsHub)
+        v
+ [3] Hugging Face Hub : modèle fusionné, dépôt privé, révision fixée
+        |
+        v
+ [4] Service (Docker Compose, GPU)
+     vLLM (inférence)  &lt;---  API FastAPI (clé d&#39;API, audit)  &lt;--- client
+        ^
+        |
+ [5] CI/CD GitHub Actions
+     tests -&gt; image de l&#39;API (GHCR) -&gt; déploiement -&gt; tests d&#39;intégration</code></pre>
+<h2 id="les-briques">2.2 Les briques</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Brique</th>
+<th>Outils</th>
+<th>Rôle</th>
+<th>Livrable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Préparation</td>
+<td>datasets, pandas</td>
+<td>Charger, nettoyer, filtrer, découper</td>
+<td>15 fichiers JSONL</td>
+</tr>
+<tr>
+<td>Anonymisation</td>
+<td>Presidio, spaCy</td>
+<td>Remplacer les noms de personnes</td>
+<td>Données anonymisées</td>
+</tr>
+<tr>
+<td>Entraînement</td>
+<td>PEFT, TRL</td>
+<td>SFT puis DPO avec LoRA</td>
+<td>Adaptateurs, checkpoints</td>
+</tr>
+<tr>
+<td>Suivi</td>
+<td>MLflow, DagsHub</td>
+<td>Hyperparamètres, métriques, runs</td>
+<td>Historique des runs</td>
+</tr>
+<tr>
+<td>Distribution</td>
+<td>Hugging Face Hub</td>
+<td>Héberger les poids fusionnés</td>
+<td>Dépôt privé versionné</td>
+</tr>
+<tr>
+<td>Inférence</td>
+<td>vLLM 0.32</td>
+<td>Générer les réponses sur GPU</td>
+<td>Serveur interne</td>
+</tr>
+<tr>
+<td>Exposition</td>
+<td>FastAPI</td>
+<td>Valider, authentifier, tracer</td>
+<td><code>POST /qcm</code>, <code>GET /health</code></td>
+</tr>
+<tr>
+<td>Conteneurs</td>
+<td>Docker Compose</td>
+<td>Assembler vLLM et l’API</td>
+<td><code>docker-compose.yml</code></td>
+</tr>
+<tr>
+<td>CI/CD</td>
+<td>GitHub Actions, GHCR</td>
+<td>Tester, publier, déployer</td>
+<td>Pipeline automatisé</td>
+</tr>
+</tbody>
+</table>
+<h2 id="le-fil-conducteur-un-seul-format-de-bout-en-bout">2.3 Le fil
+conducteur : un seul format, de bout en bout</h2>
+<p>Le principal risque d’une chaîne comme celle-ci est un
+<strong>décalage de format</strong> : le modèle reçoit en service un
+texte légèrement différent de celui qu’il a appris, et ses performances
+chutent sans erreur visible. Deux choix l’évitent.</p>
+<p><strong>Un module partagé pour le prompt.</strong> Le module Python
+<code>projet_14.mediqal</code> construit le message utilisateur (cas
+clinique, question, propositions, consigne). Il est utilisé à toutes les
+étapes :</p>
+<table>
+<thead>
+<tr>
+<th>Étape</th>
+<th>Utilisation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Préparation des données</td>
+<td>construire les prompts d’entraînement</td>
+</tr>
+<tr>
+<td>Évaluation</td>
+<td>relire les lettres des réponses générées</td>
+</tr>
+<tr>
+<td>API</td>
+<td>construire le prompt à partir de la requête JSON</td>
+</tr>
+<tr>
+<td>Tests et mesures</td>
+<td>rejouer les QCM du jeu de test contre l’API</td>
+</tr>
+</tbody>
+</table>
+<p>Une fonction inverse retrouve le cas, la question et les propositions
+à partir d’un prompt. L’aller-retour est exact sur les 2 161 QCM de
+test.</p>
+<p><strong>Un seul gabarit de conversation.</strong> Le texte vu par le
+modèle suit le format ChatML de Qwen. Une particularité de
+Qwen3-<em>Base</em> a imposé un choix : ses balises
+<code>&lt;|im_start|&gt;</code> et <code>&lt;|im_end|&gt;</code> n’ont
+jamais été entraînées, et LoRA ne modifie pas les vecteurs des tokens.
+Le modèle ne peut donc pas apprendre à écrire
+<code>&lt;|im_end|&gt;</code>, et ne s’arrêterait jamais. Les réponses
+se terminent par <code>&lt;|endoftext|&gt;</code>, appris au
+pré-entraînement. Ce gabarit est sauvegardé avec le modèle, publié sur
+le Hub et appliqué par vLLM. Nous avons vérifié que vLLM produit
+exactement les mêmes tokens que l’entraînement : une même question donne
+la même réponse dans le notebook d’évaluation et à travers l’API.</p>
+<h2 id="traçabilité-et-reproductibilité">2.4 Traçabilité et
+reproductibilité</h2>
+<p>Chaque maillon garde la trace de sa version, de sorte qu’une réponse
+de l’API peut être reliée aux données et aux réglages qui l’ont
+produite.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Maillon</th>
+<th>Trace conservée</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Données</td>
+<td>version (<code>v1</code> à <code>v3</code>) dans le nom des runs,
+graine fixe (42)</td>
+</tr>
+<tr>
+<td>Entraînement</td>
+<td>run MLflow : hyperparamètres, courbes, métriques ;
+<code>run_config.json</code></td>
+</tr>
+<tr>
+<td>Modèle</td>
+<td>dépôt Hugging Face, révision fixée dans
+<code>docker-compose.yml</code></td>
+</tr>
+<tr>
+<td>API</td>
+<td>image Docker étiquetée par le commit Git</td>
+</tr>
+<tr>
+<td>Requêtes</td>
+<td>journal d’audit : identifiant, horodatage, modèle, latence,
+réponse</td>
+</tr>
+</tbody>
+</table>
+<p>Le journal d’audit ne contient <strong>aucun texte patient</strong> :
+seule une empreinte SHA-256 de l’entrée est conservée. Elle permet de
+retrouver une requête sans stocker de données de santé.</p>
+<h2 id="le-parcours-dune-requête">2.5 Le parcours d’une requête</h2>
+<ol type="1">
+<li>Le client envoie un QCM en JSON à <code>POST /qcm</code>, avec sa
+clé dans l’en-tête <code>X-API-Key</code>.</li>
+<li>FastAPI vérifie la clé, puis valide l’entrée (longueurs,
+propositions non vides, aucune balise de gabarit).</li>
+<li>L’API construit le prompt avec <code>projet_14.mediqal</code> et
+appelle vLLM (<code>temperature = 0</code>).</li>
+<li>vLLM génère la réponse sur le GPU, en regroupant les requêtes
+simultanées.</li>
+<li>L’API relit les lettres, vérifie que le format est exploitable,
+écrit une ligne dans le journal d’audit et renvoie la réponse, avec un
+avertissement sur les limites d’usage.</li>
+</ol>
+<h2 id="le-déploiement-automatisé">2.6 Le déploiement automatisé</h2>
+<p>À chaque modification du code, le pipeline GitHub Actions enchaîne
+trois étapes.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Étape</th>
+<th>Où</th>
+<th>Contenu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tests</code></td>
+<td>serveur GitHub</td>
+<td>17 tests de l’API, vLLM simulé (pas de GPU)</td>
+</tr>
+<tr>
+<td><code>image</code></td>
+<td>serveur GitHub</td>
+<td>construction de l’image ; sur <code>master</code>, publication sur
+GHCR</td>
+</tr>
+<tr>
+<td><code>deploy</code></td>
+<td>machine GPU</td>
+<td>mise à jour de la pile, puis tests d’intégration</td>
+</tr>
+</tbody>
+</table>
+<p>Le déploiement remplace le conteneur de l’API en quelques secondes,
+sans redémarrer vLLM. Le retour à une version précédente consiste à
+relancer le pipeline d’un commit antérieur.</p>
+<h1 id="constitution-des-datasets-sft-et-dpo">3. Constitution des
+datasets SFT et DPO</h1>
+<h2 id="sources-et-critères-de-choix">3.1 Sources et critères de
+choix</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Source</th>
+<th>Langue</th>
+<th>Contenu</th>
+<th>Licence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MediQAl</td>
+<td>fr</td>
+<td>QCM médicaux avec corrigé, avec ou sans cas clinique</td>
+<td>CC-BY-4.0</td>
+</tr>
+<tr>
+<td>UltraMedical-Preference</td>
+<td>en</td>
+<td>Questions biomédicales, réponses de LLM notées</td>
+<td>MIT</td>
+</tr>
+</tbody>
+</table>
+<p>Trois critères ont guidé le choix :</p>
+<ul>
+<li><strong>Bilingue</strong> : le français pour la cible (le CHSA),
+l’anglais pour la richesse des ressources médicales.</li>
+<li><strong>Vérifiable</strong> : un corrigé ou une note permet de
+contrôler automatiquement chaque exemple. C’est ce qui rend possible le
+principe « qualité plutôt que quantité ».</li>
+<li><strong>Licence ouverte</strong> : CC-BY-4.0 et MIT autorisent la
+réutilisation et la modification, à condition de citer la source.</li>
+</ul>
+<p><strong>MediQAl</strong> (configurations <code>mcqu</code> et
+<code>mcqm</code>) rassemble des QCM rédigés par des enseignants en
+médecine. Les mauvaises propositions (les <em>distracteurs</em>) sont
+plausibles par construction, ce qui est précieux pour le DPO.</p>
+<p><strong>UltraMedical-Preference</strong> réunit des questions
+d’examens (MedQA, MedMCQA, PubMedQA), d’échanges patients-médecins
+(ChatDoctor), de manuels et de Wikipédia. Chacune a plusieurs réponses
+générées par des LLM (GPT-4, Llama-3, Mixtral, Qwen…) et notées par
+GPT-4. Son jeu de test (777 paires) a été revu par des experts
+biomédicaux.</p>
+<h2 id="principes-de-construction">3.2 Principes de construction</h2>
+<p><strong>Qualité plutôt que quantité.</strong> Chaque exemple est
+vérifié avant d’être retenu : par le corrigé pour les QCM, par la note
+GPT-4 sinon. Les jeux sont ensuite plafonnés, plutôt que gonflés par des
+exemples douteux.</p>
+<p><strong>Répartition par cas clinique.</strong> Dans MediQAl, un même
+cas clinique sert à plusieurs questions, et les découpages officiels
+partagent des cas : <strong>954 cas</strong> se trouvent à la fois dans
+le train et dans le test officiels. Un modèle évalué sur ces cas les
+aurait déjà lus à l’entraînement, et ses scores seraient surestimés.
+MediQAl ne fournit pas d’identifiant de cas ; nous en avons calculé
+un.</p>
+<ul>
+<li>L’<strong>identifiant</strong> est l’empreinte SHA-1 du texte du
+cas, après normalisation des espaces et de la casse.</li>
+<li>Un <strong>premier tirage</strong>, dérivé de l’identifiant, affecte
+le cas au SFT ou au DPO (50 % chacun).</li>
+<li>Un <strong>second tirage</strong> l’affecte au train (70 %), à la
+validation (10 %) ou au test (20 %).</li>
+</ul>
+<p>Les tirages sont déterministes : tous les notebooks obtiennent la
+même répartition. Un contrôle final vérifie, sur tous les fichiers
+MediQAl, qu’aucun cas n’est partagé entre SFT et DPO ni entre deux
+splits. Résultat : <strong>1 039 cas</strong> pour le SFT et <strong>767
+cas</strong> pour le DPO, sans recouvrement.</p>
+<p><strong>Pas de recouvrement entre SFT et DPO.</strong> Le même
+principe s’applique à UltraMedical : les 3 056 questions utilisées par
+le DPO sont exclues du SFT.</p>
+<p><strong>Formats standard.</strong> Tous les jeux sont au format
+JSONL, lisible par la bibliothèque Hugging Face <code>datasets</code>
+:</p>
+<ul>
+<li>SFT : une liste <code>messages</code> (système, utilisateur,
+assistant) ;</li>
+<li>DPO : <code>prompt</code>, <code>chosen</code> (réponse préférée) et
+<code>rejected</code> (réponse moins bonne).</li>
+</ul>
+<h2 id="les-jeux-sft">3.3 Les jeux SFT</h2>
+<table>
+<thead>
+<tr>
+<th>Jeu</th>
+<th>Langue</th>
+<th>Train</th>
+<th>Validation</th>
+<th>Test</th>
+<th>Réponse attendue</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MediQAl <code>mcqu</code></td>
+<td>fr</td>
+<td>2 454</td>
+<td>342</td>
+<td>749</td>
+<td>Une proposition</td>
+</tr>
+<tr>
+<td>MediQAl <code>mcqm</code></td>
+<td>fr</td>
+<td>2 400</td>
+<td>380</td>
+<td>931</td>
+<td>Liste de 2 à 5</td>
+</tr>
+<tr>
+<td>UltraMedical</td>
+<td>en</td>
+<td>1 500</td>
+<td>300</td>
+<td>500</td>
+<td>Texte raisonné</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td></td>
+<td><strong>6 354</strong></td>
+<td><strong>1 022</strong></td>
+<td><strong>2 180</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Le train compte 6 354 exemples, pour un objectif d’environ 5 000
+paires.</p>
+<p><strong>MediQAl <code>mcqu</code></strong> (une seule bonne réponse).
+Les 17 017 questions des trois splits officiels sont réunies, puis
+filtrées :</p>
+<table>
+<thead>
+<tr>
+<th>Étape</th>
+<th>Questions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Splits officiels réunis</td>
+<td>17 017</td>
+</tr>
+<tr>
+<td>Avec cas clinique, après dédoublonnage</td>
+<td>6 919</td>
+</tr>
+<tr>
+<td>Cas réservés au SFT : train / validation / test</td>
+<td>2 454 / 342 / 749</td>
+</tr>
+</tbody>
+</table>
+<p>Seules les questions rattachées à un cas clinique sont gardées :
+elles décrivent un patient, ce qui est le plus proche du triage. Les 2
+454 questions d’entraînement portent sur 684 cas distincts.</p>
+<p><strong>MediQAl <code>mcqm</code></strong> (plusieurs bonnes
+réponses). Ce jeu prépare le DPO français, qui compare des listes de
+propositions : le modèle doit avoir appris ce format en SFT, car le DPO
+ajuste des préférences mais n’enseigne pas un nouveau format. Il réunit
+deux parties :</p>
+<table>
+<thead>
+<tr>
+<th>Partie</th>
+<th>Train</th>
+<th>Validation</th>
+<th>Test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sans cas clinique (échantillon)</td>
+<td>1 000</td>
+<td>200</td>
+<td>500</td>
+</tr>
+<tr>
+<td>Avec cas clinique (cas du SFT)</td>
+<td>1 400</td>
+<td>180</td>
+<td>431</td>
+</tr>
+</tbody>
+</table>
+<p>Les questions avec cas évitent que le modèle associe « cas clinique »
+à « une seule réponse », le seul format vu avec un cas dans
+<code>mcqu</code>.</p>
+<p><strong>UltraMedical</strong> (anglais). La meilleure réponse de
+chaque question sert de réponse attendue, après plusieurs filtres :</p>
+<table>
+<thead>
+<tr>
+<th>Étape</th>
+<th>Exemples (train)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Paires d’origine</td>
+<td>109 353</td>
+</tr>
+<tr>
+<td>Sans les questions du DPO</td>
+<td>103 582</td>
+</tr>
+<tr>
+<td>Réponses de qualité (corrigé ou note GPT-4)</td>
+<td>68 883</td>
+</tr>
+<tr>
+<td>Une réponse par question</td>
+<td>52 695</td>
+</tr>
+<tr>
+<td>Réponse entière sous la limite de longueur</td>
+<td>50 989</td>
+</tr>
+<tr>
+<td>Échantillon retenu</td>
+<td>1 500</td>
+</tr>
+</tbody>
+</table>
+<p>Le filtre de longueur a une raison précise : une réponse coupée
+perdrait son token de fin, et le modèle apprendrait à ne pas
+s’arrêter.</p>
+<p><strong>Le format des exemples MediQAl.</strong> Le message
+utilisateur reprend le cas, la question, les propositions et une
+consigne sur le nombre de bonnes réponses :</p>
+<pre><code>Un homme de 45 ans [...] Le stade pathologique (PS) de ce patient est :
+
+Propositions :
+A. PS IIE
+B. PS IIB
+C. PS IIIA
+D. PS IIIB
+E. PS IVB
+
+Une seule proposition est exacte.</code></pre>
+<p>La réponse attendue donne la lettre et le texte de la bonne
+proposition (<code>D. PS IIIB</code>), ou une liste
+(<code>- A. ...</code>) pour les réponses multiples. La lettre vient en
+premier : l’exactitude se mesure automatiquement en relisant les
+lettres.</p>
+<h2 id="les-jeux-dpo">3.4 Les jeux DPO</h2>
+<p>Le DPO apprend au modèle à préférer une réponse à une autre. Chaque
+exemple est une paire : pour un même prompt, une réponse
+<code>chosen</code> et une réponse <code>rejected</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Jeu</th>
+<th>Langue</th>
+<th>Train</th>
+<th>Validation</th>
+<th>Test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MediQAl <code>mcqm</code></td>
+<td>fr</td>
+<td>1 357</td>
+<td>220</td>
+<td>481</td>
+</tr>
+<tr>
+<td>UltraMedical-Preference</td>
+<td>en</td>
+<td>2 000</td>
+<td>300</td>
+<td>756</td>
+</tr>
+</tbody>
+</table>
+<p>À l’entraînement, les paires de plus de 1 024 tokens sont écartées
+(contrainte de mémoire GPU) : il reste 1 994, 297 et 750 paires
+anglaises.</p>
+<p><strong>Le jeu français : des erreurs construites et garanties
+fausses.</strong> Les 4 066 questions <code>mcqm</code> avec cas
+clinique sont filtrées sur les cas réservés au DPO (521 cas pour le
+train). Pour chaque question :</p>
+<ul>
+<li>la <code>chosen</code> est la liste des bonnes propositions, d’après
+le corrigé ;</li>
+<li>la <code>rejected</code> est la même liste avec <strong>une seule
+erreur</strong>, tirée au hasard parmi trois types.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Type d’erreur</th>
+<th>Construction</th>
+<th>Paires (train)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Omission</td>
+<td>une bonne proposition retirée</td>
+<td>495</td>
+</tr>
+<tr>
+<td>Ajout</td>
+<td>une mauvaise proposition ajoutée</td>
+<td>428</td>
+</tr>
+<tr>
+<td>Substitution</td>
+<td>une bonne remplacée par une mauvaise</td>
+<td>434</td>
+</tr>
+</tbody>
+</table>
+<p>Les mauvaises propositions viennent des distracteurs rédigés par les
+enseignants : l’erreur est plausible, et le corrigé garantit qu’elle est
+fausse. Les propositions sont toujours affichées dans l’ordre A à E,
+pour que la position ne trahisse pas l’erreur. La <code>chosen</code>
+est la plus longue des deux réponses dans environ la moitié des paires :
+la longueur ne permet pas de deviner la bonne réponse.</p>
+<p><strong>Le jeu anglais : des préférences vérifiées et
+équilibrées.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Étape</th>
+<th>Paires (train)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Paires d’origine</td>
+<td>109 353</td>
+</tr>
+<tr>
+<td>Types <code>hard</code> et <code>length</code>, <code>chosen</code>
+mieux notée</td>
+<td>80 306</td>
+</tr>
+<tr>
+<td>Préférence vérifiée (corrigé, ou écart de note net)</td>
+<td>10 362</td>
+</tr>
+<tr>
+<td>Nettoyage et dédoublonnage</td>
+<td>8 879</td>
+</tr>
+<tr>
+<td>Sans les questions de validation et de test</td>
+<td>8 817</td>
+</tr>
+<tr>
+<td>Sous la limite de longueur</td>
+<td>8 577</td>
+</tr>
+<tr>
+<td>Échantillon équilibré sur la longueur</td>
+<td>2 000</td>
+</tr>
+</tbody>
+</table>
+<p>Pour les sources QCM, une paire n’est gardée que si le corrigé
+confirme que la <code>chosen</code> est juste et la
+<code>rejected</code> fausse. Pour les autres sources, sans corrigé, la
+<code>chosen</code> doit avoir une très bonne note et un écart net avec
+la <code>rejected</code>. Le champ <code>pair_check</code> garde la
+trace du contrôle appliqué.</p>
+<p><strong>L’équilibrage sur la longueur</strong> corrige un biais
+découvert au premier entraînement. Après filtrage, la
+<code>chosen</code> n’était la plus longue que dans un quart des paires.
+Le modèle avait surtout appris que « la réponse la plus courte est la
+meilleure » : 0,82 de préférences justes en validation, mais 0,51 en
+test, soit le hasard. Le train et la validation contiennent désormais
+autant de paires où la <code>chosen</code> est la plus longue que de
+paires où elle est la plus courte.</p>
+<p>Le <strong>test</strong> est gardé entier et non équilibré : revu par
+des experts, il représente la distribution réelle (la
+<code>chosen</code> y est la plus longue dans 70 % des paires).
+L’évaluation le découpe selon la longueur, pour détecter un biais
+résiduel.</p>
+<h2 id="anonymisation-et-conformité-rgpd">3.5 Anonymisation et
+conformité RGPD</h2>
+<p><strong>L’outil.</strong> Presidio (Microsoft) détecte les noms de
+personnes avec les modèles de langue spaCy
+(<code>fr_core_news_md</code>, <code>en_core_web_md</code>) et les
+remplace par la balise <code>&lt;PERSON&gt;</code>. Seules les
+détections de score supérieur ou égal à 0,5 sont retenues. Des règles
+propres au domaine médical écartent ensuite les faux positifs les plus
+fréquents :</p>
+<table>
+<thead>
+<tr>
+<th>Motif d’exclusion</th>
+<th>Exemple</th>
+<th>Détections écartées</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mot sans majuscule</td>
+<td>« fièvre », « dyspnée »</td>
+<td>6 225</td>
+</tr>
+<tr>
+<td>Sigle</td>
+<td>« HTA », « ECG »</td>
+<td>516</td>
+</tr>
+<tr>
+<td>Éponyme médical</td>
+<td>« maladie de Basedow »</td>
+<td>513</td>
+</tr>
+<tr>
+<td>Marque déposée</td>
+<td>nom commercial d’un médicament</td>
+<td>197</td>
+</tr>
+<tr>
+<td>Mot exclu (liste)</td>
+<td>termes médicaux fréquents</td>
+<td>104</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td></td>
+<td><strong>7 555</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Sans ces règles, plus de 7 500 termes médicaux auraient été remplacés
+par <code>&lt;PERSON&gt;</code>.</p>
+<p><strong>Un périmètre ciblé.</strong> Anonymiser tout le texte aurait
+détruit l’information médicale : Presidio prend de nombreux termes
+médicaux pour des noms (« Angiographie », « Érythrose palmaire », gènes
+« Akt » ou « FOXO1 »). Seuls les champs qui peuvent décrire un patient
+réel sont donc traités :</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Jeu</th>
+<th>Champs anonymisés</th>
+<th>Raison</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MediQAl</td>
+<td>cas clinique et question</td>
+<td>ils décrivent le patient</td>
+</tr>
+<tr>
+<td>MediQAl</td>
+<td>propositions et réponses : non</td>
+<td>énoncés rédigés par les enseignants</td>
+</tr>
+<tr>
+<td>UltraMedical</td>
+<td>source ChatDoctor seulement</td>
+<td>seuls vrais échanges patients-médecins</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Les volumes traités</strong> (train, validation et test
+réunis) :</p>
+<table>
+<thead>
+<tr>
+<th>Jeu</th>
+<th>Exemples</th>
+<th>Modifiés</th>
+<th>Noms remplacés</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SFT MediQAl <code>mcqu</code></td>
+<td>3 545</td>
+<td>1 209</td>
+<td>2 157</td>
+</tr>
+<tr>
+<td>SFT MediQAl <code>mcqm</code></td>
+<td>3 711</td>
+<td>722</td>
+<td>1 249</td>
+</tr>
+<tr>
+<td>DPO MediQAl <code>mcqm</code></td>
+<td>2 058</td>
+<td>674</td>
+<td>1 235</td>
+</tr>
+<tr>
+<td>SFT UltraMedical</td>
+<td>2 300</td>
+<td>96</td>
+<td>203</td>
+</tr>
+<tr>
+<td>DPO UltraMedical</td>
+<td>3 056</td>
+<td>174</td>
+<td>464</td>
+</tr>
+</tbody>
+</table>
+<p>Pour UltraMedical, seuls les exemples ChatDoctor sont analysés : 190
+en SFT et 290 en DPO. Les remplacements comptés dans MediQAl peuvent
+inclure des faux positifs résiduels : chaque notebook affiche le
+contexte de chaque balise <code>&lt;PERSON&gt;</code> pour une
+relecture.</p>
+<p><strong>Contrôles.</strong> Après anonymisation, des contrôles
+vérifient que les propositions et les réponses MediQAl sont intactes
+(aucune balise <code>&lt;PERSON&gt;</code> sur les 9 314 exemples), et
+que les paires DPO restent distinctes (<code>chosen</code> différente de
+<code>rejected</code>). Un rapport par fichier enregistre les paramètres
+(modèle spaCy, seuil, champs traités), les comptes et les détections
+écartées par motif.</p>
+<p><strong>Justification RGPD.</strong></p>
+<ul>
+<li><strong>Minimisation</strong> : seuls les champs susceptibles de
+contenir des données personnelles sont traités ; aucune donnée n’est
+ajoutée.</li>
+<li><strong>Pseudonymisation irréversible</strong> : les noms sont
+remplacés par une balise, sans table de correspondance.</li>
+<li><strong>Traçabilité</strong> : chaque fichier anonymisé a son
+rapport (paramètres, comptes, motifs d’exclusion), et chaque exemple
+garde le nombre de noms remplacés (<code>persons_replaced</code>).</li>
+<li><strong>Données dérivées non publiées</strong> : les jeux anonymisés
+ne sont pas versionnés dans Git. Ils se régénèrent à partir des sources
+et des notebooks.</li>
+<li><strong>En service</strong> : le journal d’audit de l’API ne
+conserve que l’empreinte de l’entrée, jamais le texte du cas.</li>
+</ul>
+<h2 id="trois-itérations-sur-les-données">3.6 Trois itérations sur les
+données</h2>
+<p>Les données ont évolué au fil des entraînements : chaque version
+corrige un problème révélé par la précédente.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Version</th>
+<th>Problème observé</th>
+<th>Correction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v1</td>
+<td>Propositions absentes du prompt : aucune lettre exploitable</td>
+<td>Propositions A à E dans le prompt, réponse « lettre + texte »</td>
+</tr>
+<tr>
+<td>v1</td>
+<td>954 cas partagés entre train et test officiels</td>
+<td>Répartition par cas clinique</td>
+</tr>
+<tr>
+<td>v1</td>
+<td>DPO anglais : préférence apprise pour la réponse courte</td>
+<td>Équilibrage sur la longueur</td>
+</tr>
+<tr>
+<td>v2</td>
+<td>25 % de réponses à plusieurs lettres en <code>mcqu</code></td>
+<td>Consigne « une seule / plusieurs propositions »</td>
+</tr>
+<tr>
+<td>v3</td>
+<td>—</td>
+<td>Version entraînée et servie</td>
+</tr>
+</tbody>
+</table>
+<p>L’effet de la dernière correction est direct : en <code>mcqu</code>,
+la part de réponses à plusieurs lettres passe de 25 % à 0 %, et
+l’exactitude du modèle SFT de 0,32 à 0,39 (200 questions de test).</p>
+<h2 id="schéma-des-métadonnées">3.7 Schéma des métadonnées</h2>
+<p>Chaque exemple garde ses métadonnées, en plus du texte
+d’entraînement.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Champ</th>
+<th>Description</th>
+<th>Jeux</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>identifiant de la question d’origine</td>
+<td>MediQAl</td>
+</tr>
+<tr>
+<td><code>prompt_id</code></td>
+<td>identifiant de la question d’origine</td>
+<td>UltraMedical</td>
+</tr>
+<tr>
+<td><code>source</code></td>
+<td>jeu et configuration d’origine</td>
+<td>tous</td>
+</tr>
+<tr>
+<td><code>lang</code></td>
+<td>langue (<code>fr</code>, <code>en</code>)</td>
+<td>tous</td>
+</tr>
+<tr>
+<td><code>case_id</code></td>
+<td>identifiant du cas clinique</td>
+<td>MediQAl</td>
+</tr>
+<tr>
+<td><code>medical_subject</code></td>
+<td>spécialité médicale</td>
+<td>MediQAl</td>
+</tr>
+<tr>
+<td><code>question_type</code></td>
+<td>type de question</td>
+<td>MediQAl</td>
+</tr>
+<tr>
+<td><code>golden_answer</code></td>
+<td>corrigé (QCM) ou réponse de référence</td>
+<td>tous</td>
+</tr>
+<tr>
+<td><code>rejected_type</code></td>
+<td>type d’erreur de la <code>rejected</code></td>
+<td>DPO fr</td>
+</tr>
+<tr>
+<td><code>label_type</code></td>
+<td>type de paire d’origine</td>
+<td>DPO en</td>
+</tr>
+<tr>
+<td><code>chosen_model</code>, <code>rejected_model</code></td>
+<td>LLM auteur de chaque réponse</td>
+<td>UltraMedical</td>
+</tr>
+<tr>
+<td><code>chosen_score</code>, <code>rejected_score</code></td>
+<td>notes GPT-4 des réponses</td>
+<td>UltraMedical</td>
+</tr>
+<tr>
+<td><code>pair_check</code></td>
+<td>contrôle appliqué à l’exemple</td>
+<td>DPO, SFT en</td>
+</tr>
+<tr>
+<td><code>persons_replaced</code></td>
+<td>noms remplacés par l’anonymisation</td>
+<td>tous</td>
+</tr>
+</tbody>
+</table>
+<p>Les champs <code>pair_check</code>, <code>chosen_score</code> et
+<code>rejected_score</code> jouent le rôle d’un <strong>niveau de
+confiance</strong> : ils disent comment chaque préférence a été
+validée.</p>
+<p>Le schéma demandé pour la phase 1 prévoyait aussi des champs
+<strong>symptômes, antécédents et constantes vitales</strong>. Les
+sources utilisées ne les fournissent pas de façon structurée : ces
+informations figurent dans le texte libre des cas cliniques. Les
+structurer est un prérequis pour un jeu de triage, et fait partie de la
+feuille de route.</p>
+</body>
+</html>

@@ -1,0 +1,10 @@
+/* Mise en page PDF du rapport (pandoc -> HTML -> WeasyPrint) */
+
+@page { size: A4; margin: 2.2cm; @bottom-center { content: counter(page); font-size: 9pt; } }
+body { font-family: "DejaVu Serif"; font-size: 10.5pt; line-height: 1.4; }
+h1, h2, h3 { font-family: "DejaVu Sans"; } h1 { page-break-before: always; font-size: 17pt; } h2 { font-size: 13pt; }
+table { border-collapse: collapse; width: 100%; font-size: 9pt; margin: 0.6em 0; page-break-inside: avoid; }
+th, td { border: 1px solid #999; padding: 3px 5px; vertical-align: top; } th { background: #eee; }
+pre { font-family: "DejaVu Sans Mono"; font-size: 7.8pt; background: #f6f6f6; padding: 6px; page-break-inside: avoid; white-space: pre; }
+code { font-family: "DejaVu Sans Mono"; font-size: 8.5pt; }
+nav#TOC { page-break-after: always; }
