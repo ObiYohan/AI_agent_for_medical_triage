@@ -26,7 +26,8 @@ vertical-align: middle;
   <style type="text/css">
 @page { size: A4; margin: 2.2cm; @bottom-center { content: counter(page); font-size: 9pt; } }
 body { font-family: "DejaVu Serif"; font-size: 10.5pt; line-height: 1.4; }
-h1, h2, h3 { font-family: "DejaVu Sans"; } h1 { page-break-before: always; font-size: 17pt; } h2 { font-size: 13pt; }
+h1, h2, h3 { font-family: "DejaVu Sans"; } h1 { font-size: 17pt; margin-top: 1.4em; }
+h1, h2, h3 { break-after: avoid; }  h2 { font-size: 13pt; }
 table { border-collapse: collapse; width: 100%; font-size: 9pt; margin: 0.6em 0; page-break-inside: avoid; }
 th, td { border: 1px solid #999; padding: 3px 5px; vertical-align: top; } th { background: #eee; }
 pre { font-family: "DejaVu Sans Mono"; font-size: 7.8pt; background: #f6f6f6; padding: 6px; page-break-inside: avoid; white-space: pre; }
@@ -44,6 +45,7 @@ stratégiques</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
+<li><a href="#résumé" id="toc-résumé">Résumé</a></li>
 <li><a href="#contexte-et-périmètre" id="toc-contexte-et-périmètre">1.
 Contexte et périmètre</a>
 <ul>
@@ -109,8 +111,80 @@ débit</a></li>
 <li><a href="#audit-de-traçabilité" id="toc-audit-de-traçabilité">6.5
 Audit de traçabilité</a></li>
 </ul></li>
+<li><a href="#limites" id="toc-limites">7. Limites</a></li>
+<li><a href="#roadmap-de-passage-à-léchelle-au-chsa" id="toc-roadmap-de-passage-à-léchelle-au-chsa">8. Roadmap de passage à
+l’échelle au CHSA</a></li>
 </ul>
 </nav>
+<h1 id="résumé">Résumé</h1>
+<p><strong>Objectif.</strong> Le CHSA souhaite évaluer la faisabilité
+d’un agent IA d’aide au triage pour son service des urgences. Ce POC
+construit toute la chaîne technique nécessaire, des données jusqu’à un
+service déployé, avec un modèle compact : Qwen3-1.7B-Base.</p>
+<p><strong>Ce qui a été construit.</strong></p>
+<ul>
+<li><strong>Données</strong> : un corpus médical bilingue, construit à
+partir de deux sources ouvertes (MediQAl en français, UltraMedical en
+anglais). Il est vérifié par corrigé, réparti par cas clinique pour
+éviter toute fuite entre entraînement et test, et anonymisé avec
+Presidio. Il compte 6 354 exemples d’entraînement SFT et 3 357 paires
+DPO.</li>
+<li><strong>Modèle</strong> : un fine-tuning supervisé (SFT) avec LoRA,
+puis un alignement par préférences (DPO), sur une seule carte graphique
+de 10 Go. Le modèle est publié sur Hugging Face Hub, et chaque run est
+tracé dans MLflow.</li>
+<li><strong>Service</strong> : une API FastAPI protégée par clé, servie
+par vLLM dans Docker, avec un journal d’audit sans donnée patient. Un
+pipeline GitHub Actions teste, publie et redéploie automatiquement
+chaque nouvelle version.</li>
+</ul>
+<p><strong>Résultats clés.</strong></p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Indicateur</th>
+<th>Résultat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>QCM à réponse unique (749 questions)</td>
+<td>0,44 de bonnes réponses, contre 0,24 pour une réponse naïve</td>
+</tr>
+<tr>
+<td>Apport du DPO</td>
+<td>aucun sur les réponses uniques ; + 2,4 points, non significatif, sur
+les réponses multiples</td>
+</tr>
+<tr>
+<td>Contrôles de sécurité (12 cas)</td>
+<td>3 recommandations dangereuses ; entités inventées jamais
+reconnues</td>
+</tr>
+<tr>
+<td>Latence (1 requête)</td>
+<td>168 ms en médiane</td>
+</tr>
+<tr>
+<td>Débit (50 requêtes simultanées)</td>
+<td>45 requêtes par seconde</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Conclusion.</strong> La faisabilité technique est démontrée :
+la chaîne complète fonctionne, est reproductible et traçable, et le
+service répond en moins d’une seconde. La valeur clinique, en revanche,
+n’est pas démontrée. Le modèle n’a pas appris le triage, faute de
+données adaptées, et il commet encore des erreurs dangereuses. Il ne
+doit pas être utilisé auprès de patients.</p>
+<p><strong>Recommandation.</strong> Avant de passer à un modèle plus
+grand, constituer avec les équipes du CHSA un jeu de cas de triage
+annotés, puis valider le système en conditions réelles, sans effet sur
+la décision des soignants (partie 8).</p>
 <h1 id="contexte-et-périmètre">1. Contexte et périmètre</h1>
 <h2 id="le-besoin">1.1 Le besoin</h2>
 <p>Le service des urgences du CHSA est en surcharge constante, surtout
@@ -1486,5 +1560,180 @@ selon le regroupement des requêtes, 2 à 3 % des réponses changent d’un
 passage à l’autre. Rejouer une question ne garantit donc pas d’obtenir
 la même réponse. Le journal enregistre la réponse effectivement donnée,
 ce qui reste la trace de référence.</p>
+<h1 id="limites">7. Limites</h1>
+<p><strong>Par rapport au besoin du CHSA.</strong></p>
+<ul>
+<li><strong>Pas de triage appris</strong> : le modèle répond à des QCM
+médicaux ; il n’a jamais appris à attribuer un niveau de priorité. Ses
+premiers résultats sur neuf cas de triage montrent une tendance au
+sur-triage.</li>
+<li><strong>Pas de questionnaire adaptatif</strong> : le modèle répond à
+une question complète, il ne mène pas d’entretien avec le patient.</li>
+<li><strong>Peu d’explications</strong> : en français, les réponses
+donnent la ou les propositions retenues, sans justification. Seule la
+partie anglaise a appris à raisonner.</li>
+<li><strong>Pas d’intégration au SIH</strong> : l’API reçoit un QCM en
+JSON, pas un dossier patient.</li>
+</ul>
+<p><strong>Le modèle.</strong></p>
+<ul>
+<li><strong>Connaissances limitées</strong> : environ une réponse juste
+sur deux aux QCM à réponse unique, ce qui est cohérent avec sa taille
+(1,7 milliard de paramètres).</li>
+<li><strong>Erreurs dangereuses et hallucinations</strong> : 3
+recommandations dangereuses sur 12 cas pièges, et aucune entité inventée
+reconnue comme telle.</li>
+<li><strong>Apport du DPO limité</strong> : le gain mesuré vient surtout
+d’un raccourci (cocher moins de propositions) et n’est pas
+significatif.</li>
+</ul>
+<p><strong>Les données et la méthode.</strong></p>
+<ul>
+<li><strong>Erreurs DPO simulées</strong> : en français, les réponses
+<code>rejected</code> sont construites à partir du corrigé, pas tirées
+des erreurs réelles du modèle.</li>
+<li><strong>Préférences jugées par GPT-4</strong> : en anglais, hors
+QCM, les préférences reposent sur les notes d’un autre LLM. Seul le jeu
+de test a été revu par des experts.</li>
+<li><strong>Pas de données structurées</strong> : symptômes, antécédents
+et constantes figurent dans le texte libre des cas, pas dans des champs
+dédiés.</li>
+<li><strong>Contrôles de sécurité non validés</strong> : les 28 cas
+pièges ont été rédigés pour ce projet, sans relecture clinique.</li>
+<li><strong>Une seule graine</strong> : chaque configuration a été
+entraînée une fois ; les écarts de quelques points ne sont pas
+significatifs.</li>
+</ul>
+<p><strong>Le déploiement.</strong></p>
+<ul>
+<li><strong>Endpoint local</strong> : le service tourne sur un poste de
+travail, sans haute disponibilité ni accès public. Il n’est pas hébergé
+chez un hébergeur certifié pour les données de santé (HDS).</li>
+<li><strong>Surveillance minimale</strong> : état de santé et journal
+d’audit, sans tableau de bord ni alertes.</li>
+<li><strong>Non-déterminisme</strong> : 2 à 3 % des réponses peuvent
+varier d’un passage à l’autre.</li>
+</ul>
+<h1 id="roadmap-de-passage-à-léchelle-au-chsa">8. Roadmap de passage à
+l’échelle au CHSA</h1>
+<p>La faisabilité technique est acquise ; la valeur clinique reste à
+démontrer. La feuille de route place donc les données de triage et la
+validation clinique <strong>avant</strong> l’augmentation de la taille
+du modèle : un modèle plus grand, entraîné sur les mêmes QCM, ne saurait
+toujours pas trier.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Étape</th>
+<th>Objectif</th>
+<th>Livrables</th>
+<th>Condition de passage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Données de triage</td>
+<td>Apprendre la vraie tâche</td>
+<td>Jeu de cas annotés par des soignants</td>
+<td>Accord entre annotateurs suffisant</td>
+</tr>
+<tr>
+<td>2. Modèle de triage</td>
+<td>Trier et expliquer</td>
+<td>Modèle évalué sur ce jeu</td>
+<td>Sous-triage des urgences vitales proche de zéro</td>
+</tr>
+<tr>
+<td>3. Infrastructure</td>
+<td>Héberger en conformité</td>
+<td>Serveurs HDS ou sur site, intégration SIH</td>
+<td>Audit de sécurité validé</td>
+</tr>
+<tr>
+<td>4. Pilote clinique</td>
+<td>Mesurer la valeur réelle</td>
+<td>Étude en parallèle des soignants</td>
+<td>Concordance et sécurité démontrées</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Étape 1 : un jeu de données de triage.</strong></p>
+<ul>
+<li>Construire, avec les infirmiers organisateurs de l’accueil (IOA) du
+CHSA, quelques milliers de cas annotés selon l’échelle de tri en vigueur
+dans le service (par exemple l’échelle FRENCH de la SFMU).</li>
+<li>Structurer chaque cas : motif de recours, symptômes, antécédents,
+constantes vitales, niveau de priorité et justification. C’est le schéma
+de métadonnées prévu en phase 1.</li>
+<li>Partir de dossiers historiques pseudonymisés, avec l’accord du
+délégué à la protection des données, et les héberger dans un
+environnement certifié HDS. La chaîne d’anonymisation de ce POC est
+réutilisable.</li>
+<li>Faire annoter une partie des cas par deux soignants, pour mesurer
+leur accord : c’est le plafond de performance à viser.</li>
+</ul>
+<p><strong>Étape 2 : un modèle de triage.</strong></p>
+<ul>
+<li><strong>Sortie structurée</strong> : niveau de priorité,
+justification, signaux d’alerte identifiés, au format JSON validé par
+l’API.</li>
+<li><strong>Garde-fous déterministes</strong> : des règles simples (par
+exemple des constantes vitales hors seuils) imposent l’urgence maximale,
+quelle que soit la réponse du modèle.</li>
+<li><strong>Abstention</strong> : le modèle doit pouvoir répondre « avis
+soignant requis » plutôt que d’inventer.</li>
+<li><strong>Protocoles du CHSA</strong> : fournir au modèle les
+protocoles locaux au moment de répondre (recherche documentaire, ou
+RAG), plutôt que de les lui faire mémoriser.</li>
+<li><strong>DPO sur les vraies erreurs</strong> : construire les paires
+à partir des erreurs réelles du modèle, validées par des soignants.</li>
+<li><strong>Montée en taille</strong> : passer à un modèle de 32B ou
+plus une fois le jeu de triage disponible, et mesurer le gain sur ce
+jeu.</li>
+<li><strong>Métrique principale</strong> : le taux de sous-triage des
+urgences vitales, avant l’exactitude globale.</li>
+</ul>
+<p><strong>Étape 3 : une infrastructure de production.</strong></p>
+<ul>
+<li><strong>Hébergement</strong> : serveurs GPU sur site ou chez un
+hébergeur certifié HDS. Un modèle de 32B demande environ 64 Go de
+mémoire GPU en bf16 (deux GPU de 48 Go, répartis par vLLM), ou moins
+avec une quantification.</li>
+<li><strong>Intégration au SIH</strong> : échanges au standard HL7 FHIR
+(patient, constantes, passage aux urgences), pour lire le dossier et y
+écrire la proposition de triage.</li>
+<li><strong>Sécurité</strong> : authentification des soignants par
+l’annuaire du CHSA, au lieu d’une clé d’API partagée ; journal d’audit
+inaltérable, avec une durée de conservation définie.</li>
+<li><strong>Surveillance</strong> : tableaux de bord et alertes sur la
+latence, les erreurs et la répartition des niveaux de priorité, pour
+détecter une dérive.</li>
+<li><strong>Reproductibilité</strong> : registre des modèles et mode
+d’inférence invariant au regroupement des requêtes.</li>
+<li><strong>Déploiement</strong> : la chaîne CI/CD de ce POC se
+transpose telle quelle, avec un environnement de recette avant la
+production.</li>
+</ul>
+<p><strong>Étape 4 : un pilote clinique.</strong></p>
+<ul>
+<li><strong>Étude « en parallèle »</strong> : pendant plusieurs
+semaines, le système propose un niveau de priorité sans que les
+soignants le voient. On compare ensuite ses propositions à leurs
+décisions.</li>
+<li><strong>Critères</strong> : concordance avec les IOA, taux de
+sous-triage, temps gagné, acceptabilité par les équipes.</li>
+<li><strong>Cadre réglementaire</strong> : un logiciel d’aide au triage
+peut relever du règlement européen sur les dispositifs médicaux et des
+systèmes d’IA à haut risque du règlement européen sur l’IA. Son statut
+est à instruire dès l’étape 1.</li>
+<li><strong>Usage</strong> : l’outil reste une aide. Le soignant garde
+la décision, et chaque proposition est tracée.</li>
+</ul>
 </body>
 </html>

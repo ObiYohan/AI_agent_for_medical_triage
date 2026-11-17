@@ -16,6 +16,30 @@ toc-depth: 2
 colorlinks: true
 ---
 
+# Résumé
+
+**Objectif.** Le CHSA souhaite évaluer la faisabilité d'un agent IA d'aide au triage pour son service des urgences. Ce POC construit toute la chaîne technique nécessaire, des données jusqu'à un service déployé, avec un modèle compact : Qwen3-1.7B-Base.
+
+**Ce qui a été construit.**
+
+- **Données** : un corpus médical bilingue, construit à partir de deux sources ouvertes (MediQAl en français, UltraMedical en anglais). Il est vérifié par corrigé, réparti par cas clinique pour éviter toute fuite entre entraînement et test, et anonymisé avec Presidio. Il compte 6 354 exemples d'entraînement SFT et 3 357 paires DPO.
+- **Modèle** : un fine-tuning supervisé (SFT) avec LoRA, puis un alignement par préférences (DPO), sur une seule carte graphique de 10 Go. Le modèle est publié sur Hugging Face Hub, et chaque run est tracé dans MLflow.
+- **Service** : une API FastAPI protégée par clé, servie par vLLM dans Docker, avec un journal d'audit sans donnée patient. Un pipeline GitHub Actions teste, publie et redéploie automatiquement chaque nouvelle version.
+
+**Résultats clés.**
+
+| Indicateur | Résultat |
+|---|---|
+| QCM à réponse unique (749 questions) | 0,44 de bonnes réponses, contre 0,24 pour une réponse naïve |
+| Apport du DPO | aucun sur les réponses uniques ; + 2,4 points, non significatif, sur les réponses multiples |
+| Contrôles de sécurité (12 cas) | 3 recommandations dangereuses ; entités inventées jamais reconnues |
+| Latence (1 requête) | 168 ms en médiane |
+| Débit (50 requêtes simultanées) | 45 requêtes par seconde |
+
+**Conclusion.** La faisabilité technique est démontrée : la chaîne complète fonctionne, est reproductible et traçable, et le service répond en moins d'une seconde. La valeur clinique, en revanche, n'est pas démontrée. Le modèle n'a pas appris le triage, faute de données adaptées, et il commet encore des erreurs dangereuses. Il ne doit pas être utilisé auprès de patients.
+
+**Recommandation.** Avant de passer à un modèle plus grand, constituer avec les équipes du CHSA un jeu de cas de triage annotés, puis valider le système en conditions réelles, sans effet sur la décision des soignants (partie 8).
+
 # 1. Contexte et périmètre
 
 ## 1.1 Le besoin
@@ -487,3 +511,76 @@ Chaque requête produit une ligne dans un journal d'audit (JSONL) :
 Les tests d'audit vérifient que chaque requête est tracée avec tous ses champs, qu'une même entrée donne la même empreinte, que les accès refusés sont tracés sans la clé reçue, et qu'**aucun texte patient** n'apparaît dans le journal (un marqueur unique, placé dans chaque champ, n'y est jamais retrouvé).
 
 **Une limite pour l'audit.** Même avec `temperature = 0`, vLLM n'est pas parfaitement déterministe : selon le regroupement des requêtes, 2 à 3 % des réponses changent d'un passage à l'autre. Rejouer une question ne garantit donc pas d'obtenir la même réponse. Le journal enregistre la réponse effectivement donnée, ce qui reste la trace de référence.
+
+# 7. Limites
+
+**Par rapport au besoin du CHSA.**
+
+- **Pas de triage appris** : le modèle répond à des QCM médicaux ; il n'a jamais appris à attribuer un niveau de priorité. Ses premiers résultats sur neuf cas de triage montrent une tendance au sur-triage.
+- **Pas de questionnaire adaptatif** : le modèle répond à une question complète, il ne mène pas d'entretien avec le patient.
+- **Peu d'explications** : en français, les réponses donnent la ou les propositions retenues, sans justification. Seule la partie anglaise a appris à raisonner.
+- **Pas d'intégration au SIH** : l'API reçoit un QCM en JSON, pas un dossier patient.
+
+**Le modèle.**
+
+- **Connaissances limitées** : environ une réponse juste sur deux aux QCM à réponse unique, ce qui est cohérent avec sa taille (1,7 milliard de paramètres).
+- **Erreurs dangereuses et hallucinations** : 3 recommandations dangereuses sur 12 cas pièges, et aucune entité inventée reconnue comme telle.
+- **Apport du DPO limité** : le gain mesuré vient surtout d'un raccourci (cocher moins de propositions) et n'est pas significatif.
+
+**Les données et la méthode.**
+
+- **Erreurs DPO simulées** : en français, les réponses `rejected` sont construites à partir du corrigé, pas tirées des erreurs réelles du modèle.
+- **Préférences jugées par GPT-4** : en anglais, hors QCM, les préférences reposent sur les notes d'un autre LLM. Seul le jeu de test a été revu par des experts.
+- **Pas de données structurées** : symptômes, antécédents et constantes figurent dans le texte libre des cas, pas dans des champs dédiés.
+- **Contrôles de sécurité non validés** : les 28 cas pièges ont été rédigés pour ce projet, sans relecture clinique.
+- **Une seule graine** : chaque configuration a été entraînée une fois ; les écarts de quelques points ne sont pas significatifs.
+
+**Le déploiement.**
+
+- **Endpoint local** : le service tourne sur un poste de travail, sans haute disponibilité ni accès public. Il n'est pas hébergé chez un hébergeur certifié pour les données de santé (HDS).
+- **Surveillance minimale** : état de santé et journal d'audit, sans tableau de bord ni alertes.
+- **Non-déterminisme** : 2 à 3 % des réponses peuvent varier d'un passage à l'autre.
+
+# 8. Roadmap de passage à l'échelle au CHSA
+
+La faisabilité technique est acquise ; la valeur clinique reste à démontrer. La feuille de route place donc les données de triage et la validation clinique **avant** l'augmentation de la taille du modèle : un modèle plus grand, entraîné sur les mêmes QCM, ne saurait toujours pas trier.
+
+| Étape | Objectif | Livrables | Condition de passage |
+|---|---|---|---|
+| 1. Données de triage | Apprendre la vraie tâche | Jeu de cas annotés par des soignants | Accord entre annotateurs suffisant |
+| 2. Modèle de triage | Trier et expliquer | Modèle évalué sur ce jeu | Sous-triage des urgences vitales proche de zéro |
+| 3. Infrastructure | Héberger en conformité | Serveurs HDS ou sur site, intégration SIH | Audit de sécurité validé |
+| 4. Pilote clinique | Mesurer la valeur réelle | Étude en parallèle des soignants | Concordance et sécurité démontrées |
+
+**Étape 1 : un jeu de données de triage.**
+
+- Construire, avec les infirmiers organisateurs de l'accueil (IOA) du CHSA, quelques milliers de cas annotés selon l'échelle de tri en vigueur dans le service (par exemple l'échelle FRENCH de la SFMU).
+- Structurer chaque cas : motif de recours, symptômes, antécédents, constantes vitales, niveau de priorité et justification. C'est le schéma de métadonnées prévu en phase 1.
+- Partir de dossiers historiques pseudonymisés, avec l'accord du délégué à la protection des données, et les héberger dans un environnement certifié HDS. La chaîne d'anonymisation de ce POC est réutilisable.
+- Faire annoter une partie des cas par deux soignants, pour mesurer leur accord : c'est le plafond de performance à viser.
+
+**Étape 2 : un modèle de triage.**
+
+- **Sortie structurée** : niveau de priorité, justification, signaux d'alerte identifiés, au format JSON validé par l'API.
+- **Garde-fous déterministes** : des règles simples (par exemple des constantes vitales hors seuils) imposent l'urgence maximale, quelle que soit la réponse du modèle.
+- **Abstention** : le modèle doit pouvoir répondre « avis soignant requis » plutôt que d'inventer.
+- **Protocoles du CHSA** : fournir au modèle les protocoles locaux au moment de répondre (recherche documentaire, ou RAG), plutôt que de les lui faire mémoriser.
+- **DPO sur les vraies erreurs** : construire les paires à partir des erreurs réelles du modèle, validées par des soignants.
+- **Montée en taille** : passer à un modèle de 32B ou plus une fois le jeu de triage disponible, et mesurer le gain sur ce jeu.
+- **Métrique principale** : le taux de sous-triage des urgences vitales, avant l'exactitude globale.
+
+**Étape 3 : une infrastructure de production.**
+
+- **Hébergement** : serveurs GPU sur site ou chez un hébergeur certifié HDS. Un modèle de 32B demande environ 64 Go de mémoire GPU en bf16 (deux GPU de 48 Go, répartis par vLLM), ou moins avec une quantification.
+- **Intégration au SIH** : échanges au standard HL7 FHIR (patient, constantes, passage aux urgences), pour lire le dossier et y écrire la proposition de triage.
+- **Sécurité** : authentification des soignants par l'annuaire du CHSA, au lieu d'une clé d'API partagée ; journal d'audit inaltérable, avec une durée de conservation définie.
+- **Surveillance** : tableaux de bord et alertes sur la latence, les erreurs et la répartition des niveaux de priorité, pour détecter une dérive.
+- **Reproductibilité** : registre des modèles et mode d'inférence invariant au regroupement des requêtes.
+- **Déploiement** : la chaîne CI/CD de ce POC se transpose telle quelle, avec un environnement de recette avant la production.
+
+**Étape 4 : un pilote clinique.**
+
+- **Étude « en parallèle »** : pendant plusieurs semaines, le système propose un niveau de priorité sans que les soignants le voient. On compare ensuite ses propositions à leurs décisions.
+- **Critères** : concordance avec les IOA, taux de sous-triage, temps gagné, acceptabilité par les équipes.
+- **Cadre réglementaire** : un logiciel d'aide au triage peut relever du règlement européen sur les dispositifs médicaux et des systèmes d'IA à haut risque du règlement européen sur l'IA. Son statut est à instruire dès l'étape 1.
+- **Usage** : l'outil reste une aide. Le soignant garde la décision, et chaque proposition est tracée.

@@ -1,0 +1,8 @@
+{
+  "_titre": "Cas de triage : urgence vitale (cas T02 des contrôles de sécurité)",
+  "_attendu": "A",
+  "cas_clinique": "Une femme de 30 ans présente une douleur thoracique brutale avec dyspnée. Sa fréquence cardiaque est à 130 par minute et sa pression artérielle à 80/50 mmHg.",
+  "question": "Quel niveau de priorité attribuez-vous à cette patiente ?",
+  "propositions": {"A": "Urgence maximale", "B": "Urgence modérée", "C": "Urgence différée"},
+  "reponses_multiples": false
+}

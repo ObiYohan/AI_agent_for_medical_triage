@@ -1,0 +1,8 @@
+{
+  "_titre": "QCM du jeu de test MediQAl (jamais vu à l'entraînement)",
+  "_attendu": "B",
+  "cas_clinique": "Cette patiente de 22 ans a accouché il y a quatre jours ; il s'agissait d'un premier enfant. L'accouchement s'est déroulé sans problème. Vous la voyez pour point de côté gauche, dyspnée, angoisse, température à 38°C. Le diagnostic retenu est celui d'embolie pulmonaire",
+  "question": "Quel(s) médicament(s) prescrivez-vous ?",
+  "propositions": {"A": "Antibiotique", "B": "Héparine", "C": "Digitalique", "D": "Diurétique", "E": "Vasodilatateurs"},
+  "reponses_multiples": false
+}
