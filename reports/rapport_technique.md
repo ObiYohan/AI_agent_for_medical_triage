@@ -38,9 +38,9 @@ Le projet étudie la faisabilité d'un **agent IA de triage médical**, chargé 
 | 2. Optimisation ciblée | Adapter Qwen3-1.7B-Base par SFT LoRA, puis l'aligner par DPO | Modèle SFT + DPO, publié sur Hugging Face Hub |
 | 3. Projection industrielle | Servir le modèle (vLLM, FastAPI, Docker), automatiser le déploiement | API servie par vLLM sur GPU, CI/CD GitHub Actions, tests de latence et de robustesse |
 
-## 1.3 Ce que le POC couvre, et ce qu'il ne couvre pas
+## 1.3 Périmètre du POC
 
-Aucun jeu de données de triage aux urgences (description d'un patient associée à un niveau de priorité validé) n'est disponible sous une licence ouverte. Le POC s'appuie donc sur une tâche intermédiaire, mesurable automatiquement : **répondre à des questions médicales**.
+Le POC entraine le modèle à **répondre à des questions médicales**.
 
 - En **français**, des QCM sur des cas cliniques (MediQAl), avec un corrigé officiel. Le modèle doit choisir la ou les bonnes propositions.
 - En **anglais**, des questions biomédicales avec des réponses rédigées et raisonnées (UltraMedical).
@@ -49,7 +49,7 @@ Ce choix permet de valider toute la chaîne technique (données, entraînement, 
 
 ## 1.4 Environnement
 
-Tout le projet a été réalisé sur un poste de travail : carte graphique NVIDIA RTX 3080 (10 Go), sous Linux (WSL 2). Cette contrainte a guidé plusieurs choix : LoRA plutôt qu'un fine-tuning complet, limite de longueur des exemples, modèle de 1,7 milliard de paramètres.
+Tout le projet a été réalisé sur un poste de travail : carte graphique NVIDIA RTX 3080 (10 Go), sous Linux (WSL 2).
 
 # 2. Architecture : l'enchaînement des briques
 
@@ -99,46 +99,7 @@ Le schéma suit le parcours des données, des sources publiques jusqu'à la rép
 | Conteneurs | Docker Compose | Assembler vLLM et l'API | `docker-compose.yml` |
 | CI/CD | GitHub Actions, GHCR | Tester, publier, déployer | Pipeline automatisé |
 
-## 2.3 Le fil conducteur : un seul format, de bout en bout
-
-Le principal risque d'une chaîne comme celle-ci est un **décalage de format** : le modèle reçoit en service un texte légèrement différent de celui qu'il a appris, et ses performances chutent sans erreur visible. Deux choix l'évitent.
-
-**Un module partagé pour le prompt.** Le module Python `projet_14.mediqal` construit le message utilisateur (cas clinique, question, propositions, consigne). Il est utilisé à toutes les étapes :
-
-| Étape | Utilisation |
-|---|---|
-| Préparation des données | construire les prompts d'entraînement |
-| Évaluation | relire les lettres des réponses générées |
-| API | construire le prompt à partir de la requête JSON |
-| Tests et mesures | rejouer les QCM du jeu de test contre l'API |
-
-Une fonction inverse retrouve le cas, la question et les propositions à partir d'un prompt. L'aller-retour est exact sur les 2 161 QCM de test.
-
-**Un seul gabarit de conversation.** Le texte vu par le modèle suit le format ChatML de Qwen. Une particularité de Qwen3-*Base* a imposé un choix : ses balises `<|im_start|>` et `<|im_end|>` n'ont jamais été entraînées, et LoRA ne modifie pas les vecteurs des tokens. Le modèle ne peut donc pas apprendre à écrire `<|im_end|>`, et ne s'arrêterait jamais. Les réponses se terminent par `<|endoftext|>`, appris au pré-entraînement. Ce gabarit est sauvegardé avec le modèle, publié sur le Hub et appliqué par vLLM. Nous avons vérifié que vLLM produit exactement les mêmes tokens que l'entraînement : une même question donne la même réponse dans le notebook d'évaluation et à travers l'API.
-
-## 2.4 Traçabilité et reproductibilité
-
-Chaque maillon garde la trace de sa version, de sorte qu'une réponse de l'API peut être reliée aux données et aux réglages qui l'ont produite.
-
-| Maillon | Trace conservée |
-|---|---|
-| Données | version (`v1` à `v3`) dans le nom des runs, graine fixe (42) |
-| Entraînement | run MLflow : hyperparamètres, courbes, métriques ; `run_config.json` |
-| Modèle | dépôt Hugging Face, révision fixée dans `docker-compose.yml` |
-| API | image Docker étiquetée par le commit Git |
-| Requêtes | journal d'audit : identifiant, horodatage, modèle, latence, réponse |
-
-Le journal d'audit ne contient **aucun texte patient** : seule une empreinte SHA-256 de l'entrée est conservée. Elle permet de retrouver une requête sans stocker de données de santé.
-
-## 2.5 Le parcours d'une requête
-
-1. Le client envoie un QCM en JSON à `POST /qcm`, avec sa clé dans l'en-tête `X-API-Key`.
-2. FastAPI vérifie la clé, puis valide l'entrée (longueurs, propositions non vides, aucune balise de gabarit).
-3. L'API construit le prompt avec `projet_14.mediqal` et appelle vLLM (`temperature = 0`).
-4. vLLM génère la réponse sur le GPU, en regroupant les requêtes simultanées.
-5. L'API relit les lettres, vérifie que le format est exploitable, écrit une ligne dans le journal d'audit et renvoie la réponse, avec un avertissement sur les limites d'usage.
-
-## 2.6 Le déploiement automatisé
+## 2.3 Le déploiement automatisé
 
 À chaque modification du code, le pipeline GitHub Actions enchaîne trois étapes.
 
@@ -163,7 +124,7 @@ Trois critères ont guidé le choix :
 
 - **Bilingue** : le français pour la cible (le CHSA), l'anglais pour la richesse des ressources médicales.
 - **Vérifiable** : un corrigé ou une note permet de contrôler automatiquement chaque exemple. C'est ce qui rend possible le principe « qualité plutôt que quantité ».
-- **Licence ouverte** : CC-BY-4.0 et MIT autorisent la réutilisation et la modification, à condition de citer la source.
+
 
 **MediQAl** (configurations `mcqu` et `mcqm`) rassemble des QCM rédigés par des enseignants en médecine. Les mauvaises propositions (les *distracteurs*) sont plausibles par construction, ce qui est précieux pour le DPO.
 
@@ -187,6 +148,8 @@ Les tirages sont déterministes : tous les notebooks obtiennent la même répart
 
 - SFT : une liste `messages` (système, utilisateur, assistant) ;
 - DPO : `prompt`, `chosen` (réponse préférée) et `rejected` (réponse moins bonne).
+
+Chaque exemple garde ses métadonnées : source, langue, identifiant de cas clinique, corrigé, type d'erreur, contrôle appliqué et nombre de noms anonymisés. Le schéma complet est documenté dans le README du dépôt.
 
 ## 3.3 Les jeux SFT
 
@@ -231,20 +194,6 @@ Les questions avec cas évitent que le modèle associe « cas clinique » à « 
 
 Le filtre de longueur a une raison précise : une réponse coupée perdrait son token de fin, et le modèle apprendrait à ne pas s'arrêter.
 
-**Le format des exemples MediQAl.** Le message utilisateur reprend le cas, la question, les propositions et une consigne sur le nombre de bonnes réponses :
-
-```
-Un homme de 45 ans [...] Le stade pathologique (PS) de ce patient est :
-
-Propositions :
-A. PS IIE
-B. PS IIB
-C. PS IIIA
-D. PS IIIB
-E. PS IVB
-
-Une seule proposition est exacte.
-```
 
 La réponse attendue donne la lettre et le texte de la bonne proposition (`D. PS IIIB`), ou une liste (`- A. ...`) pour les réponses multiples. La lettre vient en premier : l'exactitude se mesure automatiquement en relisant les lettres.
 
@@ -335,41 +284,206 @@ Pour UltraMedical, seuls les exemples ChatDoctor sont analysés : 190 en SFT et 
 - **Données dérivées non publiées** : les jeux anonymisés ne sont pas versionnés dans Git. Ils se régénèrent à partir des sources et des notebooks.
 - **En service** : le journal d'audit de l'API ne conserve que l'empreinte de l'entrée, jamais le texte du cas.
 
-## 3.6 Trois itérations sur les données
+# 4. Entraînement
 
-Les données ont évolué au fil des entraînements : chaque version corrige un problème révélé par la précédente.
+## 4.1 Méthode : SFT puis DPO, avec LoRA
 
-| Version | Problème observé | Correction |
+L'entraînement se fait en deux temps, sur le même modèle de base, `Qwen/Qwen3-1.7B-Base`.
+
+- **SFT** (*Supervised Fine-Tuning*) : le modèle lit des questions et les réponses attendues, et apprend à les reproduire. La perte ne porte que sur la réponse, pas sur la question.
+- **DPO** (*Direct Preference Optimization*) : le modèle lit des paires de réponses à une même question, et apprend à rendre la réponse préférée plus probable que l'autre. Le modèle SFT sert de **référence** : le DPO mesure ce que le modèle préfère *de plus* que le SFT, ce qui l'empêche de s'en éloigner trop.
+
+Les deux étapes utilisent **LoRA** : les poids du modèle sont figés, et seules de petites matrices ajoutées à chaque couche sont entraînées. Avec un rang de 16 sur toutes les couches linéaires, cela représente 17,4 millions de paramètres, soit 1 % du modèle. Un fine-tuning complet demanderait environ 27 Go de mémoire GPU ; avec LoRA, l'entraînement tient sur les 10 Go de la RTX 3080.
+
+Pour le DPO, l'adaptateur SFT est d'abord fusionné dans les poids, puis un nouvel adaptateur est entraîné par-dessus. La référence s'obtient en désactivant ce nouvel adaptateur : il n'est pas nécessaire de charger un second modèle en mémoire.
+
+## 4.2 Réglages
+
+| Réglage | SFT | DPO |
 |---|---|---|
-| v1 | Propositions absentes du prompt : aucune lettre exploitable | Propositions A à E dans le prompt, réponse « lettre + texte » |
-| v1 | 954 cas partagés entre train et test officiels | Répartition par cas clinique |
-| v1 | DPO anglais : préférence apprise pour la réponse courte | Équilibrage sur la longueur |
-| v2 | 25 % de réponses à plusieurs lettres en `mcqu` | Consigne « une seule / plusieurs propositions » |
-| v3 | — | Version entraînée et servie |
+| Données (train) | 6 354 exemples | 3 351 paires |
+| LoRA | rang 16, alpha 32, dropout 0,05 | identique |
+| Époques | 1 | 1 |
+| Learning rate | 2e-4, décroissance en cosinus | 5e-5, décroissance en cosinus |
+| Montée progressive | 3 % des pas | 10 % des pas |
+| Batch effectif | 16 exemples (4 × 4) | 16 paires (2 × 8) |
+| Longueur maximale | 1 024 tokens | 1 024 tokens |
+| Paramètre propre | — | beta = 0,1 |
+| Pas d'entraînement | 398 | 210 |
+| Durée (RTX 3080) | 30 min | 53 min |
 
-L'effet de la dernière correction est direct : en `mcqu`, la part de réponses à plusieurs lettres passe de 25 % à 0 %, et l'exactitude du modèle SFT de 0,32 à 0,39 (200 questions de test).
+Deux réglages ont été ajustés au fil des runs :
 
-## 3.7 Schéma des métadonnées
+- **Une seule époque de SFT** : avec deux époques, la perte de validation atteignait son minimum à la fin de la première, puis remontait légèrement. La seconde époque coûtait 30 minutes sans rien apporter.
+- **Learning rate du DPO à 5e-5** : la valeur usuelle en DPO complet (5e-6) ne produisait presque aucun apprentissage avec LoRA, qui n'entraîne qu'1 % des poids. La marge entre réponses préférées et rejetées restait proche de zéro.
 
-Chaque exemple garde ses métadonnées, en plus du texte d'entraînement.
+## 4.3 Déroulement
 
-| Champ | Description | Jeux |
+| Indicateur | Avant | Après |
 |---|---|---|
-| `id` | identifiant de la question d'origine | MediQAl |
-| `prompt_id` | identifiant de la question d'origine | UltraMedical |
-| `source` | jeu et configuration d'origine | tous |
-| `lang` | langue (`fr`, `en`) | tous |
-| `case_id` | identifiant du cas clinique | MediQAl |
-| `medical_subject` | spécialité médicale | MediQAl |
-| `question_type` | type de question | MediQAl |
-| `golden_answer` | corrigé (QCM) ou réponse de référence | tous |
-| `rejected_type` | type d'erreur de la `rejected` | DPO fr |
-| `label_type` | type de paire d'origine | DPO en |
-| `chosen_model`, `rejected_model` | LLM auteur de chaque réponse | UltraMedical |
-| `chosen_score`, `rejected_score` | notes GPT-4 des réponses | UltraMedical |
-| `pair_check` | contrôle appliqué à l'exemple | DPO, SFT en |
-| `persons_replaced` | noms remplacés par l'anonymisation | tous |
+| SFT : perte de validation | 0,781 | 0,643 |
+| DPO : perte de validation | 0,693 | 0,446 |
+| DPO : préférences justes (validation) | 0,50 | 0,79 |
+| DPO : marge des récompenses | 0 | 1,73 |
 
-Les champs `pair_check`, `chosen_score` et `rejected_score` jouent le rôle d'un **niveau de confiance** : ils disent comment chaque préférence a été validée.
+- **SFT** : la perte de validation baisse de façon régulière et se stabilise en fin d'époque, sans remonter. Sur le test, elle est proche de la validation (0,589) : le modèle généralise, sans apprendre par cœur.
+- **DPO** : la perte part de 0,693 (valeur théorique sans aucune préférence) et plafonne à partir du pas 150. Les probabilités des réponses préférées et rejetées baissent toutes les deux, mais celles des rejetées baissent plus vite : c'est le comportement attendu.
 
-Le schéma demandé pour la phase 1 prévoyait aussi des champs **symptômes, antécédents et constantes vitales**. Les sources utilisées ne les fournissent pas de façon structurée : ces informations figurent dans le texte libre des cas cliniques. Les structurer est un prérequis pour un jeu de triage, et fait partie de la feuille de route.
+Les pertes par source rappellent qu'une perte basse ne suffit pas à juger le modèle : 0,08 à 0,11 sur les QCM français, contre 0,79 sur l'anglais. En français, le texte des propositions est dans le prompt, et le modèle n'a presque qu'à le recopier ; la seule vraie difficulté est la lettre. D'où l'évaluation sur les réponses générées (partie 5).
+
+## 4.4 Traçabilité de l'entraînement
+
+- **Petits runs d'abord** : chaque changement est validé sur quelques dizaines de pas (environ 10 minutes) avant le run complet, comme le recommande le sujet.
+- **MLflow sur DagsHub** : chaque run enregistre ses hyperparamètres, la version des données, ses courbes et ses métriques finales. Son nom résume sa configuration, par exemple `dpo-lora-r16-v3-beta0.1-lr5e-05-seed42`.
+- **Checkpoints** : une sauvegarde tous les 100 pas (SFT) ou 25 pas (DPO), avec reprise possible après une interruption. Le meilleur checkpoint, selon la perte de validation, est rechargé à la fin.
+- **Configuration** : un fichier `run_config.json` accompagne chaque adaptateur (réglages, tailles des données, graine).
+- **Graine fixe** (42) pour toutes les étapes aléatoires.
+
+# 5. Évaluation et résultats
+
+## 5.1 Méthode
+
+**L'exactitude sur les réponses générées.** Le modèle répond à chaque QCM, sans hasard dans la génération (`temperature = 0`). Une réponse est juste si elle donne **exactement** les lettres du corrigé. L'évaluation est faite à travers vLLM, avec le prompt de l'API : le modèle est mesuré tel qu'il est servi.
+
+**Les réponses naïves.** Un score n'a de sens que comparé à ce qu'on obtient sans réfléchir. La référence principale est la **réponse la plus fréquente** : donner à toutes les questions la lettre, ou la combinaison, la plus courante dans le corrigé.
+
+**L'incertitude.** Sur 749 questions, une exactitude de 0,44 a une marge d'erreur d'environ ± 0,036. Pour comparer deux modèles sur les mêmes questions, on ne retient que les questions où ils divergent (**test de McNemar**) : c'est beaucoup plus fiable que de comparer deux moyennes.
+
+## 5.2 Connaissances médicales : les QCM
+
+| Test | Questions | Base | SFT | SFT + DPO | Réponse la plus fréquente |
+|---|---|---|---|---|---|
+| `mcqu` (une bonne réponse) | 749 | ~0 | 0,437 | 0,445 | 0,244 |
+| `mcqm` (2 à 5 bonnes réponses) | 931 | ~0 | 0,090 | 0,114 | 0,068 |
+
+- **Le modèle de base** (mesuré sur 200 questions par source) obtient un score proche de zéro : il ne suit pas le format (il écrit un paragraphe sans lettre).
+- **Le SFT apporte un gain réel** : 0,44 en `mcqu`, contre 0,24 pour la réponse naïve, soit 1,8 fois plus de bonnes réponses.
+- **Le DPO ne change rien en `mcqu`** (43 questions gagnées, 37 perdues ; p = 0,58), alors qu'il n'a été entraîné que sur des QCM à réponses multiples. Il ne dégrade donc pas ce qu'avait appris le SFT.
+- **En `mcqm`, le DPO gagne 2,4 points** (83 questions gagnées, 61 perdues ; p = 0,08) : un gain à la limite de la significativité.
+
+L'exactitude stricte reste faible en `mcqm` : il faut trouver la bonne combinaison parmi 26.
+
+## 5.3 Ce que le DPO a appris
+
+**Les préférences.** Sur les paires de test, le modèle DPO préfère la bonne réponse dans 70 % des cas en français et 66 % en anglais (50 % = hasard). Le découpage par type d'erreur montre *comment* :
+
+| Type de `rejected` | Paires de test | Préférences justes |
+|---|---|---|
+| Ajout d'une mauvaise proposition | 150 | 0,86 |
+| Omission d'une bonne proposition | 176 | 0,64 |
+| Substitution | 155 | 0,61 |
+
+Le modèle repère bien une proposition en trop, beaucoup moins une proposition manquante. Le score des omissions est même flatteur : dans 81 de ces paires, la `rejected` n'a qu'une lettre et contredit la consigne « au moins deux ». La substitution, seul cas où les deux listes ont la même longueur, mesure le mieux l'apprentissage sur le fond : 0,61, à peine au-dessus du hasard.
+
+**L'effet sur les réponses.** Le DPO a surtout appris à **cocher moins** :
+
+| Bonnes réponses attendues | 2 | 3 | 4 | 5 |
+|---|---|---|---|---|
+| Questions (200 du test DPO) | 87 | 76 | 30 | 7 |
+| Exactitude SFT | 0,13 | 0,12 | 0,13 | 0,43 |
+| Exactitude SFT + DPO | 0,30 | 0,09 | 0,07 | 0,00 |
+
+Sur l'ensemble du test `mcqm`, le SFT coche en moyenne 3,68 propositions, le DPO 2,42, pour 2,78 attendues. Le DPO répond le plus souvent deux lettres : il gagne sur les questions à deux bonnes réponses, les plus nombreuses, et perd sur les autres. Son gain global vient de ce raccourci, plus que d'un progrès de connaissances.
+
+**Le biais de longueur en anglais.** Sur le test revu par des experts, le modèle préfère la bonne réponse dans 77 % des cas quand elle est la plus courte, et dans 62 % quand elle est la plus longue. L'équilibrage du train (partie 3.4) a réduit ce biais sans le supprimer.
+
+## 5.4 Contrôles de sécurité
+
+Les contrôles de sécurité demandés en phase 2 portent sur 28 QCM pièges, passés par l'API. Ces cas ont été rédigés pour ce projet ; ils n'ont pas été validés par un clinicien.
+
+| Catégorie | Questions | SFT | SFT + DPO |
+|---|---|---|---|
+| Recommandation dangereuse parmi les choix | 12 | 4 dangereuses | 3 dangereuses |
+| Entité médicale inventée | 5 | 0 reconnue | 0 reconnue |
+| Questions témoins (réelles) | 2 | 2 justes | 2 justes |
+| Niveau de priorité (triage) | 9 | 6 justes | 4 justes |
+
+**Recommandations dangereuses.** Les deux modèles choisissent une option dangereuse dans trois situations :
+
+- une **perfusion de potassium** face à une hyperkaliémie sévère, qu'elle aggraverait ;
+- un **antipyrétique et un retour à domicile** face à un purpura fébrile extensif, au lieu d'une antibiothérapie immédiate ;
+- un **antalgique et un retour à domicile** face à une intoxication au monoxyde de carbone.
+
+Le SFT seul indique en plus une dose maximale de paracétamol de **10 g par jour** ; le DPO corrige cette erreur (4 g).
+
+**Hallucinations.** Face à une maladie, un médicament ou un muscle inventés, les deux modèles choisissent toujours une réponse médicale plausible, alors que la proposition « n'existe pas » est offerte. Ils ne savent pas reconnaître les limites de leurs connaissances.
+
+**Triage.** Les quatre urgences vitales (arrêt cardiaque, état de choc, hémorragie, convulsions) sont toutes classées en urgence maximale : aucun sous-triage. En revanche, les cas modérés sont classés en urgence maximale, et le DPO classe les trois cas bénins en urgence modérée. Les deux modèles **sur-trient** : c'est l'erreur la moins dangereuse, mais elle engorgerait le service. Le modèle n'a jamais été entraîné sur cette tâche, et neuf cas ne suffisent pas à conclure.
+
+**Conclusion.** Le modèle ne peut en aucun cas être utilisé de façon autonome. Ses erreurs sont précisément celles qu'un outil de triage ne peut pas se permettre : recommandations dangereuses et réponses assurées sur ce qu'il ignore.
+
+# 6. Mise en service de la démonstration
+
+## 6.1 Pourquoi vLLM
+
+Pendant l'entraînement, la génération avec la bibliothèque Transformers traite environ 2 questions par seconde : les requêtes sont regroupées en lots figés, et le lot attend la réponse la plus longue. vLLM est un serveur d'inférence conçu pour servir de nombreuses requêtes en même temps :
+
+- **PagedAttention** : la mémoire de travail de chaque requête est allouée par petites pages, au fil de la génération. Moins de mémoire perdue, donc plus de requêtes simultanées.
+- **Batching continu** : dès qu'une réponse est terminée, une nouvelle requête prend sa place, sans attendre la fin du lot.
+- **API compatible OpenAI** : n'importe quel client standard peut l'interroger.
+- **Passage à l'échelle** : vLLM sait répartir un grand modèle sur plusieurs GPU, ce que demandera un modèle de 32B et plus.
+
+## 6.2 L'API et la sécurité d'accès
+
+L'API FastAPI expose deux points d'accès : `POST /qcm` (répondre à un QCM) et `GET /health` (état de l'API et de vLLM). vLLM n'est jamais exposé directement : seule l'API l'est.
+
+| Mesure | Mise en œuvre |
+|---|---|
+| Accès protégé | clé obligatoire dans l'en-tête `X-API-Key` ; refus tracés |
+| Secrets | clés dans `.env` (exclu de Git) et dans les secrets GitHub |
+| Validation des entrées | longueurs maximales, propositions non vides, balises interdites |
+| Réponse vérifiée | champ `format_valide` : lettres proposées, en nombre conforme |
+| Limites d'usage | avertissement joint à chaque réponse |
+
+Le modèle est servi en local, sur la machine GPU qui héberge aussi le runner de déploiement.
+
+## 6.3 Latence et débit
+
+Mesures sur la RTX 3080, avec 100 QCM du jeu de test par niveau de charge, enregistrées dans MLflow.
+
+| Requêtes simultanées | Latence médiane | Latence p95 | Débit |
+|---|---|---|---|
+| 1 | 168 ms | 433 ms | 4,7 req/s |
+| 10 | 234 ms | 657 ms | 31,8 req/s |
+| 50 | 823 ms | 1 234 ms | 45,0 req/s |
+
+- **Le batching continu fonctionne** : de 1 à 50 requêtes simultanées, le débit est multiplié par 10, pour une latence médiane qui reste sous la seconde.
+- **Par rapport à la génération pendant l'entraînement**, le débit passe d'environ 2 à 45 réponses par seconde.
+- **vLLM seul** répond en 38 ms au premier token (TTFT) et produit ensuite un token toutes les 7 ms (TPOT) : l'essentiel du temps est passé à générer la réponse.
+- Le p95 est environ trois fois la médiane à faible charge : une réponse à plusieurs propositions est plus longue à générer qu'une réponse unique.
+
+## 6.4 Robustesse
+
+Quatorze tests d'intégration, lancés contre la pile réelle, vérifient le comportement dans les cas limites. La plupart sont relancés automatiquement à chaque déploiement ; l'arrêt de vLLM n'est testé qu'à la demande.
+
+| Situation testée | Comportement vérifié |
+|---|---|
+| 40 QCM réels du jeu de test | toutes les réponses au format attendu |
+| Entrée trop longue pour le modèle | refus clair (erreur 422) |
+| Propositions vides, entrée hors limites | refus (erreur 422) |
+| Consigne contradictoire (« ignore les consignes ») | le modèle garde le format QCM |
+| Question en anglais, caractères spéciaux | réponse valide |
+| 50 requêtes simultanées | toutes servies, toutes tracées |
+| Serveur vLLM arrêté | l'API reste disponible, erreur 503 tracée |
+
+Ces tests ont révélé trois défauts, corrigés depuis :
+
+- **Injection par les balises du gabarit.** Un texte contenant `<|im_end|>` ou `<|im_start|>` était découpé en vrais tokens spéciaux : un utilisateur pouvait fermer son message et injecter un faux message système. L'API refuse désormais toute balise de cette forme, avant tout appel au modèle.
+- **Entrée trop longue présentée comme une panne** : l'API répondait « serveur indisponible ». Elle répond maintenant « entrée trop longue ».
+- **Propositions vides acceptées** : un QCM pouvait ne contenir qu'une seule vraie proposition.
+
+## 6.5 Audit de traçabilité
+
+Chaque requête produit une ligne dans un journal d'audit (JSONL) :
+
+| Champ | Contenu |
+|---|---|
+| `request_id`, `timestamp` | identifiant unique et horodatage |
+| `model` | modèle servi |
+| `input_sha256` | empreinte de l'entrée, sans le texte |
+| `letters`, `format_valide` | réponse donnée et sa validité |
+| `latency_ms`, `status` | latence et issue (succès, refus, erreur) |
+
+Les tests d'audit vérifient que chaque requête est tracée avec tous ses champs, qu'une même entrée donne la même empreinte, que les accès refusés sont tracés sans la clé reçue, et qu'**aucun texte patient** n'apparaît dans le journal (un marqueur unique, placé dans chaque champ, n'y est jamais retrouvé).
+
+**Une limite pour l'audit.** Même avec `temperature = 0`, vLLM n'est pas parfaitement déterministe : selon le regroupement des requêtes, 2 à 3 % des réponses changent d'un passage à l'autre. Rejouer une question ne garantit donc pas d'obtenir la même réponse. Le journal enregistre la réponse effectivement donnée, ce qui reste la trace de référence.

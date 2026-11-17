@@ -13,6 +13,36 @@
 - **Obligations** : CC-BY-4.0 et MIT imposent de citer la source et sa licence, ce que fait ce tableau et la fiche du modèle publié.
 - **Modèle publié** : [`0biyohan/qwen3-1.7b-medical-qcm-fr`](https://huggingface.co/0biyohan/qwen3-1.7b-medical-qcm-fr) (dépôt privé, Apache 2.0).
 
+## Schéma des métadonnées
+
+Chaque exemple des fichiers `data/anonymized/*.anonymized.jsonl` garde ses métadonnées, en plus du texte
+d'entraînement (`messages` pour le SFT, `prompt` / `chosen` / `rejected` pour le DPO).
+
+| Champ | Description | Jeux |
+|---|---|---|
+| `id` | identifiant de la question d'origine | MediQAl |
+| `prompt_id` | identifiant de la question d'origine | UltraMedical |
+| `source` | jeu et configuration d'origine (`MediQAl-mcqu`, `MediQAl-mcqm`, `MedQA`, `ChatDoctor`…) | tous |
+| `lang` | langue : `fr` ou `en` | tous |
+| `case_id` | identifiant du cas clinique (empreinte SHA-1 du texte normalisé, 12 caractères) ; détermine l'usage (SFT ou DPO) et le split | MediQAl |
+| `medical_subject` | spécialité médicale | MediQAl |
+| `question_type` | type de question | MediQAl |
+| `golden_answer` | corrigé (QCM) ou réponse de référence | tous |
+| `rejected_type` | erreur de la réponse `rejected` : `omission`, `ajout` ou `substitution` | DPO MediQAl |
+| `label_type` | type de paire d'origine (`hard`, `length`, `human`…) | DPO UltraMedical |
+| `chosen_model`, `rejected_model` | LLM auteur de chaque réponse | UltraMedical |
+| `chosen_score`, `rejected_score` | notes GPT-4 des réponses | UltraMedical |
+| `pair_check` | contrôle qui valide l'exemple : `golden_answer` (corrigé) ou `gpt4_score` (note GPT-4) | DPO, SFT UltraMedical |
+| `persons_replaced` | nombre de noms remplacés par `<PERSON>` lors de l'anonymisation | tous |
+
+- **Niveau de confiance** : `pair_check`, `chosen_score` et `rejected_score` indiquent comment chaque réponse ou
+  préférence a été validée.
+- **Symptômes, antécédents, constantes vitales** : les sources ne les fournissent pas de façon structurée (ils
+  figurent dans le texte libre des cas cliniques). Les extraire en champs dédiés est un prérequis pour un futur jeu
+  de triage.
+- **Rapport d'anonymisation** : chaque fichier a son `*.report.json` (modèle spaCy, seuil, champs traités, comptes,
+  détections écartées par motif).
+
 ## Anonymisation RGPD
 
 Le script `rgpd-anonymize` anonymise un dataset JSONL au format SFT (`messages`) ou DPO
