@@ -1,0 +1,3038 @@
+id,jeu,attendu,lettres,juste,dangereuse,format_valide,reponse
+13466,mcqu,D,D,True,False,True,D. Neuroleptiques
+18047,mcqu,D,D,True,False,True,D. 24 cm
+21132,mcqu,D,B,False,False,True,B. Listeria monocytogenes
+18097,mcqu,A,C,False,False,True,C. Ménopause précoce
+9615,mcqu,B,D,False,False,True,D. Négatif de 6 grammes
+17468,mcqu,C,C,True,False,True,C. Mesure de la glycémie
+17301,mcqu,D,E,False,False,True,E. Cathétérisme veineux cave avec dosages étagés de catécholamines
+8309,mcqu,D,D,True,False,True,D. Insuffisance de production érythroblastique
+24412,mcqu,C,D,False,False,True,D. Pneumothorax
+9099,mcqu,A,C,False,False,True,C. Diminués.
+3085,mcqu,B,C,False,False,True,C. Sel ferreux et acide folique per os
+18064,mcqu,E,E,True,False,True,E. Colposcopie et biopsie cervicales dirigées
+21149,mcqu,E,D,False,False,True,D. Dosage des anticorps en inhibition de l'hémaglutination (IHA) pour mettre en évidence une séropositivité immédiate
+26881,mcqu,C,C,True,False,True,C. Lupus érythémateux disséminé.
+11721,mcqu,A,B,False,False,True,B. Ulcéro-nécrotique
+20751,mcqu,B,B,True,False,True,"B. Isoniazide, rifampicine, éthambutol, pyrazinamide"
+9051,mcqu,C,D,False,False,True,"D. Une crise d'épilepsie partielle, secondairement généralisée"
+24319,mcqu,C,B,False,False,True,B. Protidémie normale
+18048,mcqu,C,E,False,False,True,E. 12 semaines avant l'accouchement
+10722,mcqu,A,A,True,False,True,A. Parotidectomie totale ou partielle avec conservation du nerf facial
+22629,mcqu,B,B,True,False,True,B. Sexe
+28202,mcqu,A,A,True,False,True,A. 1+2
+23861,mcqu,B,C,False,False,True,C. Vaccination de l'entourage
+15538,mcqu,C,A,False,False,True,A. Streptocoque bêta hémolytique A
+27277,mcqu,B,B,True,False,True,B. Haubanage appuyé sur deux broches
+16796,mcqu,D,A,False,False,True,A. Les AVK sont commencés le jour de l'arrêt de l'héparine
+24452,mcqu,E,E,True,False,True,E. Toutes ces réponses sont justes
+20688,mcqu,C,D,False,False,True,D. Vaccination anti-poliomyélite
+27269,mcqu,D,D,True,False,True,D. Une bronchiolite aigue virale avec atélectasie du lobe supérieur droit
+15534,mcqu,D,B,False,False,True,B. Sérologie
+10653,mcqu,B,B,True,False,True,B. Carcinome glandulaire
+17416,mcqu,C,C,True,False,True,C. Myxoedème
+26880,mcqu,C,A,False,False,True,A. 1+2+5
+17602,mcqu,C,C,True,False,True,C. Retard pubertaire simple
+23138,mcqu,B,B,True,False,True,B. Fracture ouverte
+1876,mcqu,E,E,True,False,True,E. Ichtyose
+17545,mcqu,C,C,True,False,True,C. Rhabdomyolyse aiguë
+9191,mcqu,E,E,True,False,True,E. Signe de Babinski
+27265,mcqu,C,C,True,False,True,C. Hospitalisation avec sa mère dans une chambre isolée
+10719,mcqu,D,D,True,False,True,D. Une tumeur parotidienne
+5271,mcqu,A,A,True,False,True,A. Doxycycline (Vibramycine®)
+15497,mcqu,E,D,False,False,True,D. Thyroglobuline
+27262,mcqu,E,E,True,False,True,E. Une bronchiolite aigue
+4557,mcqu,C,C,True,False,True,C. Une hernie crurale étranglée
+18054,mcqu,B,C,False,False,True,C. Tobramycine (Nebcine®)
+27824,mcqu,D,C,False,False,True,"C. Glycémie A jeun < 1,00 g/l, glycémie post-prandiale A 2 heures < 1,40 g/l."
+17600,mcqu,D,C,False,False,True,C. D'origine ovarienne
+23627,mcqu,D,D,True,False,True,D. Ponction drainage échoguidée
+13707,mcqu,D,A,False,False,True,A. Une intoxication alcoolique aiguë
+21886,mcqu,E,E,True,False,True,E. Toutes les propositions sont exactes.
+23173,mcqu,D,D,True,False,True,D. Mannitol à 10%
+21139,mcqu,C,C,True,False,True,C. Angiographie en fluorescence
+21792,mcqu,D,D,True,False,True,D. Thrombolyse
+21734,mcqu,B,B,True,False,True,B. KILLIP
+13544,mcqu,E,E,True,False,True,E. Hospitalisation avec contrat thérapeutique concernant la reprise du poids
+22674,mcqu,B,C,False,False,True,C. Régime hypocalorique et hypoglucidique + insuline semi lente Bed-time
+13543,mcqu,D,C,False,False,True,C. Diététique
+777,mcqu,B,E,False,False,True,E. Plaquettes
+23480,mcqu,E,C,False,False,True,C. 1+2+5
+2037,mcqu,E,E,True,False,True,E. Aucun des caractères précités
+4488,mcqu,C,C,True,False,True,C. Une coloscopie totale
+1941,mcqu,B,B,True,False,True,B. Une culture pour recherche de bacilles de Ducreyi
+4487,mcqu,A,C,False,False,True,C. La diverticulose sigmoïdienne
+6067,mcqu,E,A,False,False,True,A. Déficit en hypoxanthine guanine phosphoribosyltransgérase
+13378,mcqu,D,E,False,False,True,E. Syndrome de conversion hystérique
+21669,mcqu,A,C,False,False,True,"C. Syndrome coronarien aigu sans sus
+décalage du segment ST"
+1843,mcqu,E,E,True,False,True,E. Aucun des examens précédents
+8311,mcqu,D,C,False,False,True,C. Entre 30 et 40 %
+1919,mcqu,D,D,True,False,True,D. Immunofluorescence directe cutanée
+21690,mcqu,A,D,False,False,True,D. 5+8
+24383,mcqu,E,E,True,False,True,E. Toutes les réponses sont justes.
+21073,mcqu,E,B,False,False,True,B. Maladie de Biermer
+26885,mcqu,B,B,True,False,True,B. Corticoïde.
+17471,mcqu,C,C,True,False,True,C. Une injection IV de 30 ml de sérum glucosé à 30 %
+4561,mcqu,B,B,True,False,True,B. Une intervention chirurgicale immédiate
+7108,mcqu,B,E,False,False,True,E. La recherche de silice libre dans le liquide de lavage broncho-alvéolaire
+10652,mcqu,C,D,False,False,True,D. Tomographies des sinus de face
+23210,mcqu,B,B,True,False,True,B. 1+2+4
+10755,mcqu,D,D,True,False,True,D. Un cancer du cavum avec adénopathie métastatique
+9616,mcqu,A,C,False,False,True,C. L'ammonium
+18126,mcqu,D,E,False,False,True,E. Présence d'acétone + au Labstix
+9252,mcqu,C,B,False,False,True,B. Ascension de la pression du LCR lombaire lors de la compression jugulaire
+5266,mcqu,B,D,False,False,True,D. Rickettsia rickettsi
+26116,mcqu,B,B,True,False,True,B. Echographie abdominale
+27279,mcqu,D,C,False,False,True,C. 30 à 45 jours
+24374,mcqu,D,C,False,False,True,C. Nombre de selles supérieur à 4 par 24 heures.
+24380,mcqu,D,D,True,False,True,D. La vésicule biliaire.
+11647,mcqu,D,D,True,False,True,D. Enquête épidémiologique parmi les enfants fréquentant la même cantine
+3272,mcqu,D,A,False,False,True,A. L'examen cytologique de la moelle
+3237,mcqu,C,D,False,False,True,D. Azathioprine
+24807,mcqu,D,B,False,False,True,B. Doxycycline
+23482,mcqu,C,D,False,False,True,D. Présence de cellules malignes
+5154,mcqu,C,D,False,False,True,D. Rickettsia akari
+9069,mcqu,D,A,False,False,True,A. Fatigabilité
+21145,mcqu,C,C,True,False,True,C. Sevrage éthylique
+23495,mcqu,C,C,True,False,True,C. 1+2+4
+11451,mcqu,A,B,False,False,True,B. Macrolides pendant 8 jours
+23448,mcqu,B,B,True,False,True,B. Inflammatoire
+22622,mcqu,C,D,False,False,True,"D. Radio du cou, face et profil"
+16169,mcqu,D,C,False,False,True,C. Insuffisance mitrale rhumatismale
+9588,mcqu,A,B,False,False,True,B. VLDL
+21088,mcqu,D,D,True,False,True,D. Echographie
+27266,mcqu,E,E,True,False,True,E. Toutes ces réponses sont justes
+6131,mcqu,B,C,False,False,True,"C. VS : 65, leucocytes : 7 200, Waaler Rose négatif, Latex négatif anticorps antinucléaires : absent, protéinurie 2 g/24 h"
+23493,mcqu,B,D,False,False,True,D. Polyarthrite rhumatoide
+21673,mcqu,D,D,True,False,True,D. Tamponnade
+16173,mcqu,D,D,True,False,True,D. Rupture du pilier postérieur de la valve mitrale
+28091,mcqu,B,C,False,False,True,C. Le dosage de l'HCG.
+21888,mcqu,D,D,True,False,True,D. Les propositions A et B ci-dessus
+27540,mcqu,A,A,True,False,True,A. Les données de la cytologie exfoliative
+17419,mcqu,E,D,False,False,True,D. Régime sans sucre
+21751,mcqu,D,E,False,False,True,E. Biopsie osseuse
+23642,mcqu,C,C,True,False,True,C. 4 à 6 semaines
+8093,mcqu,B,B,True,False,True,B. Niridazole (Ambilhar®)
+13016,mcqu,B,C,False,False,True,C. Artériographie bronchique en période hémorragique
+879,mcqu,E,D,False,False,True,D. Une pilule estroprogestative séquentielle
+23452,mcqu,D,C,False,False,True,C. Corticoïdes
+28200,mcqu,C,C,True,False,True,C. Une coloscopie annuelle
+15529,mcqu,E,C,False,False,True,C. La douleur hépatique spontanée
+14914,mcqu,C,C,True,False,True,C. 4 semaines
+15619,mcqu,B,D,False,False,True,D. 10/96
+828,mcqu,D,C,False,False,True,C. Hormonothérapie + chimiothérapie
+15620,mcqu,B,B,True,False,True,B. 40/1822
+16409,mcqu,E,B,False,False,True,B. Embolie plaquettaire dans l'artère vertébrale droite
+23219,mcqu,A,A,True,False,True,A. 1+4
+25899,mcqu,A,E,False,False,True,E. Les propositions A et C sont exactes
+15618,mcqu,E,C,False,False,True,"C. 0,50"
+21750,mcqu,C,C,True,False,True,C. Maladie de Behcet
+17302,mcqu,C,B,False,False,True,B. Au niveau du pédicule rénal
+22853,mcqu,D,C,False,False,True,C. Glomérulonéphrite aiguë
+22907,mcqu,E,E,True,False,True,E. Ponction biopsie osseuse
+16561,mcqu,C,C,True,False,True,C. Inhibiteur de l'enzyme de conversion
+6756,mcqu,B,C,False,False,True,C. Uricémie : 40 mg/l
+21001,mcqu,B,C,False,False,True,C. Syndrome de Leriche
+16503,mcqu,A,C,False,False,True,C. Une exploration électrophysiologique endocavitaire
+15540,mcqu,D,C,False,False,True,C. Amoxicilline per os
+827,mcqu,B,E,False,False,True,E. 3 ans de chimio-hormonothérapie
+6068,mcqu,B,C,False,False,True,C. Comprise entre 300 et 600 mg/24 h
+3090,mcqu,B,C,False,False,True,C. Leucémie aiguë Iymphoblastique
+21912,mcqu,B,B,True,False,True,B. Corticoïdes inhalés
+11646,mcqu,E,E,True,False,True,E. Réhydratation orale
+22937,mcqu,A,A,True,False,True,A. D'indiquer une photothérapie
+3039,mcqu,D,D,True,False,True,"D. Acide folique, per os, 5 mg par jour jusqu'à guérison de l'anémie"
+21691,mcqu,D,D,True,False,True,D. Endocardite aiguë
+4319,mcqu,C,C,True,False,True,C. Appendicite aiguë méso-coeliaque
+24377,mcqu,B,B,True,False,True,B. Syndrome de malabsorption.
+17603,mcqu,A,B,False,False,True,B. Adulte
+22938,mcqu,B,C,False,False,True,C. 960 ml
+16407,mcqu,D,D,True,False,True,D. Echocardiogramme
+18802,mcqu,A,C,False,False,True,C. Le nombre de faux positifs va être supérieur
+25891,mcqu,E,E,True,False,True,E. Embolie pulmonaire
+4491,mcqu,E,E,True,False,True,E. Aucune des propositions précédentes
+13632,mcqu,B,B,True,False,True,B. Accès maniaque
+27826,mcqu,B,A,False,False,True,A. HbA1c.
+9016,mcqu,C,C,True,False,True,C. A une atteinte des voies intémucléaires
+23213,mcqu,D,D,True,False,True,D. Hémopneumothorax
+1811,mcqu,C,C,True,False,True,C. Bulle à la jonction dermo-épidermique
+10695,mcqu,D,D,True,False,True,D. Une ponction à travers le pilier antérieur
+13017,mcqu,B,B,True,False,True,B. Artères systémiques bronchiques
+880,mcqu,B,B,True,False,True,"B. Pourquoi pas, après deux ans de surveillance"
+17354,mcqu,B,B,True,False,True,B. Prescrire des petites doses de thyroxine pour prévenir cette évolution
+1800,mcqu,D,D,True,False,True,D. Traitement par voie générale pendant 3 mois accompagné d'un traitement local et du meulage de l'ongle atteint
+13381,mcqu,C,D,False,False,True,D. Normothymique
+11648,mcqu,E,E,True,False,True,E. Aucune mesure prophylactique autre que l'hygiène des mains
+22855,mcqu,B,C,False,False,True,C. Anti-aldostérone
+21429,mcqu,C,C,True,False,True,C. Production d'une anoxémie par blocage réversible de l'hémoglobine
+13022,mcqu,B,B,True,False,True,B. Les béta 2 mimétiques intraveineux constituent le meilleur traitement
+25951,mcqu,C,C,True,False,True,C. Torsion d'annexe
+911,mcqu,D,D,True,False,True,D. Un nodule hyperfixant est en règle histologiquement bénin
+23626,mcqu,C,C,True,False,True,C. Echographie abdomino-pelvienne
+23172,mcqu,B,C,False,False,True,C. Taux d'hémoglobine
+24379,mcqu,E,E,True,False,True,E. Maladie de Crohn iléo-caecale.
+16147,mcqu,C,C,True,False,True,C. Dépression majeure récidivante
+16502,mcqu,B,C,False,False,True,C. D'un bloc auriculo-ventriculaire complet
+20689,mcqu,C,C,True,False,True,C. Le caractère hémi-convulsif de la crise
+8310,mcqu,A,D,False,False,True,D. Hypofibrinogénémie
+10757,mcqu,C,C,True,False,True,C. D'un carcinome indifférencié du cavum
+22901,mcqu,C,B,False,False,True,B. Echographie abdomino-pelvienne
+5159,mcqu,E,E,True,False,True,E. Sérologie par immunofluorescence indirecte
+28201,mcqu,D,C,False,False,True,C. 1+2
+9111,mcqu,E,D,False,False,True,D. Crise d'épilepsie généralisée primaire
+8355,mcqu,B,C,False,False,True,C. Epuration extra-rénale
+21834,mcqu,E,D,False,False,True,D. 1+3
+24376,mcqu,C,E,False,False,True,E. Hypocholestérolémie.
+13633,mcqu,C,B,False,False,True,B. Diazépam (Valium®) par voie intraveineuse
+9065,mcqu,E,D,False,False,True,D. Dissection carotidienne
+28097,mcqu,A,C,False,False,True,C. Une poly-chimiothérapie type CHAMOCA.
+18994,mcqu,D,D,True,False,True,D. Injection intra-articulaire de corticoides dans les 2 arthrites résiduelles
+10720,mcqu,E,E,True,False,True,E. Aucun de ces arguments
+28096,mcqu,C,C,True,False,True,C. Un curetage biopsique.
+16148,mcqu,E,D,False,False,True,D. Schizophrénique
+8125,mcqu,D,D,True,False,True,D. Faire pratiquer une laminectomie décompressive
+4502,mcqu,B,B,True,False,True,B. Fibroscopie gastroduodénale
+25894,mcqu,A,C,False,False,True,C. Acébutolol
+9068,mcqu,B,C,False,False,True,C. Une zone hypodense pariétale droite
+6332,mcqu,B,B,True,False,True,B. Ponction articulaire
+23174,mcqu,D,E,False,False,True,E. Contusion pulmonaire
+23175,mcqu,D,D,True,False,True,D. Contusion pulmonaire droite
+15622,mcqu,B,B,True,False,True,B. Un appariement
+4560,mcqu,C,C,True,False,True,C. Est la forme anatomo-clinique qui se complique le plus d'étranglement
+17564,mcqu,D,A,False,False,True,A. Insuline Rapitard® 10 U. matin et soir
+8308,mcqu,C,C,True,False,True,C. Normochrome normocytaire non régénérative
+17418,mcqu,C,C,True,False,True,C. L-Thyroxine 100 microg/j
+21881,mcqu,D,D,True,False,True,D. Les propositions A et C exactes
+16794,mcqu,D,B,False,False,True,B. 1 000 UI
+23451,mcqu,B,B,True,False,True,B. Spondylarthropathie
+1858,mcqu,E,B,False,False,True,B. Syphilis secondaire
+24805,mcqu,C,C,True,False,True,C. Neisseria gonorrhoeae
+21754,mcqu,D,C,False,False,True,C. Tuberculose pulmonaire
+21670,mcqu,C,C,True,False,True,C. Frottement péricardique
+10771,mcqu,B,B,True,False,True,B. Endoscopie et biopsie des voies aérodigestives supérieures
+13024,mcqu,D,D,True,False,True,D. Théophylline retard avec béta 2 mimétiques en spray en cas de crise
+16468,mcqu,C,E,False,False,True,E. Cephalosporine + Gentamycine
+9617,mcqu,C,C,True,False,True,C. 60
+1799,mcqu,B,D,False,False,True,D. Hémogramme et vitesse de sédimentation
+15485,mcqu,D,C,False,False,True,C. L'existence d'une insuffisance coronaire
+677,mcqu,A,C,False,False,True,C. T4 N1b M0
+15083,mcqu,E,D,False,False,True,"D. 0,80"
+3091,mcqu,D,A,False,False,True,A. L'examen cytologique de la moelle
+18051,mcqu,B,A,False,False,True,A. La présence du corps étranger (D.I.U.)
+4321,mcqu,D,B,False,False,True,B. Fistule coecale
+25890,mcqu,A,A,True,False,True,A. La recherche de protéines dans les urines
+21887,mcqu,E,D,False,False,True,D. Aux propositions A et B ci dessus
+7624,mcqu,A,C,False,False,True,C. Contre-immunoélectrophorèse du L.C.R.
+10648,mcqu,C,C,True,False,True,C. Une rhinoscopie antérieure
+6098,mcqu,E,E,True,False,True,E. Mise au repos absolu en attendant le résultat des examens complémentaires
+18127,mcqu,A,E,False,False,True,E. Aucune des propositions ci-dessus
+21787,mcqu,D,C,False,False,True,C. Insuffisance coronaire aiguë
+27823,mcqu,B,D,False,False,True,D. Hyperplaquettose.
+8353,mcqu,C,C,True,False,True,C. Une A.R.P. et une aldosteronémie toutes deux élevées
+3271,mcqu,B,B,True,False,True,B. Leucémie myéloïde chronique
+25895,mcqu,B,C,False,False,True,C. Le dosage de l'acide urique
+23171,mcqu,D,D,True,False,True,D. Radiographie de l'abdomen sans préparation
+18201,mcqu,E,B,False,False,True,B. De prendre de l'aciclovir par voie orale jusqu'à l'accouchement qui pourra se faire alors par voie basse
+15084,mcqu,D,C,False,False,True,"C. 0,20"
+23501,mcqu,C,C,True,False,True,C. 1+2+3
+13019,mcqu,B,C,False,False,True,C. Bronchographie bilatérale
+21829,mcqu,C,B,False,False,True,B. Opacité des 2/3 inférieur du poumon droit avec comblement du cul de sac diaphragmatique et refoulement du médias- tin
+24806,mcqu,E,C,False,False,True,C. Sérologie de l'hépatite B
+3795,mcqu,C,C,True,False,True,C. Immunofluorescence anti-noyau périphérique positive au 1/10 000
+21794,mcqu,B,B,True,False,True,B. Héparinothérapie
+6254,mcqu,E,D,False,False,True,D. Fracture par arrachement du grand trochanter
+3083,mcqu,C,C,True,False,True,C. Concentré érythrocytaire choisi après test de comptabilité fait au laboratoire (Cross-match)
+14385,mcqu,B,C,False,False,True,C. Rien
+9015,mcqu,C,C,True,False,True,C. Des potentiels évoques visuels
+17544,mcqu,B,B,True,False,True,B. Hyperkaliémie
+27537,mcqu,C,C,True,False,True,C. Une endométriose
+22680,mcqu,C,C,True,False,True,C. Ostéoporose
+25897,mcqu,D,D,True,False,True,D. La mise en place d'une perfusion de mannitol a 20%
+18093,mcqu,A,D,False,False,True,D. 12 mois
+13377,mcqu,A,A,True,False,True,A. De mettre en évidence une détérioration pathologique
+23625,mcqu,C,C,True,False,True,C. Abcès de Douglas
+21788,mcqu,A,A,True,False,True,"A. Arythmie complète par fibrillation
+auriculaire"
+25892,mcqu,D,D,True,False,True,D. D'un hydramnios
+11722,mcqu,C,C,True,False,True,C. Streptocoque
+21688,mcqu,B,B,True,False,True,B. Hospitaliser et demander des investigations
+22627,mcqu,C,C,True,False,True,C. Curage ganglionnaire suivi d'une irathérapie
+7623,mcqu,B,B,True,False,True,B. Plasmodium falciparum
+21835,mcqu,D,D,True,False,True,D. Biopsie bronchique
+5161,mcqu,C,C,True,False,True,C. Doxycycline
+23498,mcqu,A,D,False,False,True,D. 1+2
+23714,mcqu,C,C,True,False,True,C. Syndrome de Cotard
+16388,mcqu,C,C,True,False,True,C. Echographie vasculaire
+17592,mcqu,B,B,True,False,True,B. Fénofibrate (Lipanthyl®)
+15029,mcqu,C,C,True,False,True,C. 450 mg/m2
+21796,mcqu,D,D,True,False,True,D. Héparines de bas poids moléculaires (HBPM)
+21074,mcqu,E,B,False,False,True,B. Scanner rachidien
+11376,mcqu,E,C,False,False,True,C. Ne s'exprime que par un purpura pétéchial spontané
+5442,mcqu,D,D,True,False,True,D. Débuter le traitement antibiotique
+681,mcqu,B,A,False,False,True,A. Alpha foeto-protéine
+20999,mcqu,B,B,True,False,True,B. Carotide droite
+11277,mcqu,C,C,True,False,True,C. 25 à 30 grammes
+23500,mcqu,D,D,True,False,True,D. 1+2+4
+18727,mcqu,C,B,False,False,True,B. Corticothérapie générale
+11279,mcqu,D,C,False,False,True,C. Vaccin antirougeoleux
+17629,mcqu,D,E,False,False,True,E. 1 litre de mélange de 500 ml de sérum isotonique (CINa) avec 500 ml de sérum bicarbonaté hypertonique
+21086,mcqu,A,B,False,False,True,B. Môle hydatiforme
+15498,mcqu,E,D,False,False,True,D. Thyroïdectomie totale
+18046,mcqu,C,C,True,False,True,C. 24 Décembre 1983
+5396,mcqu,E,C,False,False,True,C. Intradermoréaction au médicament
+21837,mcqu,D,D,True,False,True,D. 1+5
+24453,mcqu,E,A,False,False,True,A. Administration de béta bloquants
+15623,mcqu,A,D,False,False,True,D. Le rôle du D.E.S.OE n'est pas statistiquement démontré
+6331,mcqu,C,C,True,False,True,C. Arthrite septique
+18052,mcqu,C,E,False,False,True,E. Radio de l'abdomen sans préparation
+23859,mcqu,A,A,True,False,True,A. 3+4
+13590,mcqu,C,A,False,False,True,A. Schizoïde
+8218,mcqu,B,C,False,False,True,C. Un syndrome de néphropathie glomérulaire chronique
+10694,mcqu,E,C,False,False,True,C. Bombement du pilier postérieur
+22903,mcqu,B,B,True,False,True,B. Un purpura thrombopénique
+22673,mcqu,A,B,False,False,True,"B. Un syndrome de Cushing par adénome
+surrénalien"
+21087,mcqu,E,C,False,False,True,C. Colposcopie
+24323,mcqu,E,E,True,False,True,"E. SGI à 5% + Electrolytes (Nacl + Kcl) + SB à 1,4%"
+878,mcqu,C,D,False,False,True,"D. Tumorectomie, curage axillaire, anti-estrogènes"
+825,mcqu,E,D,False,False,True,D. Tumeur mesurant de 3 à 5 cm
+25950,mcqu,B,E,False,False,True,E. 1+2+5
+6099,mcqu,D,D,True,False,True,D. Ostéochondrite de la tête fémorale
+23715,mcqu,C,C,True,False,True,C. Anti parkinsoniens
+23217,mcqu,C,C,True,False,True,C. Arrêt des matières et des gaz
+10698,mcqu,B,B,True,False,True,B. Une amygdalectomie
+20541,mcqu,B,B,True,False,True,B. Cancer de l'ovaire
+14387,mcqu,E,D,False,False,True,D. Calculable si le taux de létalité est commun
+16691,mcqu,B,D,False,False,True,D. Angor mixte
+21671,mcqu,C,D,False,False,True,D. Alternance électrique
+23494,mcqu,D,D,True,False,True,D. 1+2+3+4+5
+21385,mcqu,B,E,False,False,True,E. Application d'une crème anti-parasitaire sur les lésions de la nuque
+27538,mcqu,D,D,True,False,True,D. Un adénocarcinome
+8351,mcqu,B,C,False,False,True,C. Existence d'une protéinurie
+20911,mcqu,B,B,True,False,True,B. Tuberculose
+8318,mcqu,C,B,False,False,True,"B. Ampicilline ou amoxilline 1,5 g toutes les deux heures"
+13834,mcqu,D,C,False,False,True,C. Idées obsédantes
+5136,mcqu,C,C,True,False,True,C. Cathéter veineux
+7538,mcqu,D,D,True,False,True,D. Elle est positive mais à recontrôler
+21795,mcqu,A,D,False,False,True,D. Curiethérapie
+23167,mcqu,D,C,False,False,True,C. 1+4+3+5+2
+18095,mcqu,D,D,True,False,True,D. Test au LH-RH
+24450,mcqu,C,C,True,False,True,C. Fibroscopie oeso-gastro-duodénale avec rétrovision
+27278,mcqu,B,C,False,False,True,C. Le cercle vasculaire péri-rotulien est tributaire de l'artère fémorale
+17351,mcqu,D,D,True,False,True,"D. La TSH de base est élevée, elle s'élève encore après TRH"
+1921,mcqu,C,C,True,False,True,C. Prednisone® ( 1 à 1 5 mg/kg/jour)
+21144,mcqu,B,C,False,False,True,C. Bouffée délirante polymorphe
+25896,mcqu,C,C,True,False,True,C. Césariser immédiatement
+7110,mcqu,E,D,False,False,True,"D. Non, parce que Mr. P. F., ne remplit pas la condition d'exposition professionnelle au risque et que le délai de prise en charge était dépasse"
+22675,mcqu,B,B,True,False,True,B. Régime pauvre en graisses + traitement du diabète sucré dans un premier temps
+15532,mcqu,B,B,True,False,True,B. Coloscopie avec biopsie
+21748,mcqu,A,B,False,False,True,B. Artérite du membre inférieur gauche
+11773,mcqu,A,D,False,False,True,D. Mesure du périmètre crânien au ruban-mètre
+18050,mcqu,B,B,True,False,True,B. Une pyélonéphrite aiguë
+17467,mcqu,C,C,True,False,True,C. Coma hypoglycémique
+28195,mcqu,C,C,True,False,True,C. Coloscopie sous neuroleptanalgesique
+21733,mcqu,C,B,False,False,True,B. Inféro-basal
+28197,mcqu,E,E,True,False,True,E. Biopsie exérèse a l'anse diathermique et examen histologique
+16134,mcqu,A,A,True,False,True,A. Pneumocoque
+16586,mcqu,C,D,False,False,True,D. Le Doppler
+16559,mcqu,E,D,False,False,True,D. Association aux anticoagulants
+27275,mcqu,B,C,False,False,True,C. Baïonnette
+22940,mcqu,E,D,False,False,True,D. Propositions B et C exactes
+5949,mcqu,A,A,True,False,True,A. Immuno-électrophorèse des protéines sériques
+23638,mcqu,A,A,True,False,True,A. De l'Albuminémie
+21442,mcqu,C,C,True,False,True,C. 60 grammes
+16469,mcqu,D,D,True,False,True,D. Echocardiogramme
+9614,mcqu,B,B,True,False,True,B. La 3 méthyl-histidinurie
+21756,mcqu,D,D,True,False,True,D. Adjoindre un immuno-suppresseur
+24415,mcqu,C,A,False,False,True,A. < 10%
+23712,mcqu,D,A,False,False,True,A. Psychose hallucinatoire chronique
+23639,mcqu,C,C,True,False,True,C. Hypertension artérielle
+16171,mcqu,D,D,True,False,True,D. L'abstention de tout traitement médicamenteux
+7638,mcqu,C,C,True,False,True,C. Les carottes râpées
+5158,mcqu,B,B,True,False,True,B. Chancre d'inoculation escharrotique
+6129,mcqu,C,C,True,False,True,C. Une synovite des fléchisseurs
+18995,mcqu,C,C,True,False,True,C. La grossesse a de grandes chances d'améliorer la polyarthrite au moins jusqu'au retour de couches
+9193,mcqu,E,E,True,False,True,E. Syndrome de Guillain et Barré
+21749,mcqu,B,B,True,False,True,B. 1+2+3
+22852,mcqu,E,B,False,False,True,B. Téléthorax
+22626,mcqu,B,B,True,False,True,B. Lévothyroxine jusqu'à une dose totale freinatrice de la TSH
+11278,mcqu,B,C,False,False,True,C. 500 U.I.
+7169,mcqu,C,C,True,False,True,C. Le port de gants lors de la manipulation de certains produits
+24446,mcqu,E,D,False,False,True,D. Pose d’une sonde gastrique
+27822,mcqu,E,E,True,False,True,E. Toutes les réponses sont justes.
+21836,mcqu,C,B,False,False,True,B. Lymphome non Hodgkinien
+9052,mcqu,C,C,True,False,True,C. Un E.E.G. montrant des pointes-ondes rolandiques gauches
+13060,mcqu,C,C,True,False,True,C. Défervescence thermique en 2 à 3 jours et nettoyage radiologique en 15 jours - 3 semaines
+16587,mcqu,B,B,True,False,True,"B. Doppler et échographie vasculaire, cervicaux"
+23215,mcqu,C,B,False,False,True,B. Pouls > 120 /mn
+23137,mcqu,B,C,False,False,True,C. Choc direct en rotation
+21833,mcqu,B,B,True,False,True,B. 1+3
+9591,mcqu,C,C,True,False,True,C. Un régime isocalorique équilibré (35 % de lipides environ)
+23713,mcqu,B,B,True,False,True,B. Suicide
+732,mcqu,D,D,True,False,True,D. 80 %
+5180,mcqu,B,B,True,False,True,B. Allergie à la Pénicilline
+7165,mcqu,D,D,True,False,True,D. Eczéma
+17601,mcqu,B,A,False,False,True,A. Frottis cyto-hormonaux
+5222,mcqu,D,D,True,False,True,"D. Opacité basale dense, homogène, avec limite supérieure concave en haut et dedans"
+15482,mcqu,B,B,True,False,True,B. Athérosclérose
+21752,mcqu,B,D,False,False,True,D. Anévrysme pulmonaire
+24321,mcqu,D,D,True,False,True,D. Pertes intestinales de bicarbonates
+27264,mcqu,E,E,True,False,True,E. Toutes ces réponses sont justes
+8315,mcqu,E,B,False,False,True,B. Un apport de soluté salé à 9 g pour mille intraveineux (deux litres)
+21791,mcqu,D,B,False,False,True,B. Dosage des troponines
+28203,mcqu,C,C,True,False,True,C. Un bilan endoscopique annuel pendant 5 ans
+15038,mcqu,B,B,True,False,True,B. Une carence en vitamine D
+23169,mcqu,C,B,False,False,True,B. 1+2+4
+28092,mcqu,C,C,True,False,True,C. Un volume utérin normal.
+21909,mcqu,C,A,False,False,True,A. Crise d’asthme sévère associées à une infection respiratoire aiguë
+16558,mcqu,D,B,False,False,True,B. Hallucinations visuelles
+15085,mcqu,A,D,False,False,True,"D. 0,5"
+9014,mcqu,C,B,False,False,True,B. De la papille optique
+23212,mcqu,A,B,False,False,True,B. 1+2+3+4
+6258,mcqu,D,D,True,False,True,D. Une prothèse totale
+12884,mcqu,A,A,True,False,True,A. Tabagisme
+23481,mcqu,D,C,False,False,True,C. 1+3+5
+23619,mcqu,A,B,False,False,True,B. 2+4+5
+9096,mcqu,B,B,True,False,True,B. Il s'agit d'une forme akinéto-hypertonique de maladie de Parkinson.
+6100,mcqu,B,D,False,False,True,D. Tomographie de l'extrémité supérieure du fémur
+13465,mcqu,D,D,True,False,True,D. Survenue épisodique de crises maniaques et/ou mélancoliques
+21828,mcqu,B,C,False,False,True,C. Pneumonie grave
+25893,mcqu,A,E,False,False,True,E. Le dosage de l'uricémie
+15537,mcqu,E,C,False,False,True,C. Pseudo-panaris de la pulpe des doigts
+27542,mcqu,C,D,False,False,True,D. Stade	 llIA
+17630,mcqu,C,C,True,False,True,C. 7 litres
+28199,mcqu,D,B,False,False,True,B. Une resection sigmoïdienne
+11450,mcqu,C,C,True,False,True,C. Méningite lymphocytaire
+9613,mcqu,A,A,True,False,True,A. La circonférence brachiale et le pli cutané tricipital
+16585,mcqu,D,D,True,False,True,D. Echo doppler
+13380,mcqu,C,C,True,False,True,C. Hospitalisation
+4615,mcqu,A,A,True,False,True,A. Cure chirurgicale
+28198,mcqu,C,C,True,False,True,C. 1+2
+20685,mcqu,E,C,False,False,True,C. Oedème cérébral et engagement
+24408,mcqu,D,C,False,False,True,C. 1+3
+23620,mcqu,C,C,True,False,True,C. Etranglement herniaire
+21880,mcqu,A,B,False,False,True,B. Hémocultures
+27818,mcqu,D,B,False,False,True,B. IMG > 25 kg/m2.
+10769,mcqu,C,C,True,False,True,C. Un cancer de l'hypopharynx
+10673,mcqu,D,D,True,False,True,D. Une ponction à travers le pilier antérieur
+17417,mcqu,D,D,True,False,True,D. Dosage de la TSH
+21004,mcqu,C,C,True,False,True,C. Traitement chirurgical de la lésion sténosante
+5181,mcqu,D,C,False,False,True,C. Nouveau traitement autre que pénicilline
+23711,mcqu,E,E,True,False,True,E. Filiation.
+23139,mcqu,D,D,True,False,True,D. Angulation
+21672,mcqu,B,B,True,False,True,B. Virale
+21735,mcqu,B,C,False,False,True,C. Thrombolytique
+26879,mcqu,D,D,True,False,True,D. Test de Coombs direct.
+16387,mcqu,C,C,True,False,True,C. Siège sur le trajet de l'axe artériel opéré
+28098,mcqu,E,A,False,False,True,A. Le dosage hebdomadaire de l'HCG pendant 08 semaines.
+11770,mcqu,C,C,True,False,True,C. Ponction lombaire
+775,mcqu,A,C,False,False,True,C. Du côté opposé au sein opéré
+4577,mcqu,E,E,True,False,True,E. Une nutrition parentérale totale
+5139,mcqu,D,B,False,False,True,"B. Pénicilline M (Oxacilline®) 6 g/j et Métronidazole (Flagyl®) 1,5 g/j"
+16603,mcqu,A,C,False,False,True,C. Dysfibrinogénémie
+15026,mcqu,D,D,True,False,True,D. Par voie intraveineuse stricte
+16133,mcqu,D,D,True,False,True,D. Hospitaliser le patient
+21431,mcqu,C,C,True,False,True,C. Oxycarbonémie
+22681,mcqu,C,D,False,False,True,D. Très péjoratif
+23178,mcqu,D,A,False,False,True,A. Perfusion de Mannitol à 10%
+24375,mcqu,C,D,False,False,True,D. Une diarrhée qui dépasse les 3 mois.
+13020,mcqu,D,C,False,False,True,C. Soludécadron 1 ampoule en intraveineux direct
+6134,mcqu,D,B,False,False,True,B. Arrêt de l'Allochrysine® et surveillance clinique et biologique
+21695,mcqu,B,B,True,False,True,B. Occlusion de la veine centrale de la rétine
+22902,mcqu,D,D,True,False,True,D. Hospitalisation
+21072,mcqu,B,D,False,False,True,D. Syndrome polyradiculonévritique
+6343,mcqu,B,D,False,False,True,D. A la colchicine
+13464,mcqu,C,C,True,False,True,C. Accès maniaque
+26877,mcqu,C,C,True,False,True,C. Pancytopénie.
+20644,mcqu,A,A,True,False,True,A. Escherichia Coli
+26120,mcqu,E,E,True,False,True,E. A + B + C
+2035,mcqu,C,C,True,False,True,C. Mélanome malin superficiel extensif
+27827,mcqu,C,C,True,False,True,C. Intolérance au gluten.
+27280,mcqu,B,B,True,False,True,B. Arthrose fémoro-patellaire
+10693,mcqu,B,D,False,False,True,D. Un adénophlegmon
+14901,mcqu,B,B,True,False,True,B. Une fluoroquinolone
+16338,mcqu,B,B,True,False,True,B. Héparine
+16390,mcqu,D,D,True,False,True,D. La sténose est actuellement asymptomatique
+9064,mcqu,B,C,False,False,True,C. Le territoire carotidien droit
+26878,mcqu,B,B,True,False,True,B. 1+4+5
+21031,mcqu,C,E,False,False,True,E. Névrose d'angoisse
+5270,mcqu,C,C,True,False,True,C. Sérologie par immunofluorescence indirecte
+7605,mcqu,D,D,True,False,True,D. Pévaryl® (éconazole) lotion 2 applications par jour pendant 4 semaines
+22628,mcqu,E,E,True,False,True,E. Radiographies du cou face et profil
+13468,mcqu,B,B,True,False,True,B. Rechute identique dans les deux ans
+21757,mcqu,B,D,False,False,True,D. Accident vasculaire cérébral
+15500,mcqu,D,E,False,False,True,E. Scintigraphie à la MIBG
+23450,mcqu,C,D,False,False,True,D. Facteur rhumatoïde
+8221,mcqu,A,A,True,False,True,A. La prescription de furosémide
+1875,mcqu,B,B,True,False,True,B. Asthme
+9114,mcqu,C,C,True,False,True,C. Traitement anticonvulsivant
+16114,mcqu,D,D,True,False,True,D. Surdosage en théophylline
+27272,mcqu,C,C,True,False,True,C. La perte de l'extension active du genou
+21697,mcqu,E,C,False,False,True,C. Prescription d'anticoagulants à vie
+21090,mcqu,E,B,False,False,True,B. Cerclage du col
+13835,mcqu,C,C,True,False,True,C. Schizophrénie
+24802,mcqu,E,C,False,False,True,C. Trichomonas vaginalis
+21440,mcqu,C,C,True,False,True,C. La 3-méthylhistidine
+14388,mcqu,E,E,True,False,True,E. Le maintenir dans les deux groupes et en tenir compte dans l'analyse
+24809,mcqu,E,E,True,False,True,E. Dosage des anticorps antinucléaires
+22677,mcqu,C,B,False,False,True,B. Trois
+16391,mcqu,D,D,True,False,True,D. Traitement chirurgical de l'anévrysme
+23140,mcqu,D,D,True,False,True,D. 1+2+3
+5156,mcqu,C,C,True,False,True,C. Transmission par morsure de tique
+13056,mcqu,A,A,True,False,True,A. Pneumocoque
+13542,mcqu,D,D,True,False,True,D. Anorexie mentale essentielle
+8326,mcqu,B,D,False,False,True,"D. Faire une radiothérapie des chaines iliaques et lombo-aortiques, du creux sus-claviculaire gauche et du médiastin"
+20913,mcqu,D,D,True,False,True,D. Chimiothérapie antituberculeuse et corticothérapie 1 mg/kg
+21831,mcqu,B,B,True,False,True,B. Streptococcus pneumoniae
+27546,mcqu,C,E,False,False,True,E. Dosages hormonaux
+28196,mcqu,C,C,True,False,True,C. Lavage à la solution de polyéthylène glycol (PEG) per os
+22905,mcqu,E,D,False,False,True,D. Purpura thrombopénique périphérique
+16695,mcqu,B,B,True,False,True,B. Triple pontage aorto-coronarien
+23141,mcqu,B,C,False,False,True,C. III de Cauchoix et Duparc
+14953,mcqu,A,A,True,False,True,A. Rupture du rein
+10675,mcqu,C,C,True,False,True,C. Incision de la collection suppurée
+24410,mcqu,B,C,False,False,True,C. Résection endoscopique des polypes + hémicolectomie gauche avec anastomose en deux temps
+24449,mcqu,D,C,False,False,True,C. Transfusion sanguine
+868,mcqu,D,D,True,False,True,"D. Endoscopie des VADS, de l'oesophage et des bronches"
+6014,mcqu,B,C,False,False,True,C. Des cristaux de pyrophosphate de calcium
+8091,mcqu,D,C,False,False,True,C. Lambliase ou giardiase
+5269,mcqu,E,E,True,False,True,E. Point d'inoculation escharrotique
+27270,mcqu,A,B,False,False,True,B. Oxacilline 200mg/Kg/j en 4 fois I.V. + Gentamycine 5mg/Kg/j en 2X/IM
+14911,mcqu,B,B,True,False,True,B. 1/3 moyen
+14913,mcqu,D,E,False,False,True,E. De confection d'un boléro plâtré pour une durée de deux mois
+26119,mcqu,C,C,True,False,True,C. Prolifération de cellules lymphoïdes de grande taille avec macrophages (aspect en ciel étoilé)
+21755,mcqu,E,D,False,False,True,D. Recherche de BK dans les crachats
+9070,mcqu,A,C,False,False,True,C. Anesthésie en selle
+11335,mcqu,D,D,True,False,True,D. Une dérivation ventriculo-péritonéale suivie de l'intervention sur la fosse postérieure
+6340,mcqu,B,A,False,False,True,A. 98 % des cas
+23641,mcqu,C,B,False,False,True,B. 1/2 mg / kg
+24810,mcqu,A,C,False,False,True,C. Toxoplasmose cérébral
+11772,mcqu,E,E,True,False,True,E. Céphalosporines de 3ème génération
+24454,mcqu,C,E,False,False,True,E. 1+4+5
+6132,mcqu,C,D,False,False,True,D. Pincement du 5ème interligne métatarsophalangien et ostéophytose
+10676,mcqu,B,B,True,False,True,B. Une amygdalectomie
+4562,mcqu,D,C,False,False,True,C. Abaissement conjoint Cooper par voie inguinale (Mac Vay)
+7107,mcqu,E,E,True,False,True,E. Son métier de tailleur de pierre
+11334,mcqu,C,C,True,False,True,C. Un médulloblastome
+3035,mcqu,E,B,False,False,True,B. Microcytaire hypochrome régénérative
+27821,mcqu,E,A,False,False,True,A. Mesure échographique de la clarté nucale.
+20540,mcqu,D,D,True,False,True,D. Exposition à l'amiante
+10671,mcqu,B,D,False,False,True,D. Un adénophlegmon
+8312,mcqu,E,E,True,False,True,E. Décompensation aiguë d'une insuffisance rénale chronique
+20462,mcqu,D,C,False,False,True,C. Dans la première quinzaine de décembre
+24451,mcqu,E,C,False,False,True,C. Varices gastriques
+23478,mcqu,C,C,True,False,True,C. Ostéoporose
+10649,mcqu,C,C,True,False,True,C. Cancer éthmoïdo-maxillaire
+27539,mcqu,A,A,True,False,True,A. Est dû au papiilomavirus
+21736,mcqu,B,B,True,False,True,B. Fibrillation ventriculaire
+15037,mcqu,D,D,True,False,True,D. Un apport en vitamine D insuffisant
+17604,mcqu,C,D,False,False,True,D. Traitement oestro-progestatif séquentiel
+728,mcqu,A,A,True,False,True,A. Lymphographie bipédieuse
+15533,mcqu,A,B,False,False,True,B. Fièvre élevée d'apparition brusque
+21693,mcqu,D,D,True,False,True,D. Oxacilline + Gentamycine
+5107,mcqu,B,D,False,False,True,D. Amibiase
+1844,mcqu,B,B,True,False,True,B. PUVA
+867,mcqu,C,B,False,False,True,B. Adénocarcinome
+10651,mcqu,A,A,True,False,True,A. L'anosmie
+17547,mcqu,E,E,True,False,True,E. Séance d'hémodialyse
+16604,mcqu,A,D,False,False,True,D. Surdosage en héparine
+26117,mcqu,A,D,False,False,True,D. B + C
+28194,mcqu,E,B,False,False,True,B. Cancer du rectum
+11446,mcqu,D,A,False,False,True,A. 3 à 6 jours
+5951,mcqu,C,D,False,False,True,D. Hyperviscosité plasmatique
+20684,mcqu,D,B,False,False,True,B. Crises toniques pures généralisées
+22620,mcqu,B,B,True,False,True,B. 1+2
+26883,mcqu,B,B,True,False,True,B. Une crétininémie à 20mg/l.
+17589,mcqu,C,C,True,False,True,C. Hyper prébêta lipoprotéinémie
+6130,mcqu,B,A,False,False,True,"A. 8 700                   75 %           15 %           10 %               -                      0,15"
+22909,mcqu,A,D,False,False,True,D. Noréthondrolone (NILEVAR) 1 mg/kg/j
+23497,mcqu,B,B,True,False,True,B. Un accident vasculaire cérébral transitoire
+21753,mcqu,C,C,True,False,True,C. 1+2+5
+22936,mcqu,B,C,False,False,True,C. Ictère par iso-immunisation dans un sous groupe rhésus
+16406,mcqu,E,B,False,False,True,B. Insuffisance mitrale
+15505,mcqu,E,C,False,False,True,"C. Elle a eu une poussée ulcéreuse, il y a 6 mois"
+21147,mcqu,C,B,False,False,True,B. Un syndrome de Gayet-Wernicke
+10754,mcqu,C,C,True,False,True,C. L'envahissement ou l'atteinte de la trompe d'Eustache
+21910,mcqu,B,D,False,False,True,D. Béta 2 sympathomimétiques inhalés 4 à 8 bouffées associés à la prédnisone per os
+9075,mcqu,B,D,False,False,True,"D. Protéines : 0,80 g/l : 22 éléments blancs/ml : IgG : 15%"
+23624,mcqu,C,D,False,False,True,D. Echographie abdominale
+729,mcqu,B,B,True,False,True,B. II Aa
+7541,mcqu,A,B,False,False,True,B. Peut entraîner des complications hémorragiques chez la mère à ce stade de la grossesse
+5108,mcqu,B,E,False,False,True,E. Examen parasitologique des selles
+21911,mcqu,E,B,False,False,True,B. Hospitalisation dans un service de pneumologie
+22621,mcqu,B,C,False,False,True,C. Il existe certainement un autre nodule infra-clinique
+22623,mcqu,C,C,True,False,True,C. 1+2+3+4+5
+21689,mcqu,B,C,False,False,True,C. Une hémi-parésie gauche
+14955,mcqu,A,B,False,False,True,B. Imagerie par résonance magnétique
+10674,mcqu,A,C,False,False,True,C. Une irritation des branches du trijumeau
+23179,mcqu,D,B,False,False,True,B. Ouverture du foyer de fracture
+24407,mcqu,B,B,True,False,True,B. BPCO à l'état stable
+16562,mcqu,B,C,False,False,True,C. Digoxine®
+23622,mcqu,D,D,True,False,True,D. Administration de Lasilix
+14380,mcqu,A,E,False,False,True,E. On a utilisé une méthode d'approximation (odds ratio)
+24803,mcqu,C,A,False,False,True,A. Identifier la source de contamination
+23499,mcqu,D,E,False,False,True,E. Asthénie
+17628,mcqu,B,D,False,False,True,"D. PA élevée, PVC abaissée"
+25953,mcqu,C,D,False,False,True,D. 1+2+4
+16408,mcqu,D,D,True,False,True,D. Fibrillation auriculaire
+9074,mcqu,A,C,False,False,True,C. Une atteinte de la moelle dorsale
+23618,mcqu,A,B,False,False,True,B. 1+3+4
+8313,mcqu,A,A,True,False,True,A. Une insuffisance rénale avancée
+17590,mcqu,E,C,False,False,True,C. Type IIb
+28090,mcqu,A,C,False,False,True,C. De 02 mois.
+28094,mcqu,E,E,True,False,True,E. La chimioprophylaxie par méthotrexate
+3081,mcqu,D,D,True,False,True,D. Ictère hémolytique par hémolyse intratissulaire transfusionnelle
+24414,mcqu,C,C,True,False,True,C. Dosage de l'hemocult
+6015,mcqu,D,C,False,False,True,C. D-Penicillamine
+22676,mcqu,A,E,False,False,True,E. Traitement médicale par l'OP'DDD
+22678,mcqu,D,D,True,False,True,D. 1+2+3+4+5
+17548,mcqu,A,D,False,False,True,D. Hyperkaliémie
+10650,mcqu,A,E,False,False,True,E. Sinusoscopie
+3084,mcqu,E,D,False,False,True,D. Répétition des examens immuno-hématologiques 10 jours plus tard
+27263,mcqu,E,A,False,False,True,A. Une radiographie du thorax de face
+24808,mcqu,E,C,False,False,True,C. Absence d'hygiène corporelle
+21790,mcqu,E,B,False,False,True,B. Ischémie sous épicardique
+731,mcqu,B,C,False,False,True,C. 60 grays en 6 semaines
+1920,mcqu,D,B,False,False,True,B. Anti-substance intercellulaire épidermique
+1798,mcqu,A,B,False,False,True,B. Onyxis psoriasique
+13532,mcqu,C,B,False,False,True,B. Schizophrénie simple
+21885,mcqu,C,E,False,False,True,E. Toutes les propositions sont exactes
+12781,mcqu,D,C,False,False,True,C. La biopsie préscalénique de Daniels
+6101,mcqu,D,B,False,False,True,B. Traitement antalgique et anti-inflammatoire
+16501,mcqu,B,B,True,False,True,B. Une tachyarythmie complète par fibrillation auriculaire
+26882,mcqu,C,B,False,False,True,B. 1+2
+22854,mcqu,A,C,False,False,True,C. 200 cc
+16465,mcqu,A,D,False,False,True,D. Maladie aortique + rétrécissement mitral
+28089,mcqu,B,E,False,False,True,E. Association d'une grossesse et d'un fibrome.
+1873,mcqu,C,B,False,False,True,B. Visage
+28093,mcqu,A,C,False,False,True,C. Hystérotomie.
+14386,mcqu,A,C,False,False,True,C. L'exclure de l'étude avant la randomisation
+10697,mcqu,A,C,False,False,True,C. Incision de la collection suppurée
+7540,mcqu,A,C,False,False,True,C. Nécessite une surveillance du foetus par échographies régulières
+23214,mcqu,B,B,True,False,True,B. Un drainage thoracique aspiratif
+22910,mcqu,E,A,False,False,True,A. Le sexe
+24447,mcqu,B,B,True,False,True,B. Splénomégalie
+16692,mcqu,A,B,False,False,True,B. Sus-décalage du segment ST de 2 mm concave vers le bas
+28095,mcqu,D,E,False,False,True,E. Ré-ascension supérieure ou égale à 5% de l'HCG sur 3 dosages hebdomadaires successifs.
+24320,mcqu,A,C,False,False,True,C. Acidose mixte
+727,mcqu,C,C,True,False,True,C. Biopsie ganglionaire sus claviculaire
+6754,mcqu,D,A,False,False,True,A. Plus de 120 grammes
+21830,mcqu,B,D,False,False,True,D. Faire une recherche de virus dans les sécrétions naso-pharyngées
+21789,mcqu,B,C,False,False,True,C. La stase sanguine
+24382,mcqu,C,D,False,False,True,D. Sacro-illéïte.
+26876,mcqu,E,B,False,False,True,B. Une anémie inflammatoire.
+25898,mcqu,A,D,False,False,True,D. Une intubation associée à une ventilation et une réanimation métabolique
+18096,mcqu,A,A,True,False,True,A. Clomid®
+22624,mcqu,D,A,False,False,True,A. La thyroïdectomie totale est préférable pour éviter toute récidive
+21879,mcqu,B,C,False,False,True,C. Miliaire bronchogène tuberculeuse
+20687,mcqu,B,C,False,False,True,C. Electroencéphalogramme
+22906,mcqu,E,B,False,False,True,B. Insuffisance médullaire
+8314,mcqu,D,C,False,False,True,C. La prise de diurétique
+26884,mcqu,B,C,False,False,True,C. 2 + 4.
+18123,mcqu,B,A,False,False,True,A. Cholestase gravidique
+22939,mcqu,A,D,False,False,True,D. 72 ml de sang total 0 Rh positif
+9192,mcqu,B,C,False,False,True,C. Atrophie olivo-ponto-cérébelleuse
+23211,mcqu,C,C,True,False,True,C. 1+2+3+4+5
+21696,mcqu,C,C,True,False,True,C. Embolisation de l'anévrysme mycotique intra-cérébral
+13379,mcqu,A,C,False,False,True,C. Episode psychotique gravidique
+5160,mcqu,A,C,False,False,True,C. Arthrites suppurées
+21883,mcqu,B,D,False,False,True,D. Les propositions A et B sont exactes
+14965,mcqu,C,D,False,False,True,D. Deux reins de contours irréguliers avec rétraction corticale
+21832,mcqu,C,A,False,False,True,A. Amoxicilline/Acide clavulanique en première intention
+23621,mcqu,A,C,False,False,True,C. Cystoscopie
+27268,mcqu,E,D,False,False,True,D. Les propositions A et C sont justes
+22904,mcqu,D,B,False,False,True,B. Infiltration à localisation rénale au cours d'une leucose aiguë
+21382,mcqu,C,C,True,False,True,C. Une pédiculose du cuir chevelu
+23479,mcqu,A,C,False,False,True,C. 1+2+3
+13635,mcqu,C,B,False,False,True,B. Sauvegarde de justice
+21793,mcqu,C,B,False,False,True,B. FNS
+10672,mcqu,E,A,False,False,True,A. Parésie vélopalatine
+20464,mcqu,B,B,True,False,True,"B. Le risque de toxoplasmose congénitale est faible ( < 10%) mais si il y a une atteinte, elle est sévère"
+27273,mcqu,B,D,False,False,True,D. 1+5
+24409,mcqu,A,C,False,False,True,C. 1+4
+23218,mcqu,A,E,False,False,True,E. Absence des pouls périphériques.
+24322,mcqu,A,D,False,False,True,D. Déshydratation extra cellulaire avec hyperhydratation intracellulaire
+21737,mcqu,C,B,False,False,True,B. Perfusion d'isoprénaline
+13374,mcqu,B,D,False,False,True,D. Fond d'oeil
+27274,mcqu,A,C,False,False,True,C. Type III de la classification de Moulay et Ricard
+27267,mcqu,D,E,False,False,True,"E. Réponses A, B et C sont justes"
+27541,mcqu,C,D,False,False,True,D. Hystéroscopie
+23858,mcqu,C,B,False,False,True,B. 1+2+3
+7622,mcqu,C,D,False,False,True,D. Paludisme viscéral évolutif
+23860,mcqu,B,B,True,False,True,B. Sérothérapie + Pénicilline G
+6012,mcqu,C,A,False,False,True,A. Une polyarthrite rhumatoïde
+21882,mcqu,B,B,True,False,True,B. 2 SRHZ/4 RH + Corticoïdes
+3236,mcqu,C,B,False,False,True,B. Myélogramme
+22672,mcqu,A,D,False,False,True,D. 1+2+4
+7542,mcqu,A,C,False,False,True,C. Nécessite une surveillance du foetus par échographies régulières
+24406,mcqu,C,D,False,False,True,D. Diverticule sigmoïdien
+16560,mcqu,B,B,True,False,True,B. Hypertension pulmonaire post-capillaire avec bas débit cardiaque
+27825,mcqu,B,B,True,False,True,"B. Poursuite de la grossesse jusqu'A terme s'il n'y a pas de complications materno-
+fœtales."
+23168,mcqu,A,C,False,False,True,C. Fracture du fémur
+680,mcqu,E,D,False,False,True,D. Irradiation loco-régionale + hormonothérapie adjuvante
+9254,mcqu,E,C,False,False,True,C. Radiothérapie
+13014,mcqu,A,D,False,False,True,D. Une emphysème pan-lobulaire
+27281,mcqu,C,E,False,False,True,E. Blocage du genou en demi-flexion
+26118,mcqu,A,C,False,False,True,C. Liquide de Bouin
+24455,mcqu,E,A,False,False,True,A. Pose d'un stent porto-cave par voie trans-jugulaire (TIPS)
+16149,mcqu,B,C,False,False,True,C. Téralithe
+23177,mcqu,B,C,False,False,True,C. A+B
+23857,mcqu,E,C,False,False,True,C. Phlegmon amygdalien
+27544,mcqu,A,D,False,False,True,"D. Curiethérapie utérovaginale préopératoire, hystérectomie totale abdominale avec
+annexectomie, collerette vaginale, curage ganglionnaire et radiothérapie externe si N+"
+3040,mcqu,D,C,False,False,True,C. 20ème jour
+22679,mcqu,B,A,False,False,True,A. 1+4
+23216,mcqu,B,B,True,False,True,B. 1+3
+13061,mcqu,C,C,True,False,True,C. Une fibroscopie bronchique
+5140,mcqu,D,C,False,False,True,C. Céphalosporine de 3ème génération
+7539,mcqu,B,B,True,False,True,B. Est à recontrôler afin d'observer I'ascension des anticorps en cas de rubéole récente
+5141,mcqu,A,A,True,False,True,A. Klebsiella pneumoniae
+9112,mcqu,D,B,False,False,True,B. Frontal gauche
+27545,mcqu,E,C,False,False,True,C. Hormonothérapie
+13018,mcqu,B,C,False,False,True,C. Intubation sélective par sonde de Carlens
+21694,mcqu,B,C,False,False,True,C. Abcès cérébral
+11698,mcqu,C,D,False,False,True,D. Infection pulmonaire
+24378,mcqu,D,C,False,False,True,"C. La notion de séjour à l'étranger,"
+22851,mcqu,B,B,True,False,True,B. Inflammatoire
+27276,mcqu,D,A,False,False,True,A. Le tendon rotulien
+21692,mcqu,B,E,False,False,True,E. Abstention thérapeutique jusqu'à l'exploitation des résultats des examens complémentaires
+10696,mcqu,A,D,False,False,True,D. Une augmentation du volume de la loge amygdalienne
+23640,mcqu,D,E,False,False,True,E. Diurétique thiazidique (Diurelix)
+24811,mcqu,D,C,False,False,True,C. Zidovudine seule
+23170,mcqu,A,D,False,False,True,D. Tomodensitométrie cérébrale
+24804,mcqu,C,E,False,False,True,E. Spermoculture
+16028,mcqu,C,A,False,False,True,A. Diminution du tonus sympatique
+1937,mcqu,B,C,False,False,True,C. Un chancre syphilitique
+5957,mcqu,D,A,False,False,True,A. L'insuffisance rénale chronique
+18094,mcqu,C,C,True,False,True,C. Syndrome de Stein-Leventhal
+6133,mcqu,E,E,True,False,True,"E. Protéinurie avant chaque injection d'or, NFS, V S, tous les mois"
+21441,mcqu,B,D,False,False,True,D. Négatif de 6 grammes
+9250,mcqu,B,D,False,False,True,D. Déficit moteur du membre inférieur
+23449,mcqu,E,C,False,False,True,C. Les genoux face et profil
+23176,mcqu,D,C,False,False,True,C. A+B
+11449,mcqu,D,C,False,False,True,C. S'accompagne d'adénopathies prétragiennes et sous-angulo-maxillaires
+27271,mcqu,A,D,False,False,True,D. Les propositions A et B sont justes
+23496,mcqu,E,D,False,False,True,D. Scanner cérébral
+5178,mcqu,A,A,True,False,True,A. Eruption du tronc
+24448,mcqu,E,A,False,False,True,A. Hyper bilirubinémie
+9097,mcqu,B,C,False,False,True,C. Une augmentation du tonus se renforçant avec l'amplitude du mouvement
+15088,mcqu,B,C,False,False,True,C. On prendrait le risque de laisser échapper beaucoup de malades au dépistage
+19025,mcqu,E,B,False,False,True,B. Une hypersecrétion de rénine
+16467,mcqu,C,C,True,False,True,C. Streptocoque alpha
+22625,mcqu,E,C,False,False,True,C. Hypoparathyroïdie
+3273,mcqu,D,D,True,False,True,D. 2 à 4 ans
+2038,mcqu,D,E,False,False,True,E. Faire une biopsie en bordure de la lésion
+18996,mcqu,C,B,False,False,True,"B. Une rétraction des tendons fléchisseurs des deux derniers doigts, avec formation d'une griffe irréductible"
+21884,mcqu,C,A,False,False,True,A. La rifampicine et l'isoniazide sont mal absorbés en présence d'aliments
+25952,mcqu,E,B,False,False,True,B. Fibrome calcifié
+8220,mcqu,B,C,False,False,True,C. L'urétéropyélographie rétrograde
+16795,mcqu,E,B,False,False,True,B. 10 000 UI d'héparine
+12887,mcqu,A,C,False,False,True,C. Adénocarcinome
+912,mcqu,B,C,False,False,True,C. Ne pas donner d'hormone thyroïdienne qui stimulerait d'éventuelles métastases
+27819,mcqu,A,D,False,False,True,D. Le test de l'OMS à 100 g de glucose.
+11374,mcqu,E,C,False,False,True,C. Un thrombo-élastogramme
+9190,mcqu,A,C,False,False,True,C. D'une atteinte du pédoncule cérébelleux supérieur
+17591,mcqu,B,E,False,False,True,E. Abaisser les taux de cholestérol et de triglycérides
+13634,mcqu,B,A,False,False,True,A. Récidive sur un mode identique
+8090,mcqu,E,D,False,False,True,D. Une tumeur du rein
+3036,mcqu,B,D,False,False,True,D. Destruction excessive des érythrocytes circulants
+24411,mcqu,A,C,False,False,True,C. T4 N+ MO
+8511,mcqu,D,A,False,False,True,A. L'insuffisance rénale chronique
+22908,mcqu,D,A,False,False,True,A. L'apparition de bulles hémorragiques muqueuses
+24413,mcqu,B,C,False,False,True,C. Radio-chimiothérapie
+24381,mcqu,B,B,True,False,True,B. Les rectorragies.
+12888,mcqu,B,A,False,False,True,A. Hémoptysies répétées
+8256,mcqu,E,D,False,False,True,D. Une aggravation progressive de l'insuffisance rénale
+27820,mcqu,A,D,False,False,True,D. Hyperglycémie provoquée par voie orale.
+15086,mcqu,D,B,False,False,True,"B. 0,90"
+27543,mcqu,E,C,False,False,True,C. Stade ll B
+9013,mcqu,C,B,False,False,True,B. A une atteinte radiculaire
+11336,mcqu,C,C,True,False,True,C. La traduction d'une métastase dans le cul de sac lombo-sacré
+3239,mcqu,B,A,False,False,True,A. ABO
+1863,mcqu,A,C,False,False,True,C. Un ammonium quaternaire en application 2 fois/jour (ex. : Hexomédine® transcutanée)
+18202,mcqu,B,B,True,False,True,B. 50 %
+16031,mcqm,BCD,ACD,False,False,True,"- A. Association aux timbres d'Isosorbide dinitrate retard par voie orale
+- C. Adjonction au traitement d'un antagoniste bêta-adrénergique
+- D. Adjonction au traitement de Diltiazem"
+6930,mcqm,ABCE,BE,False,False,True,"- B. L'appréciation technique de l'exposition au risque
+- E. L'avis d'un médecin agréé en matière de pneumoconioses ou d'un collège de trois médecins"
+16136,mcqm,AB,AB,True,False,True,"- A. Réhydratation
+- B. Amoxicilline + Acide clavulanique (Augmentin®): 1g/8h IV"
+16116,mcqm,ACE,ACE,True,False,True,"- A. Ventoline® (salbutamol)
+- C. Bérotec® (fénotérol)
+- E. Bricanyl® (terbutaline)"
+17399,mcqm,BCD,DE,False,False,True,"- D. Décompression orbitaire (intervention d'Ogura)
+- E. Traitement immédiat par LT3 (Cynomel®)"
+20056,mcqm,ABCDE,ACE,False,False,True,"- A. GEU
+- C. Salpingite
+- E. Endométrite"
+3720,mcqm,BCE,AC,False,False,True,"- A. Les IgG passent la barrière placentaire pendant toute la durée de la gestation
+- C. Les IgA ne passent pratiquement pas la barrière placentaire"
+6510,mcqm,ADE,ABD,False,False,True,"- A. Lorsque le médecin de garde refuse de se rendre la nuit auprès d'un patient accidenté qui saigne
+- B. Si le médecin appelé un dimanche pour état fébrile chez un enfant, ne se déplace pas sans prendre d'explication parce qu'il n'est pas de garde
+- D. Si le médecin alerté ne se dérange pas et appelle le SAMU"
+11700,mcqm,ABCD,ABDE,False,False,True,"- A. Le réchauffement en incubateur
+- B. La désobstruction régulière (par aspiration) des voies aériennes et digestives
+- D. L'oxygénothérapie sous enceinte céphalique
+- E. L'administration de stimulants respiratoires (théophylline ou caféine)"
+5491,mcqm,ABD,AE,False,False,True,"- A. Leucopénie
+- E. Ulcère gastroduodénal"
+778,mcqm,ABDE,AB,False,False,True,"- A. Stomatite
+- B. Diarrhée"
+3951,mcqm,BD,BC,False,False,True,"- B. Phosphate d'aluminium (Phosphalugel®)
+- C. Cimétidine"
+578,mcqm,BD,BD,True,False,True,"- B. Epithélioma du sein
+- D. Epithélioma de la prostate"
+2417,mcqm,BCDE,BC,False,False,True,"- B. 45, X
+- C. 45, X/46 XX"
+262,mcqm,ACE,BC,False,False,True,"- B. Alvéolite fibrinoleucocytaire
+- C. Nodule tuberculeux calcifié"
+649,mcqm,AB,AB,True,False,True,"- A. Une lésion épithéliale maligne qui ne fanchit pas la membrane basale
+- B. Un carcinome intra-muqueux"
+15173,mcqm,BE,BC,False,False,True,"- B. Leucémie Iymphoïde chronique
+- C. Leucémie myéloïde chronique"
+17932,mcqm,CD,BC,False,False,True,"- B. Sécheresse vaginale
+- C. Bouffées de chaleur"
+2226,mcqm,AD,BDE,False,False,True,"- B. Femmes ayant un garçon atteint
+- D. Femmes ayant un fils et un frère atteints
+- E. Filles ayant un frère et un oncle maternel atteints"
+5444,mcqm,ACD,AC,False,False,True,"- A. Est provoquée par Brucella melitensis, B abortus suis ou B abortus bovis
+- C. Est aussi appelée fièvre ondulante ou fièvre sudoroalgique"
+21030,mcqm,BCD,AB,False,False,True,"- A. Evitement
+- B. Réassurance"
+2659,mcqm,CE,ABCD,False,False,True,"- A. Erythrose du visage
+- B. Céphalées fréquentes
+- C. Splénomégalie
+- D. Hématocrite à 57%"
+14795,mcqm,BE,AE,False,False,True,"- A. Pour déterminer le nombre de sujets nécessaires
+- E. Pour obtenir la comparabilité de deux groupes"
+10399,mcqm,ACE,BCD,False,False,True,"- B. Etude de la sécrétion de la glande parotide
+- C. Réflexe stapédien
+- D. Etude de la sensibilité mentonnière"
+15422,mcqm,ACDE,ABD,False,False,True,"- A. Diminuent mieux qu'un placebo la pression artérielle chez des hypertendus
+- B. Diminuent plus que des diurétiques ou des bêta-bloquants le risque d'accident vasculaire cérébral chez les hypertendus
+- D. Diminuent la mortalité des patients en insuffisance cardiaque grave ou modérée"
+7992,mcqm,ABD,BCD,False,False,True,"- B. Est due à la persistance du canal péritonéo-vaginal
+- C. Son trajet est extra-funiculaire
+- D. Présente une variété scrotale"
+829,mcqm,ACD,ABC,False,False,True,"- A. La morphine agit 6 heures
+- B. Toutes les douleurs répondent à la morphine
+- C. Une accoutumance est très fréquente après un mois de traitement"
+18728,mcqm,ABCDE,AE,False,False,True,"- A. Tétanos
+- E. Rougeole-Oreillons-Rubéole"
+13058,mcqm,AB,BE,False,False,True,"- B. Une opacité de type alvéolaire triangulaire à sommet hilaire de la base droite
+- E. Des opacités de type interstitiel plurisegmentaires"
+6410,mcqm,ABD,ABC,False,False,True,"- A. Peut être engagée sur le plan pénal devant les juridictions répressives
+- B. Peut être engagée sur le plan civil devant des juridictions de droit commun en cas de faute détachable du service
+- C. Peut être engagée sur le plan disciplinaire devant le conseil départemental de l'Ordre des Médecins"
+10122,mcqm,ABC,BDE,False,False,True,"- B. Kératite ponctuée superficielle inférieure
+- D. Glaucome chronique
+- E. Cataracte"
+9824,mcqm,BD,BDE,False,False,True,"- B. Comporte une inégalité avec irrégularité pupillaire
+- D. Comporte une abolition du réflexe photomoteur
+- E. Comporte une abolition du réflexe a l'accommodation-convergence"
+1505,mcqm,AC,BD,False,False,True,"- B. Elle est plus fréquente chez l'homme que chez la femme
+- D. Elle s'accompagne souvent d'une atteinte uni ou bilatérale des sacro-iliaques"
+6017,mcqm,ACD,BD,False,False,True,"- B. Vous estimez qu'elle sera bénéfique sur les poussées inflammatoires articulaires
+- D. Vous conseillez d'attendre une stabilisation de la maladie pendant au moins un an"
+14903,mcqm,BCD,BD,False,False,True,"- B. Enterobacter cloacæ
+- D. Pseudomonas aeruginosa"
+16029,mcqm,BD,ACE,False,False,True,"- A. Augmentation du travail cardiaque
+- C. Baisse de la fraction d'éjection ventriculaire gauche
+- E. Baisse de la pression télésystolique du ventricule gauche"
+504,mcqm,ABCDE,AB,False,False,True,"- A. Maladie de Bowen
+- B. Adénome (polype adénomateux) du côlon"
+7533,mcqm,ABD,ACD,False,False,True,"- A. Eruption
+- C. Fièvre
+- D. Parotidite"
+4614,mcqm,AC,CD,False,False,True,"- C. Au dessous de l'arcade crurale
+- D. Au dessous du trou obturateur"
+12280,mcqm,AC,BC,False,False,True,"- B. Est utilisée pour déclencher le travail et l'accouchement
+- C. Est utilisée comme hémostatique utérin"
+15245,mcqm,ADE,BC,False,False,True,"- B. Névralgie sciatique
+- C. Sacro-iliite"
+14148,mcqm,ABC,AE,False,False,True,"- A. Vaccination des filles âgées de 12 à 15 mois
+- E. Vaccination des femmes enceintes qui ont une sérologie de la rubéole négative"
+18818,mcqm,CD,ABCE,False,False,True,"- A. La négativité du dosage ELISA des D-dimères plasmatiques
+- B. La phlébo-cavographie
+- C. La scintigraphie pulmonaire de perfusion
+- E. Les gaz du sang artériels"
+16030,mcqm,BCDE,BCE,False,False,True,"- B. La voie sublinguale permet d'éviter le premier passage hépatique
+- C. A fortes doses, les dérivés nitrés peuvent engendrer une baisse de la résistance périphérique totale
+- E. Par voie sublinguale, le délai entre administration et effets est de l'ordre de la minute"
+21158,mcqm,ABCDE,ABCD,False,False,True,"- A. Une tristesse non exprimée
+- B. Une faible estime de soi
+- C. Des troubles du sommeil
+- D. Des troubles de l'appétit"
+8092,mcqm,AB,AB,True,False,True,"- A. Sérodiagnostic
+- B. Cystoscopie avec biopsie vésicale"
+7601,mcqm,AC,AB,False,False,True,"- A. Prélèvement de squames
+- B. Examen en lumière de Wood"
+6755,mcqm,CDE,AB,False,False,True,"- A. Angiomes stellaires
+- B. Trémulation des doigts"
+6333,mcqm,AC,AC,True,False,True,"- A. Radiographies du genou
+- C. Hémocultures"
+10470,mcqm,BCD,ABCE,False,False,True,"- A. Une rhinorrhée fétide bilatérale
+- B. Une flore polymicrobienne
+- C. Un sinus opaque à la radiographie
+- E. Une évolution sur un mode chronique"
+2202,mcqm,DE,BD,False,False,True,"- B. Se traduit par un phénotype différent de celui de la trisomie libre
+- D. Peut être acquise de novo"
+5885,mcqm,ABC,BC,False,False,True,"- B. Parfois au cours du Lupus Erythémateux Disséminé
+- C. Dans la plupart des Polyarthrites Rhumatoïdes de l'adulte"
+12335,mcqm,BE,ABC,False,False,True,"- A. Kétoprofène (Profénid®)
+- B. Ergotamine
+- C. Metformine (Glucophage®)"
+2039,mcqm,ABE,ABE,True,False,True,"- A. Tumeur bénigne du système pigmentaire
+- B. Lésion susceptible d'évoluer vers un mélanome malin
+- E. Lésion comportant des thèques intra-épidermiques au contact de la basale"
+19497,mcqm,ABCDE,ABE,False,False,True,"- A. La scintigraphie à l'iode 123 peut montrer une absence de fixation thyroïdienne
+- B. La scintigraphie à l'iode 123 peut déceler une fixation faible en regard de la base de la langue
+- E. La scintigraphie à l'iode 123 peut révéler une absence de fixation thyroïdienne alors que le corps thyroïde est présent à l'échographie"
+3869,mcqm,ABE,BDE,False,False,True,"- B. Un lavement baryté
+- D. Une ponction pleurale
+- E. Une échographie basithoracique gauche"
+569,mcqm,AC,CD,False,False,True,"- C. Est un facteur aggravant le pronostic
+- D. Est l'un des éléments de la définition de la poussée évolutive"
+8670,mcqm,BCD,AC,False,False,True,"- A. Une occlusion normale de la paupière supérieure
+- C. Une agueusie des 2/3 antérieurs de la langue"
+1939,mcqm,ABDE,BD,False,False,True,"- B. Le caractère inflammatoire des adénopathies inguinales
+- D. Le caractère douloureux des lésions génitales"
+15507,mcqm,BCD,AD,False,False,True,"- A. Valproate de sodium (Dépakine®)
+- D. Carbamazépine (Tégrétol®)"
+15624,mcqm,ABE,BE,False,False,True,"- B. Est possible même quand la maladie est rare
+- E. Nécessite beaucoup de soin dans la constitution du groupe témoin"
+15947,mcqm,ACD,BD,False,False,True,"- B. Ulcère gastrique
+- D. Abcès local"
+16063,mcqm,CE,BE,False,False,True,"- B. Mucilages
+- E. Anthraquinones"
+10721,mcqm,DE,CDE,False,False,True,"- C. Une sialographie
+- D. Une échographie
+- E. Une drill biopsie"
+4994,mcqm,ADE,ABCE,False,False,True,"- A. Est un érythème
+- B. Evolue par poussées successives
+- C. Prédomine aux plis de flexion
+- E. Est suivie d'une desquamation fine et furfuracée"
+20068,mcqm,AC,ADE,False,False,True,"- A. Douleurs pelviennes
+- D. Métrorragies
+- E. Anémie hypochrome"
+18363,mcqm,ABC,AC,False,False,True,"- A. Une infection génitale
+- C. Conséquences plus graves après une maladie sexuelle transmissible"
+15027,mcqm,DE,BC,False,False,True,"- B. Un inhibiteur de la topoisomérase II
+- C. Un agent alkylant"
+869,mcqm,BD,AD,False,False,True,"- A. Sus-omohyoïdien
+- D. Sous-mental"
+661,mcqm,DE,BC,False,False,True,"- B. En cas d'arythmie complète par fibrillation auriculaire à 90 /min
+- C. En cas d'artérite des membres inférieurs"
+910,mcqm,AB,AC,False,False,True,"- A. La dureté du nodule
+- C. L'augmentation rapide de volume"
+22050,mcqm,ABD,CD,False,False,True,"- C. Anémie macrocytaire par carence en vitamine B 12
+- D. Test au D-Xylose pertubé"
+8547,mcqm,ABDE,ABC,False,False,True,"- A. Au cours des syndromes choréiques
+- B. Au cours des atteintes de la voie lemniscale
+- C. Au cours de l'atteinte des voies spinothalamiques"
+3434,mcqm,CD,BD,False,False,True,"- B. C1q
+- D. C4"
+776,mcqm,AB,AC,False,False,True,"- A. Numération-formule sanguine
+- C. Bilan biologique hépatique"
+6550,mcqm,AC,BD,False,False,True,"- B. Tribunal Administratif
+- D. Commission de Première Instance de la Sécurité Sociale (tribunal des affaires sociales)"
+8054,mcqm,AC,ABC,False,False,True,"- A. Arthrites septiques
+- B. Péri-hépatite
+- C. Sténose urétrale"
+19891,mcqm,ABCE,ABD,False,False,True,"- A. La vaccination doit être réalisée de préférence entre 15 et 18 mois
+- B. L'otite est la complication la plus fréquente en France
+- D. L'éruption débute habituellement à la partie supérieure du thorax"
+2366,mcqm,CE,BE,False,False,True,"- B. 45,XY,t (21q21q)
+- E. 47,XY,+21"
+9098,mcqm,ABCE,BCD,False,False,True,"- B. Le tremblement est un tremblement de repos.
+- C. Le tremblement est souvent à prédominance unilatérale, 
+- D. Le tremblement n'est pas augmente par le calcul mental"
+5137,mcqm,BC,AB,False,False,True,"- A. Syndrome de détresse respiratoire aiguë (SDRA) par oedème pulmonaire lésionnel
+- B. Pleurésie purulente"
+8766,mcqm,CD,CD,True,False,True,"- C. Une hydrocéphalie à pression normale
+- D. Un hématome sous dural chronique"
+17846,mcqm,ADE,AB,False,False,True,"- A. Ampicilline
+- B. Cyclines"
+21160,mcqm,DE,ABCE,False,False,True,"- A. Psychothérapie analytique
+- B. Psychothérapie cognitive
+- C. Psychothérapie familiale
+- E. Consultations thérapeutiques"
+12684,mcqm,BD,AD,False,False,True,"- A. La présence d'adénopathies hilaires
+- D. Une opacité excavée"
+13541,mcqm,BDE,BC,False,False,True,"- B. Anorexie
+- C. Perturbation de l'image du corps"
+16065,mcqm,ABCD,ABC,False,False,True,"- A. Difficulté d'expulser les selles avec parfois manoeuvres digitales
+- B. Sensation de défécation incomplète
+- C. Douleur après le passage des selles"
+20466,mcqm,CDE,AC,False,False,True,"- A. Une communication inter-ventriculaire
+- C. Une dilatation des ventricules cérébraux latéraux"
+5109,mcqm,ABCD,BCD,False,False,True,"- B. Ankylostomose
+- C. Amibiase
+- D. Bilharziose"
+5577,mcqm,BCD,BCE,False,False,True,"- B. Baisse de la paO2
+- C. Présence de pétéchies sur la paroi thoracique
+- E. Image d'amputation à la scintigraphie pulmonaire en ventilation perfusion"
+13535,mcqm,BCE,BC,False,False,True,"- B. Neuroleptiques
+- C. Psychothérapie de psychose"
+14771,mcqm,BC,AB,False,False,True,"- A. Hébéphrénie à évolution chronique
+- B. Psychose maniaco-dépressive"
+13467,mcqm,BE,BC,False,False,True,"- B. Sauvegarde de justice avec désignation d'un mandataire
+- C. Demande d'ouverture immédiate d'une tutelle"
+14686,mcqm,ABCE,ABCE,True,False,True,"- A. Une déviation en valgus
+- B. Une pseudarthrose
+- C. Une paralysie cubitale
+- E. Une ankylose temporaire de l'articulation du coude"
+2111,mcqm,ABCDE,AB,False,False,True,"- A. Persistance du prurit pendant quelques jours
+- B. Recontamination par l'entourage"
+14094,mcqm,AE,AE,True,False,True,"- A. Grippe
+- E. Tétanos"
+8078,mcqm,ABCD,BCD,False,False,True,"- B. Natriurèse basse
+- C. Tension artérielle basse
+- D. Pression veineuse centrale basse"
+15157,mcqm,BE,ABCE,False,False,True,"- A. L'utérus est à l'ombilic
+- B. L'utérus est à mi-distance ombilic-pubis
+- C. Le col est toujours fermé
+- E. Il existe une hypercoagulabilité"
+16135,mcqm,ABCD,AB,False,False,True,"- A. Insuffisance respiratoire aiguë
+- B. Insuffisance cardiaque"
+10770,mcqm,AC,AC,True,False,True,"- A. L'altération trop importante de l'état général
+- C. Une métastase pleuro-pulmonaire"
+7339,mcqm,AE,AC,False,False,True,"- A. Prise régulière de Nivaquine®
+- C. Prise régulière de nifuroxazide (Ercéfuryl®)"
+17686,mcqm,AD,AE,False,False,True,"- A. La prématurité
+- E. La dysgravidie"
+10114,mcqm,AC,ABC,False,False,True,"- A. Représente le type le plus fréquent de cataracte
+- B. Provoque une baisse d'acuité visuelle progressive
+- C. Doit être opérée rapidement de façon à éviter une amblyopie fonctionnelle"
+17731,mcqm,CDE,CD,False,False,True,"- C. Une protéinurie
+- D. Une hypertension artérielle"
+638,mcqm,ABE,BCE,False,False,True,"- B. Les épithéliomas malpighiens sont la forme histologique la plus fréquente
+- C. Les cancers du col utérin sont partiellement hormonodépendants
+- E. L'extension loco-régionale est le principal facteur de pronostic"
+17044,mcqm,ABCDE,CDE,False,False,True,"- C. Crise convulsive
+- D. Sueurs
+- E. Agitation"
+12885,mcqm,CD,BC,False,False,True,"- B. Hippocratisme digital
+- C. Crachats hémoptoïques"
+21430,mcqm,CD,AD,False,False,True,"- A. Les fuites de gaz de ville sans combustion
+- D. Les appareils de chauffage au gaz en fonctionnement"
+9067,mcqm,AC,BD,False,False,True,"- B. Scanner cérébral
+- D. Fond d'oeil"
+10621,mcqm,BE,CD,False,False,True,"- C. Otorragie
+- D. Résolution spontanée en quelques heures"
+16851,mcqm,ACD,CDE,False,False,True,"- C. Acné
+- D. Douleurs osseuses
+- E. Infiltration cutanéo-muqueuse"
+19258,mcqm,BE,BE,True,False,True,"- B. B ta-bloquants
+- E. Isoptine® (Vérapamil)"
+21384,mcqm,AB,BD,False,False,True,"- B. Des lésions de grattage
+- D. Des croûtes sur le cuir chevelu"
+21142,mcqm,AD,DE,False,False,True,"- D. Anticoagulants
+- E. Photocoagulation des zones d'ischémie"
+10545,mcqm,AE,AB,False,False,True,"- A. Presbyacousie
+- B. Maladie de Ménière"
+9718,mcqm,BDE,BE,False,False,True,"- B. Hémorragie du vitré
+- E. Décollement de rétine"
+21157,mcqm,ABCDE,ADE,False,False,True,"- A. Modifications familiales
+- D. Maladie organique
+- E. Etat dépressif"
+2942,mcqm,BDE,AB,False,False,True,"- A. Numération des plaquettes
+- B. Dosage du fibrinogène"
+17813,mcqm,AE,AD,False,False,True,"- A. Le T.R. retrouve un envahissement paramétrial jusqu'à la paroi pelvienne
+- D. Le traitement initial est la chirurgie"
+6365,mcqm,BC,AC,False,False,True,"- A. Il est d'ordre privé
+- C. Il appartient au malade"
+18804,mcqm,ADE,ABCDE,False,False,True,"- A. 1170 sujets positifs
+- B. 190 malades
+- C. 980 vrais négatifs
+- D. 10 faux négatifs
+- E. Près d'un millier de faux positifs"
+570,mcqm,AE,BD,False,False,True,"- B. Epithélioma du col utérin
+- D. Adénocarcinome prostatique"
+20218,mcqm,ADE,ACE,False,False,True,"- A. Fracture pathologique
+- C. Pericardite
+- E. Infections bactériennes"
+8257,mcqm,BD,BD,True,False,True,"- B. Un diabète sodé et un régime désodé
+- D. Un traitement diurétique"
+5745,mcqm,ABC,AC,False,False,True,"- A. Une cruralgie
+- C. Une lésion osseuse d'une branche pubienne"
+16336,mcqm,AB,AC,False,False,True,"- A. Hémoptysie
+- C. Hypoxie"
+10013,mcqm,ACDE,AD,False,False,True,"- A. Siègent dans la couche des fibres optiques
+- D. Peuvent apparaître chez le diabétique"
+4559,mcqm,BC,AC,False,False,True,"- A. Le tendon conjoint
+- C. Le ligament de Cooper (crête pectinéale)"
+6757,mcqm,ABD,BD,False,False,True,"- B. La persistance de l'alcoolisation
+- D. Une atteinte hépatique"
+7641,mcqm,ADE,AD,False,False,True,"- A. La conservation des aliments entre 4 et 10°C
+- D. La consommation de végétaux crus"
+18993,mcqm,AD,AD,True,False,True,"- A. protéinurie avec néphropathie
+- D. Prurit ou éruption"
+15691,mcqm,ACD,ABC,False,False,True,"- A. Recherche antigène HBs négative
+- B. Caryotype normal
+- C. Absence d'antécédents personnels de maladies géniques"
+11643,mcqm,ADE,AB,False,False,True,"- A. Tuméfaction cylindrique allongée
+- B. Tympanisme à la percussion"
+7109,mcqm,AB,AC,False,False,True,"- A. Une tuberculose pleuro-pulmonaire
+- C. Une sarcoïdose"
+13710,mcqm,ABD,AC,False,False,True,"- A. Carbamates
+- C. Disulfiram (Espéral)"
+4729,mcqm,AE,AE,True,False,True,"- A. Début derrière les oreilles
+- E. Macules et papules avec intervalles de peau saine"
+15129,mcqm,BDE,AB,False,False,True,"- A. Apport de 300 à 400 mg/24 h d'hydrocortisone, per os
+- B. Apport de 300 à 400 mg/24 h d'hydrocortisone en intraveineux"
+17352,mcqm,AE,AC,False,False,True,"- A. Cette altération est le plus souvent fonctionnelle, sans lésion organique de la surrénale
+- C. L'hypercholestérolémie du myxoedème est due à cette altération surrénalienne"
+19682,mcqm,BC,CE,False,False,True,"- C. La demande doit être faite au Procureur de la République
+- E. Elle prive le sujet du droit de vote"
+20025,mcqm,ADE,AD,False,False,True,"- A. La grossesse
+- D. L'aspiration oeso-gastrique par sonde"
+7784,mcqm,ABD,ACE,False,False,True,"- A. En cours de grossesse
+- C. Si une bactériurie du même type avait été constatée 2 années auparavant
+- E. Chez un malade ayant une sonde à demeure"
+4189,mcqm,ACE,ABCE,False,False,True,"- A. Elles ont le plus souvent un début clinique brutal
+- B. Elles surviennent chez des sujets en mauvais état général
+- C. Leur diagnostic est en général basé sur l'examen clinique
+- E. La contracture abdominale est habituellement présente"
+3963,mcqm,BC,AD,False,False,True,"- A. Croissant clair gazeux sous-diaphragmatique
+- D. Elargissement des gouttières pariéto-coliques"
+13589,mcqm,ABD,AD,False,False,True,"- A. La chronicité
+- D. Une récidive suicidaire dans les mois ou années qui viennent"
+1862,mcqm,ABDE,CDE,False,False,True,"- C. Comporte une détersion cutanée et l'utilisation d'un antiseptique pendant 24 heures
+- D. Nécessite une désinfection soigneuse du linge de corps
+- E. Doit faire supprimer toute corticothérapie non indispensable"
+4501,mcqm,AC,CD,False,False,True,"- C. Echographie hépatique
+- D. Portographie transhépatique"
+15531,mcqm,ADE,ABCD,False,False,True,"- A. Troubles récents du transit intestinal
+- B. Sexe masculin
+- C. ƒlévation des phosphatases alcalines
+- D. Anémie"
+19983,mcqm,AB,AC,False,False,True,"- A. Il sont ototoxiques
+- C. Il sont actifs sur le pneumocoque"
+11227,mcqm,ABD,BDE,False,False,True,"- B. L'ictère du prématuré
+- D. L'ictère par déficit en G 6 P D
+- E. L'ictère de la maladie de Crigler-Najjar"
+17353,mcqm,BC,BC,True,False,True,"- B. Palpitations et douleurs précordiales de type constrictif
+- C. Apparition d'une thermophobie et de sudations"
+11091,mcqm,ABDE,ABC,False,False,True,"- A. Mort subite inexpliquée du nourrisson
+- B. Bronchopneumopathies
+- C. Retard de croissance staturo-pondérale"
+8510,mcqm,ADE,AE,False,False,True,"- A. Apport per os de carbonate de calcium
+- E. Apport per os de métabolites de la vitamine D"
+18098,mcqm,ABC,AE,False,False,True,"- A. Progestérone plasmatique
+- E. Prolactine plasmatique"
+20365,mcqm,BD,AD,False,False,True,"- A. Ankylose dorso-lombaire
+- D. Rupture de tendons extenseurs des doigts de la main"
+4338,mcqm,ABE,BC,False,False,True,"- B. Une échographie abdominale
+- C. Une artériographie tronc coeliaque + Art. Mésent. Sup."
+5566,mcqm,ABCE,BC,False,False,True,"- B. Se manifeste par des douleurs inflammatoires des racines
+- C. Comporte une altération importante de l'état général"
+6069,mcqm,ABD,BD,False,False,True,"- B. Alimentation hyperglucidique
+- D. Excès d'apport en alcool"
+1147,mcqm,BE,BC,False,False,True,"- B. La malade a fait une hémorragie méningée la veille
+- C. L'embolie a provoqué une obstruction vasculaire de 60 %"
+17299,mcqm,BD,AD,False,False,True,"- A. Jeune âge de la malade
+- D. Phénomènes de sudation abondante et généralisée"
+877,mcqm,AC,BD,False,False,True,"- B. T2N1a  Mo
+- D. T2N1b  Mo"
+11697,mcqm,ABDE,ABC,False,False,True,"- A. Le geignement expiratoire
+- B. Le battement des ailes du nez
+- C. Le tirage sus-sternal"
+17546,mcqm,DE,BC,False,False,True,"- B. Amylase
+- C. Phosphatases alcalines"
+7600,mcqm,AB,BDE,False,False,True,"- B. Trichophyton rubrum
+- D. Trichophyton schoenleini
+- E. Trichophyton interdigitale"
+14910,mcqm,ABCD,ABC,False,False,True,"- A. Présence d'une angulation apparente de la clavicule avec saillie del'extrémité distale du fragment interne
+- B. Abaissement et antépulsion discrète du moignon de l'épaule
+- C. Ecartement du bord spinal de l'omoplate de la ligne des épineuses"
+5268,mcqm,CD,AD,False,False,True,"- A. Eruption bulleuse
+- D. Eruption maculo-papuleuse"
+21439,mcqm,ABC,ABC,True,False,True,"- A. Le rapport poids/taille
+- B. La préalbuminémie
+- C. La protéine vectrice du rétinol sanguine"
+15962,mcqm,AC,BC,False,False,True,"- B. Peuvent être distribués gratuitement dans les Centres de Planification et d'ƒducation Familiale
+- C. Leur prescription et leur délivrance aux mineures nécessite l'autorisation parentale"
+7658,mcqm,ABC,ACDE,False,False,True,"- A. Nécessitent des urines acides pour se développer
+- C. Peuvent exister sous forme coralliforme
+- D. Font suite à des crises de goutte dans les antécédents
+- E. Sont formés par précipitation de l'urate de sodium"
+14140,mcqm,BD,AD,False,False,True,"- A. Prévention primaire
+- D. Prévention active"
+2108,mcqm,CE,CE,True,False,True,"- C. Examen microscopique du produit de grattage d'une lésion
+- E. Test thérapeutique avec une solution de benzoate de benzyle (Ascabiol®)"
+6016,mcqm,BC,BC,True,False,True,"- B. Troubles psychiques
+- C. Atteinte rénale"
+9654,mcqm,DE,AC,False,False,True,"- A. Remplacement du pain par 50 g de biscottes
+- C. Remplacement de la confiture par un verre de jus d'orange du commerce"
+14063,mcqm,ACD,AB,False,False,True,"- A. Du 8ème jour
+- B. Du 4ème mois"
+17021,mcqm,BD,BD,True,False,True,"- B. Apparait à jeun et en général après une période de malnutrition
+- D. Est liée à une inhibition de la néoglucogénèse secondaire au catabolisme de l'alcool"
+15165,mcqm,BD,BD,True,False,True,"- B. Sont le plus souvent droites
+- D. Sont un facteur d'accouchement prématuré"
+17469,mcqm,BCE,BC,False,False,True,"- B. Une activité physique excessive
+- C. Une infection"
+20043,mcqm,AC,BC,False,False,True,"- B. Un traitement par Digoxine® au long cours
+- C. Une antibiothérapie à large spectre"
+1225,mcqm,CE,ABCDE,False,False,True,"- A. Infarctus du myocarde
+- B. Accidents vasculaires cérébraux ischémiques
+- C. Insuffisance ventriculaire gauche
+- D. Artérite oblitérante des membres inférieurs
+- E. Hémorragie cérébro-méningée"
+20912,mcqm,BD,AC,False,False,True,"- A. Sérologie VIH
+- C. EFR"
+17350,mcqm,CD,BD,False,False,True,"- B. Vasodilatation périphérique
+- D. Elargissement de la silhouette cardiaque"
+17993,mcqm,BC,AC,False,False,True,"- A. La prise de Microval® 2 comprimés, puis 2 autres comprimés 12 heures plus tard
+- C. La pose d'un stérilet dans les 72 heures"
+1323,mcqm,ABDE,BCD,False,False,True,"- B. Elévation de la pression télédiastolique ventriculaire gauche
+- C. Abaissement de la pression télésystolique ventriculaire gauche
+- D. Abaissement de la pression diastolique aortique"
+17151,mcqm,BDE,BCE,False,False,True,"- B. Il existe souvent une diminution de tolérance au glucose
+- C. L'épreuve d'hyperglycémie provoquée freine la sécrétion de somathormone
+- E. Une hypersécrétion de prolactine n'est pas rare"
+18365,mcqm,ABCD,BD,False,False,True,"- B. NFS
+- D. Une échographie"
+16693,mcqm,ABCE,ABE,False,False,True,"- A. Le sous-décalage du segment ST est supérieur ou égal à 4 mm
+- B. Le sous-décalage apparaît très rapidement lors des premiers paliers de l'effort
+- E. Le sous-décalage du segment ST persiste à la 1Oème minute de la récupération"
+17300,mcqm,BDE,BC,False,False,True,"- B. Hyperglycémie
+- C. Acidose métabolique"
+15291,mcqm,DE,BC,False,False,True,"- B. Doit débuter par une dose de charge de 50 à 100 milligrammes par jour
+- C. Doit toujours être associée à une castration"
+3499,mcqm,CDE,BC,False,False,True,"- B. Ont pour l'haptène une affinité différente
+- C. Ont tous le même idiotype"
+12379,mcqm,BD,BDE,False,False,True,"- B. Il est à soupape
+- D. Il existe une insuffisance respiratoire préalable
+- E. Il s'agit d'une récidive"
+14956,mcqm,ABCD,BCD,False,False,True,"- B. La pollakiurie nocturne
+- C. La pollakiurie diurne
+- D. Les bržlures mictionnelles"
+8327,mcqm,AD,BD,False,False,True,"- B. Scintigraphie osseuse
+- D. Dosage d'HCG et d'alphafoetoprotéine"
+11999,mcqm,BCD,AD,False,False,True,"- A. Doivent être pris de préférence le soir au coucher
+- D. N'exercent pas d'interactions pharmacocinétiques connues par induction enzymatique"
+14626,mcqm,AC,BCD,False,False,True,"- B. Un steppage
+- C. Une danse des jambiers antérieurs
+- D. Un signe de Romberg"
+18062,mcqm,BE,AC,False,False,True,"- A. Une échographie pour préciser la topographie du fibrome
+- C. Une hystérographie pour rechercher un fibrome intra-cavitaire"
+10455,mcqm,BD,ADE,False,False,True,"- A. Otospongiose
+- D. Surdité unilatérale brusque
+- E. Neurinome de l'acoustique"
+15535,mcqm,AC,ABC,False,False,True,"- A. Insuffisance cardiaque aiguë
+- B. Endocardite infectieuse
+- C. Surinfection bronchopulmonaire"
+9054,mcqm,BD,BD,True,False,True,"- B. Un scanner cérébral
+- D. Une angiographie carotidienne gauche"
+21032,mcqm,ABE,AB,False,False,True,"- A. Thérapie comportementale
+- B. Médicaments antidépresseurs"
+3094,mcqm,ABD,BD,False,False,True,"- B. Transformation en leucémie aiguë myéloblastique
+- D. Myélofibrose"
+15990,mcqm,ABD,ACDE,False,False,True,"- A. Schizophrénie paranoïde
+- C. Délire paranoïaque
+- D. Psychose hallucinatoire chronique
+- E. Délire chronique interprétatif"
+19688,mcqm,CDE,BE,False,False,True,"- B. Taux de plasmocytes médullaires
+- E. Importance à la protéïnurie de Bence Jones"
+9437,mcqm,BD,BE,False,False,True,"- B. sein
+- E. foie"
+8806,mcqm,ABCDE,BDE,False,False,True,"- B. La rareté du clignement des paupières
+- D. La réduction du balancement d'un ou des 2 bras à la marche
+- E. Une difficulté à exécuter de façon rapide les mouvements alternatifs"
+17398,mcqm,BDE,BC,False,False,True,"- B. Carbimazole (Néomercasole®)
+- C. Chirurgie"
+11723,mcqm,ABDE,AE,False,False,True,"- A. Hématurie
+- E. Protéinurie"
+10654,mcqm,CD,BCE,False,False,True,"- B. Maladie favorisée par les sinusites chroniques
+- C. Maladie des travailleurs du bois
+- E. Maladie favorisée par le tabagisme chronique"
+11699,mcqm,ABCE,AE,False,False,True,"- A. Une radiographie du thorax de face
+- E. Une mesure de la TcP02 ( PO 2 cutanée)"
+19119,mcqm,DE,ACD,False,False,True,"- A. En France, son incidence est de l'ordre de 1 cas pour 500 naissances
+- C. Le diagnostic précoce avant trois mois permet d'éviter les complications pulmonaires de la maladie
+- D. Correspond à une délétion Df 508 identifiable en prénatal"
+15182,mcqm,ABCD,AB,False,False,True,"- A. Un hypersplénisme
+- B. Une CIVD"
+7168,mcqm,BC,ABC,False,False,True,"- A. Le diagnostic a été confirmé par un spécialiste
+- B. La maladie fait l'objet d'un tableau de maladie professionnelle
+- C. L'agent incriminé est repris dans le même tableau"
+20374,mcqm,BC,CD,False,False,True,"- C. Se manifeste habituellement par un placard superficiel du sein, prolongé par des trainées rouges en direction du creux axillaire homolatéral
+- D. Entraîne une symptomatologie bilatérale"
+15923,mcqm,CE,BCD,False,False,True,"- B. Des décollements épiphysaires
+- C. Des fractures diaphysaires d'âges différents
+- D. Des lacunes osseuses multiples"
+4170,mcqm,DE,BCE,False,False,True,"- B. L'augmentation du volume du foie
+- C. La fièvre
+- E. Les troubles neuropsychiques"
+15397,mcqm,ADE,ABCDE,False,False,True,"- A. Il ne s'intéresse pas du tout à un jouet qui tombe de sa main
+- B. Il ne marche pas seul
+- C. Il ne dit pas non
+- D. Il ne passe pas ses jouets d'une main dans l'autre
+- E. Il n'essaie pas du tout de prendre les petits objets entre pouce et index"
+5225,mcqm,CD,BD,False,False,True,"- B. Formule des éléments blancs du liquide pleural
+- D. Biopsie pleurale"
+18696,mcqm,CE,AC,False,False,True,"- A. S'observe de façon plus fréquente en début de scolarité (6-7 ans) et au moment de l'adolescence
+- C. Est une angoisse intense d'entrer dans l'école ou dans une classe"
+15360,mcqm,BDE,ACD,False,False,True,"- A. Une atteinte du nerf optique droit
+- C. Une atteinte du corps genouillé externe droit
+- D. Une atteinte unilatérale gauche des voies géniculostriées"
+1138,mcqm,BE,BD,False,False,True,"- B. Dilatation de l'infundibulum de l'artère pulmonaire
+- D. Augmentation de la pression capillaire pulmonaire"
+1156,mcqm,ABE,BC,False,False,True,"- B. Doppler veineux
+- C. Rhéopléthysmographie"
+5618,mcqm,BCD,AC,False,False,True,"- A. Une augmentation des gammaglobulines en dôme
+- C. Un pic étroit dans les gammaglobulines"
+5441,mcqm,AB,AB,True,False,True,"- A. Peuvent correspondre à une brucellose
+- B. Peuvent correspondre à une brucellose aiguë"
+21150,mcqm,AD,BDE,False,False,True,"- B. La seconde a été vaccinée contre la rubéole il y a 5 ans
+- D. La quatrième, qui est entrée dans l'établissement il y a une semaine vient de se faire faire une sérologie : elle est positive avec absence d'IgM
+- E. La cinquième a une sérologie négative : elle n'a jamais été en contact avec Cédric"
+19461,mcqm,ABC,ACE,False,False,True,"- A. Perte d'urines
+- C. Révulsion des globes oculaires
+- E. Respiration stertoreuse"
+14954,mcqm,BCD,AC,False,False,True,"- A. Recherche de BK
+- C. Urographie intraveineuse"
+16410,mcqm,CE,AC,False,False,True,"- A. Oreillette droite
+- C. Ventricule gauche"
+10876,mcqm,DE,AB,False,False,True,"- A. Tous les garçons sont malades
+- B. La moitié des filles est conductrice"
+15149,mcqm,ABCDE,BC,False,False,True,"- B. Récessive autosomique
+- C. Dominante autosomique"
+1860,mcqm,ACD,ABC,False,False,True,"- A. Examen en lumière de Wood
+- B. Papier cellophane adhésif
+- C. Recherche d'un signe du copeau avec un abaisse-langue"
+5394,mcqm,AD,AB,False,False,True,"- A. Numération formule sanguine
+- B. Fond d'oeil"
+18006,mcqm,ABD,ADE,False,False,True,"- A. Un retard de croissance intra-utérin
+- D. Une souffrance foetale chronique
+- E. Des ictères néonataux graves"
+16067,mcqm,ACD,BC,False,False,True,"- B. Est elle-même asymptomatique
+- C. Est confirmée par l'histologie"
+875,mcqm,AC,ABD,False,False,True,"- A. Cancer du sein chez sa grand mère paternelle
+- B. Diabète et hypertension chez sa mère
+- D. Prise de pilule combinée"
+20066,mcqm,BD,ABCD,False,False,True,"- A. Purpura pétéchial
+- B. Hématome musculaire profond
+- C. Hémorragies rétiniennes
+- D. Hémarthrose"
+4983,mcqm,ACE,ACE,True,False,True,"- A. Cicatrices d'anciens furoncles
+- C. Narines
+- E. Région périnéale"
+1859,mcqm,BD,CD,False,False,True,"- C. Halo fin hyperpigmenté entourant les taches achromiques
+- D. Aspect furfuracé et mat des taches observées"
+1874,mcqm,ABD,BDE,False,False,True,"- B. Fissuration du pli inférieur de l'oreille
+- D. Sécheresse de la peau
+- E. Chute de cheveux"
+17563,mcqm,ABCD,BD,False,False,True,"- B. Créatininémie
+- D. Protéinurie des 24 heures"
+5953,mcqm,BD,BD,True,False,True,"- B. Scanner sans injection
+- D. Radiographie du rachis"
+8885,mcqm,ACE,AD,False,False,True,"- A. Crise somato-motrice Bravais-Jaksonienne
+- D. Spasme en flexion"
+13130,mcqm,ACDE,D,False,False,False,"- D. dépression mélancolique
+- D. dépression mélancolique"
+20014,mcqm,AC,AC,True,False,True,"- A. Amoxicilline
+- C. Pefloxacine"
+3433,mcqm,ABCDE,AC,False,False,True,"- A. Anémie hémolytique immunoallergique
+- C. Choc anaphylactique"
+19035,mcqm,ABDE,ABE,False,False,True,"- A. Oreillons
+- B. Leptospirose
+- E. Tuberculose"
+6070,mcqm,ABCE,ABC,False,False,True,"- A. Régime normocalorique équilibré
+- B. Evictions des aliments purinophores
+- C. Majoration de l'activité physique"
+7640,mcqm,ABCD,ABC,False,False,True,"- A. Les excréments des animaux contaminés
+- B. Les mains souillées
+- C. La consommation de légumes ou fruits souillés"
+19851,mcqm,ACDE,AD,False,False,True,"- A. Par le toucher associé au palper abdominal
+- D. Par le scanner"
+17954,mcqm,BD,ABD,False,False,True,"- A. Vulvovaginite aiguë
+- B. Leucorrhées spumeuses aérées, continuelles
+- D. Un examen au spéculum montrant une muqueuse vaginale inflammatoire avec piquetés hémorragiques"
+13318,mcqm,CD,CE,False,False,True,"- C. Sont de mécanisme interprétatif
+- E. Evoluent de façon périodique"
+8586,mcqm,BDE,ABCDE,False,False,True,"- A. Paralysie du voile du palais
+- B. Hypoesthésie de l'hémiface
+- C. Surdité de perception endocochléaire
+- D. Signe de Charles Bell
+- E. Signe de Romberg latéralisé avec nystagmus horizontal"
+13636,mcqm,ABC,BC,False,False,True,"- B. Neuroleptique sédatif
+- C. Sels de lithium"
+13833,mcqm,ABCD,BD,False,False,True,"- B. Déréalisation
+- D. Hallucination psychique"
+22217,mcqm,AB,BD,False,False,True,"- B. Hypocalcémie
+- D. Diminution des phosphatases alcalines"
+9837,mcqm,BCD,AD,False,False,True,"- A. Protusion oculaire bilatérale symétrique
+- D. Non occlusion palpébrale nocturne"
+7625,mcqm,ACE,BC,False,False,True,"- B. Hématies altérées avec de nombreux grains de Schuffner
+- C. Aspect caractéristique des gametocytes """"en faux"""""
+1917,mcqm,CD,AC,False,False,True,"- A. Dermatite herpétiforme
+- C. Pemphigus vulgaire"
+13327,mcqm,AC,ABCDE,False,False,True,"- A. Bizarrerie
+- B. Détachement
+- C. Ambivalence affective
+- D. Instabilité de l'humeur
+- E. Délire d'influence"
+19702,mcqm,ACE,BDE,False,False,True,"- B. Une névralgie cervico-brachiale
+- D. Une paraplégie avec hypotonie musculaire et aréflexie ostéo-tendineuse
+- E. Un automatisme médullaire avec réaction de triple retrait lors du pincement du dos du pied"
+21438,mcqm,BE,AB,False,False,True,"- A. La mesure du pli cutané tricipital
+- B. La mesure de la circonférence brachiale"
+17304,mcqm,ACD,ACD,True,False,True,"- A. Troubles du rythme cardiaque
+- C. Poussées hypertensives
+- D. Collapsus vasculaire"
+15539,mcqm,AB,AB,True,False,True,"- A. Hémocultures
+- B. Echocardiographie"
+5182,mcqm,ABCE,CE,False,False,True,"- C. VDRL reste positif deux ans plus tard
+- E. TPHA reste positif deux ans plus tard"
+8253,mcqm,AC,AD,False,False,True,"- A. Faible taux par litre et par 24 heures
+- D. Protéinurie non sélective"
+10723,mcqm,CD,BD,False,False,True,"- B. Vous assurez simplement une surveillance clinique régulière
+- D. Vous demandez régulièrement une radiographie des poumons"
+17395,mcqm,ABCD,AB,False,False,True,"- A. Tachycardie
+- B. Thermophobie"
+17565,mcqm,ABCE,AE,False,False,True,"- A. Pesée
+- E. Glycémie à jeun et post-prandiale"
+2107,mcqm,ABC,AE,False,False,True,"- A. Glomérulonéphrite post-infectieuse
+- E. Immunodépression induite par le sarcopte"
+8892,mcqm,BCD,BDE,False,False,True,"- B. Il existe souvent une hémiplégie associée du même côté que la paralysie faciale
+- D. La manoeuvre de Pierre Marie et Foix peut la révéler
+- E. Elle peut évoluer vers un hémispasme facial"
+4187,mcqm,AD,BD,False,False,True,"- B. Les épices
+- D. Les choux"
+7288,mcqm,ADE,AD,False,False,True,"- A. TPHA
+- D. FTA"
+8325,mcqm,ABD,BD,False,False,True,"- B. Scanner abdominal
+- D. Dosage d'HCG et d'alphafoetoprotéine"
+15530,mcqm,ACE,CD,False,False,True,"- C. L'élévation des gamma GT
+- D. L'hyposidérémie"
+11375,mcqm,ABCD,BC,False,False,True,"- B. Proaccélérine (V)
+- C. Proconvertine (VII)"
+20421,mcqm,ACDE,AC,False,False,True,"- A. Accès de sueurs
+- C. Taches cutanées café au lait"
+2810,mcqm,CD,BCE,False,False,True,"- B. Hémophilie B mineure
+- C. Maladie de Willebrand
+- E. Surdosage par les antivitaminiques K"
+5841,mcqm,AE,BC,False,False,True,"- B. Aréflexie achilléenne
+- C. Hypotonie du mollet"
+16557,mcqm,CE,ACE,False,False,True,"- A. Dyspnée
+- C. Souffle holosystolique à la xyphoïde
+- E. Oedèmes des membres inférieurs"
+13178,mcqm,BD,AC,False,False,True,"- A. Du patient de sa propre volonté
+- C. De la volonté de l'entourage du patient"
+13921,mcqm,AC,AB,False,False,True,"- A. En réduction
+- B. En augmentation"
+4845,mcqm,AD,BC,False,False,True,"- B. Il peut survenir à la suite d'une avulsion dentaire
+- C. Il peut survenir à la suite d'une amygdalectomie"
+6393,mcqm,BC,AB,False,False,True,"- A. Peut être réalisé dans un délai maximum de 24 heures
+- B. Ne doit pas dépasser une distance supérieure à 200 km"
+3740,mcqm,BE,CE,False,False,True,"- C. Phénomène d'Arthus
+- E. Formation de complexes immuns"
+5954,mcqm,ABD,AB,False,False,True,"- A. Un défaut de synthèse du 1-25 (OH2 D3)
+- B. Un défaut d'absorption digestive du calcium"
+9072,mcqm,ABC,CD,False,False,True,"- C. Rapport immunoglobulines/protéines (pourcentage des gammaglobulines) : 15%
+- D. Eléments blancs 1 0/ml ; protéinorachie : 2,6 g/l, IgG/protéines : 24%"
+679,mcqm,ABD,AB,False,False,True,"- A. Envahissement métastatique de 4 ganglions sur 15
+- B. Tumeur peu différenciée, de grade histologique Scarf et Bloom """"3"""""
+3322,mcqm,AC,AB,False,False,True,"- A. Maladie du sérum
+- B. Eczéma atopique du nourrisson"
+11452,mcqm,CE,AE,False,False,True,"- A. Virus inactivé
+- E. Peut être associée aux vaccins contre la rougeole et la rubéole"
+19108,mcqm,BDE,BCD,False,False,True,"- B. Tuberculose
+- C. Métastase pulmonaire isolée
+- D. Cancer bronchique primitif"
+6630,mcqm,ABD,ABDE,False,False,True,"- A. Sur réquisition du Procureur de la République
+- B. Sur ordonnance d'un juge d'instruction
+- D. Sur ordonnance du Juge d'instance s'il y a contestation en matière d'accident du travail
+- E. Sur la demande du Chef de Service si le malade décède à l'hôpital"
+8042,mcqm,AB,BCD,False,False,True,"- B. Une hypocalcémie
+- C. Une hypophosphorémie
+- D. Une hypobicarbonatémie"
+16064,mcqm,CD,ACD,False,False,True,"- A. Hyperkaliémie
+- C. Crampes musculaires
+- D. Asthénie"
+12134,mcqm,ABE,AE,False,False,True,"- A. Active une lipoprotéine lipase
+- E. Exerce une action anticoagulante"
+5665,mcqm,ADE,BD,False,False,True,"- B. Névralgie sciatique
+- D. Ostéonécrose de la tête fémorale"
+3912,mcqm,ABC,BC,False,False,True,"- B. L'existence d'une hyperplasie de cellules à gastrine antrales
+- C. L'existence d'un gastrinome"
+11642,mcqm,ABCE,ACE,False,False,True,"- A. Ulcère gastro-duodénal
+- C. Ulcère du diverticule de Meckel
+- E. Polypose rectocolique"
+12416,mcqm,CE,AD,False,False,True,"- A. Staphylocoque doré
+- D. Klebsiella pneumoniae (Friedlander)"
+1841,mcqm,ABD,ABD,True,False,True,"- A. Début après un accident
+- B. La régression l'été
+- D. L'antécédent familial"
+19289,mcqm,CE,CE,True,False,True,"- C. Ne justifie aucune autre prescription que le traitement de la constipation si elle existe
+- E. Impose la recherche d'une autre étiologie en cas de rectorragie"
+21130,mcqm,BC,BD,False,False,True,"- B. Protéinorachie élevée
+- D. Glycorachie élevée"
+2444,mcqm,ABDE,AB,False,False,True,"- A. L'inactivation de l'X normal chez une femme porteuse d'une translocation X autosome
+- B. L'union d'un homme malade et d'une femme conductrice"
+5729,mcqm,ADE,BC,False,False,True,"- B. La douleur est un signe important
+- C. On se base sur l'étendue de l'hématome"
+20539,mcqm,AB,BE,False,False,True,"- B. Cancer de l'ovaire
+- E. Cancer du corps de l'utérus"
+8850,mcqm,AD,ABCE,False,False,True,"- A. Souffre à la face externe de la jambe
+- B. Ne peut marcher sur la pointe des pieds
+- C. A un réflexe achilléen aboli
+- E. A une zone d'anesthésie du bord externe du pied et du 5ème orteil"
+3890,mcqm,AD,AB,False,False,True,"- A. Siège au creux épigastrique
+- B. Irradiation rétrosternale ascendante"
+242,mcqm,ACD,BD,False,False,True,"- B. Cystadénocarcinome végétant
+- D. Carcinome transitionnel excréto-urinaire"
+4752,mcqm,BC,CD,False,False,True,"- C. Précèdent souvent l'éruption
+- D. Cèdent spontanément à la fin de l'éruption"
+12325,mcqm,AC,AB,False,False,True,"- A. Crise de goutte
+- B. Lithiase urinaire uratique"
+14572,mcqm,ABCD,BCD,False,False,True,"- B. Un déficit neurologique radial et cubital
+- C. Un déplacement sous plâtre
+- D. Un cal vicieux"
+10948,mcqm,BC,BD,False,False,True,"- B. Vous prescrivez un traitement martial
+- D. Vous prescrivez une NFS aux parents"
+5635,mcqm,ABD,BD,False,False,True,"- B. Hypercalcémie
+- D. Protéinurie"
+18551,mcqm,BCD,ACD,False,False,True,"- A. Dans les suites de la réduction d'une luxation scapulo-humérale  lorsque l'abduction active du bras reste très limitée
+- C. Lorsqu'une radio  de l'épaule  en abduction contrariée montre une diminution de l'espace acromio-huméral
+- D. Lorsque la force du bras est nettement diminuée par rapport au côté opposé en position d'abduction, antépulsion, rotation interne"
+18730,mcqm,CE,BE,False,False,True,"- B. Un jour sur deux au début
+- E. En prévoyant un arrêt progressif"
+634,mcqm,AB,AB,True,False,True,"- A. La thyroglobuline
+- B. La calcitonine"
+10413,mcqm,BCD,DE,False,False,True,"- D. Neurinome de l'acoustique
+- E. Cholestéatome"
+5952,mcqm,AC,CD,False,False,True,"- C. 50 % d'albumine et 50 % de chaînes légères kappa
+- D. 100 % d'IgG lambda"
+5662,mcqm,CD,ABE,False,False,True,"- A. Topographie de la douleur
+- B. Signe de la sonnette
+- E. Signe de Lassègue à 15 degrés d'élévation"
+9653,mcqm,ADE,ABDE,False,False,True,"- A. Est dans les limites inférieures des apports recommandés
+- B. Doit être réduit s'il existe une albuminurie
+- D. Peut être apprécié par la mesure de l'azote urinaire
+- E. Peut être apprécié par la mesure de la 3 méthyl-histidine urinaire"
+1398,mcqm,ABDE,BCE,False,False,True,"- B. Ulcère trophique
+- C. Ischémie aiguë du membre
+- E. Hémorragie variqueuse"
+3558,mcqm,ABCDE,ABE,False,False,True,"- A. Action des Iymphocytes T
+- B. Sécrétion de lymphokines
+- E. Action des Iymphocytes B"
+4032,mcqm,AE,ACD,False,False,True,"- A. Remise au malade d'une liste des médicaments gastro-toxiques interdits
+- C. Régime alimentaire excluant viandes en sauce, excès de féculents et boissons gazeuses
+- D. Exclusion complète du tabac"
+15024,mcqm,ABE,BE,False,False,True,"- B. Un poison du fuseau mitotique
+- E. Un agent inhibant de la polymérisation de la tubuline"
+19328,mcqm,AD,BD,False,False,True,"- B. La présence d'une méthémoglobinémie
+- D. Un taux élevé de CPK"
+13247,mcqm,ADE,AE,False,False,True,"- A. Les états dépressifs résistants aux traitements antidépresseurs
+- E. Les accès maniaques délirants et résistants"
+6256,mcqm,BD,BD,True,False,True,"- B. Gaz du sang
+- D. Tests de coagulation"
+17758,mcqm,ACE,BCD,False,False,True,"- B. La béance cervico-isthmique
+- C. Les antécédents de phlébite
+- D. L'utérus cicatriciel"
+6341,mcqm,BC,AB,False,False,True,"- A. Une culture de prélèvements urétraux
+- B. Une recherche d'anticorps anti-chlamydiae"
+545,mcqm,CD,ABCE,False,False,True,"- A. Leucémies Iymphoïdes chroniques
+- B. Cancers du col de l'utérus
+- C. Mélanomes malins métastatiques
+- E. Cancers du testicule métastatiques"
+16996,mcqm,BCE,BCE,True,False,True,"- B. Impuissance
+- C. Contractures musculaires
+- E. Syndrome dépressif"
+15293,mcqm,ABCD,AD,False,False,True,"- A. Hypercalcémie
+- D. Augmentation des phosphatases alcalines"
+18340,mcqm,BC,AB,False,False,True,"- A. Présence d'IgG anti-toxoplasmes
+- B. Présence d'IgM anti-toxoplasmes"
+1546,mcqm,BDE,AD,False,False,True,"- A. Chancre mou
+- D. Uréthrite subaiguë à chlamydia"
+12693,mcqm,ABC,ABDE,False,False,True,"- A. Insuffisance cardiaque congestive
+- B. Insuffisance respiratoire
+- D. Intoxication par l'oxyde de carbone
+- E. Anémie"
+13534,mcqm,CD,DE,False,False,True,"- D. Un test projectif
+- E. Une narcoanalyse"
+19698,mcqm,ACDE,ACD,False,False,True,"- A. Protéinorachie normale
+- C. Protéinorachie à 0,60 g/l, 20% de gamma globulinorachie
+- D. Cytologie normale"
+9948,mcqm,ABD,BCD,False,False,True,"- B. Ils abolissent le réflexe pupillaire photomoteur direct du côté où ils sont instillés
+- C. Ils ne s'opposent pas au réflexe pupillaire photomoteur du côté où ils sont instillés, en cas d'éclairement de la pupille de l'oeil opposé
+- D. Ils paralysent le phénomène de l'accommodation"
+18605,mcqm,DE,ADE,False,False,True,"- A. La flexion des articulations inter-phalangiennes est impossible
+- D. L'écartement des doigts est impossible
+- E. La sensibilité de la pulpe du I, II et III a disparu"
+13015,mcqm,BC,BD,False,False,True,"- B. Virus respiratoire syncitial
+- D. Streptococcus pneumoniae"
+10623,mcqm,BC,BD,False,False,True,"- B. Un adénome pléiomorphe
+- D. Un neurinome du nerf vague"
+18834,mcqm,ABDE,ABC,False,False,True,"- A. Extension locale
+- B. Bordure perlée
+- C. Disposition métamérique"
+7787,mcqm,AD,ABCE,False,False,True,"- A. Alcalinisation urinaire
+- B. Urico-éliminateur
+- C. Inhibiteurs de la xanthine-oxydase
+- E. Colchicine"
+11771,mcqm,BD,BD,True,False,True,"- B. Hémophilus influenzae
+- D. Méningocoque"
+7874,mcqm,ABE,BD,False,False,True,"- B. Glomérulonéphrite post-streptococcique en période aiguë
+- D. Polykystose rénale"
+20748,mcqm,ABCDE,ABD,False,False,True,"- A. Hémoptysie dans les antécédents
+- B. Notion de tuberculose ancienne, insuffisemment traitée
+- D. Modifications récentes des anomalies radiologiques"
+12539,mcqm,AE,AE,True,False,True,"- A. Des infiltrats bilatéraux siègeant aux sommets
+- E. Des cavités multiples au sein d'infiltrats bilatéraux"
+15193,mcqm,DE,AE,False,False,True,"- A. Ils peuvent se multiplier dans les tissus
+- E. Ils ont un rôle phagocytaire"
+14105,mcqm,AB,ACE,False,False,True,"- A. La spécificité correspond au pourcentage de sujets normaux correctement classés par le test
+- C. Une reproductibilité excellente ne garantit pas une bonne validité
+- E. Une sensibilité élevée signifie peu de faux négatifs"
+4500,mcqm,BDE,BE,False,False,True,"- B. Hépatite alcoolique aiguë
+- E. Anastomose porto-cave"
+6984,mcqm,ACD,BD,False,False,True,"- B. Elle peut être faite par le malade
+- D. Elle peut être faite par le médecin de travail"
+14538,mcqm,DE,BCD,False,False,True,"- B. Douleur sur la face latérale droite du rectum
+- C. Empâtement épigastrique
+- D. Cordon douloureux en bas et en dedans, au niveau du flanc et de la fosse iliaque gauche"
+15826,mcqm,BD,ABCE,False,False,True,"- A. Grippe
+- B. Tétanos
+- C. Rubéole
+- E. Varicelle"
+3037,mcqm,BD,CD,False,False,True,"- C. Gastroscopie avec biopsie
+- D. Dosages de vitamine B12 et de folates dans le sang"
+5106,mcqm,ABDE,BD,False,False,True,"- B. Shigellose
+- D. Verminose intestinale"
+14656,mcqm,BCE,ABCE,False,False,True,"- A. Otorrhée purulente
+- B. Vertiges
+- C. Céphalées
+- E. Paralysie faciale périphérique"
+15506,mcqm,AD,AD,True,False,True,"- A. Les hormones naturelles ont, par voie orale, une biodisponibilité trop variable
+- D. Les hormones naturelles subissent une inactivation hépatique importante"
+9651,mcqm,BDE,BC,False,False,True,"- B. Maintien de l'apport calorique global
+- C. Diminution de l'apport glucidique"
+8328,mcqm,AD,AD,True,False,True,"- A. Curage ganglionnaire iliaque et lombo-aortique
+- D. Irradiation des chaines lombo-aortiques et du creux sus-claviculaire"
+14499,mcqm,BDE,AD,False,False,True,"- A. Survient si la mère est rhésus positif et l'enfant rhésus négatif
+- D. Peut avoir une anémie associée qui fait la gravité du pronostic immédiat"
+9908,mcqm,BD,ABD,False,False,True,"- A. S'accompagne de rougeur oculaire
+- B. Entraîne une baisse de vision
+- D. Se traduit par des hémorragies disséminées sur toute la rétine"
+8122,mcqm,AD,BD,False,False,True,"- B. Parenchyme pulmonaire
+- D. Squelette"
+16411,mcqm,AC,AC,True,False,True,"- A. Anticoagulants
+- C. Dérivés quinidiniques"
+5956,mcqm,ADE,AE,False,False,True,"- A. Apport per os de carbonate de calcium
+- E. Apport per os de métabolites de la vitamine D"
+19444,mcqm,BD,BD,True,False,True,"- B. S'accompagne souvent d'un épaississement des muscles droits inférieurs
+- D. Impose un traitement d'urgence en cas de forme maligne"
+18540,mcqm,ABCDE,AB,False,False,True,"- A. Déformation du poignet """"en dos de fourchette""""
+- B. Ascension de la styloïde cubitale"
+116,mcqm,BCE,BC,False,False,True,"- B. Survenue d'une sclérose dystrophique
+- C. Constitution d'une circulation collatérale de suppléance"
+17210,mcqm,BCE,BE,False,False,True,"- B. Hypersudation
+- E. Aggravation d'un diabète"
+20053,mcqm,ABD,BD,False,False,True,"- B. Attitude antalgique nette
+- D. Impulsivité à la toux ou à la défécation"
+5869,mcqm,AD,AD,True,False,True,"- A. Existence d'une gibbosité
+- D. Rotation des corps vertébraux sur une radiographie de face"
+5393,mcqm,ACE,BD,False,False,True,"- B. Scarlatine
+- D. Rougeole"
+18125,mcqm,CE,AC,False,False,True,"- A. Prématurité
+- C. Mort in utéro"
+2859,mcqm,ABD,ABC,False,False,True,"- A. Erythrose faciale
+- B. Prurit à l'eau
+- C. Polyadénopathies"
+8929,mcqm,AC,ABCDE,False,False,True,"- A. Douleur de la face postéro-externe de la cuisse, postérieure de la jambe, en arrière de la malléole externe
+- B. Hypoesthésie du dos du pied
+- C. Abolition du réflexe achilléen
+- D. Marche sur les talons impossible
+- E. Diminution de la force des muscles péroniers latéraux"
+5778,mcqm,ABC,ABD,False,False,True,"- A. Une rupture du cintre cervico-obturateur
+- B. Une fermeture de l'angle cervico-céphalique de face
+- D. Des travées osseuses (de la tête) déviées en valgus"
+1208,mcqm,ACD,ADE,False,False,True,"- A. Fréquente chez les héroïnomanes
+- D. Fréquence des embolies pulmonaires
+- E. Le diagnostic en est plus facile que dans les autres localisations de l'endocardite infectieuse, grâce à l'apport de l'échocardiographie"
+21159,mcqm,AB,AB,True,False,True,"- A. Vous lui proposez de jouer avec vous
+- B. Vous lui proposez de dessiner"
+19887,mcqm,ABE,BDE,False,False,True,"- B. Peut être l'objet de préocupations éthiques
+- D. Peut générer des effets indésirables
+- E. Est une substance pharmacologiquement inerte"
+19024,mcqm,AB,AD,False,False,True,"- A. Diminution modérée de l'apport protéique
+- D. Restriction liquidienne à 500 ml par 24 heures"
+18216,mcqm,BCE,BC,False,False,True,"- B. Souffrance foetale
+- C. Accouchement prématuré"
+10893,mcqm,ABCDE,BCDE,False,False,True,"- B. Emphysème sous-cutané
+- C. Pneumothorax
+- D. Pneumomédiastin
+- E. Infection bronchique"
+17349,mcqm,ABDE,BC,False,False,True,"- B. Des raideurs et des crampes musculaires
+- C. L'hypertrichose"
+4506,mcqm,BC,BC,True,False,True,"- B. Chimisme gastrique avec étude de la sécrétion basale
+- C. Dosage de la gastrinémie"
+19027,mcqm,AD,AB,False,False,True,"- A. Un taux abaissé de 1.25 OH D3
+- B. Un taux de calcium osseux mesuré par radio-activation élevé"
+4012,mcqm,ABD,CD,False,False,True,"- C. Anémie macrocytaire par carence en vitamine B 12
+- D. Test au D-xylose perturbé"
+7599,mcqm,ABCE,ABE,False,False,True,"- A. Desquamation fine
+- B. Squames essentiellement périphériques
+- E. Association à un pied d'athlète ou à un herpès circiné"
+15331,mcqm,ACD,ABC,False,False,True,"- A. Atteinte possible des 3 types de fibres (motrices, sensitives et végétatives)
+- B. Atteinte asynchrone et asymétrique de plusieurs troncs nerveux
+- C. Troubles sensitifs distaux en chaussettes"
+1062,mcqm,AC,ABC,False,False,True,"- A. Une torsade de pointe
+- B. Une tachyarythmie par fibrillation auriculaire
+- C. Une pause ventriculaire prolongée"
+17152,mcqm,ABDE,BC,False,False,True,"- B. Des bêta-bloquants
+- C. De la thyroxine"
+3996,mcqm,CDE,BD,False,False,True,"- B. Est responsable d'une dysphagie paradoxale
+- D. Nécessite une fibroscopie oesophagienne pour son diagnostic positif"
+16170,mcqm,BD,BD,True,False,True,"- B. Echocardiogramme
+- D. Phonocardiogramme"
+9053,mcqm,CE,CE,True,False,True,"- C. Une tumeur intra-hémisphérique gauche
+- E. Un angiome hémisphérique gauche"
+8590,mcqm,AC,ACDE,False,False,True,"- A. Un syndrome pyramidal homolatéral à la lésion
+- C. Des troubles de la sensibilité profonde homolatéraux au syndrome pyramidal
+- D. Une dissociation thermoanalgésique suspendue
+- E. Une abolition de réflexes homolatéraux à la lésion"
+17066,mcqm,BCDE,BCD,False,False,True,"- B. Ischémie aiguë d'un membre
+- C. Hémolyse aiguë
+- D. Insuffisance rénale"
+168,mcqm,AD,AD,True,False,True,"- A. Tous les carcinomes in situ deviennent invasifs
+- D. Les carcinomes in situ donnent rarement des métastases"
+20750,mcqm,ADE,AD,False,False,True,"- A. La taille de la cavité
+- D. Le risque de résistance acquise"
+4613,mcqm,ABC,AC,False,False,True,"- A. Petite masse arrondie dans la région crurale
+- C. Irréductible"
+10587,mcqm,ABCD,BCE,False,False,True,"- B. Une otite externe
+- C. Une otite moyenne aiguë
+- E. Un neurinome de l'acoustique"
+6702,mcqm,AB,AD,False,False,True,"- A. Sa violation est punie par l'article 378 du Code Pénal
+- D. Le patient peut délier son médecin du secret médical"
+1375,mcqm,ACE,BDE,False,False,True,"- B. Douleur atroce irradiant vers les membres supérieurs et le cou
+- D. Etat de choc
+- E. Asymétrie des pouls radiaux"
+21140,mcqm,ABC,AC,False,False,True,"- A. Ralentissement circulatoire
+- C. Oedème rétinien diffus avec ou non oedème maculaire"
+19892,mcqm,DE,BCD,False,False,True,"- B. Est fréquemment associé à un reflux vésico-urétéral
+- C. Se traduit à l'urographie intra-veineuse par une urétéro-hydronéphrose
+- D. Peut se révéler par une hématurie macroscopique"
+5267,mcqm,CDE,CE,False,False,True,"- C. Morsure de tique
+- E. En France, s'observe surtout dans les régions méditerranéennes"
+5051,mcqm,ACD,AE,False,False,True,"- A. L'urétrite à Chlamydia
+- E. Une angine bactérienne"
+7939,mcqm,AC,ABCD,False,False,True,"- A. Un syndrome néphrotique pur ne comporte pas d'hématurie microscopique
+- B. Un syndrome néphrotique pur ne comporte pas d'augmentation des lipides dans le sang
+- C. Un syndrome néphrotique pur ne comporte pas d'hypertension artérielle
+- D. La protéinurie du syndrome néphrotique pur est faite d'albumine, de sidérophiline et de globulines de fort poids moléculaire"
+21146,mcqm,ABD,AB,False,False,True,"- A. Benzodiazépines
+- B. Réhydratation"
+13376,mcqm,AD,BE,False,False,True,"- B. Ulcère gastroduodénal
+- E. Hypoglycémie"
+5395,mcqm,ABC,ABD,False,False,True,"- A. Sulfamides
+- B. Anti-inflammatoires non stéroïdiens
+- D. Aspirine"
+11378,mcqm,BCE,BCE,True,False,True,"- B. Interdiction des antalgiques salicylés
+- C. Interdiction des injections intramusculaires
+- E. Surveillance clinique articulaire et musculaire à intervalles réguliers"
+4322,mcqm,AB,BC,False,False,True,"- B. Irrigation de la cavité abdominale
+- C. Evacuation et drainage"
+11333,mcqm,ABC,AC,False,False,True,"- A. """"Danse des tendons"""" en position garde à vous
+- C. Mauvaise exécution des marionnettes"
+22035,mcqm,CE,CD,False,False,True,"- C. Polyadénopathies
+- D. Splénomégalie"
+14093,mcqm,AC,AC,True,False,True,"- A. Est actuellement recommandée chez l'enfant d'un an
+- C. Evite que la maladie se déclare si elle est pratiquée dans les 48 heures qui suivent le contage"
+12316,mcqm,BE,AE,False,False,True,"- A. Les stimulants béta adrénergiques
+- E. Les bloquants béta adrénergiques"
+9655,mcqm,BE,CD,False,False,True,"- C. Yaourt nature
+- D. Gruyère"
+15974,mcqm,BCE,ABE,False,False,True,"- A. Survient sur des poumons antérieurement lésés
+- B. Peut être unilatéral
+- E. Peut évoluer vers un syndrome de détresse respiratoire aiguë (S.D.R.A.)"
+1752,mcqm,ABCDE,BCE,False,False,True,"- B. Maculo-papuleux
+- C. Persistance à la vitro-pression
+- E. Souvent accompagné d'arthralgies"
+13879,mcqm,ABCDE,ACE,False,False,True,"- A. D'une artérite des membres inférieurs
+- C. D'un cancer de la vessie
+- E. D'une bronchite chronique"
+21986,mcqm,ACE,ABE,False,False,True,"- A. Est un ectoparasite
+- B. Est hématophage
+- E. Est un parasite obligatoire"
+7642,mcqm,CE,BE,False,False,True,"- B. A déclaration facultative si un cas est isolé
+- E. A déclaration obligatoire si elles sont collectives"
+14379,mcqm,AC,AC,True,False,True,"- A. Confirme l'hypothèse selon laquelle la pilule est un facteur de risque de cancer du col
+- C. Est un argument en faveur de la causalité"
+17498,mcqm,ABCD,AB,False,False,True,"- A. Permanente
+- B. Sinusale"
+16846,mcqm,BE,ABE,False,False,True,"- A. L'autosurveillance glycémique est indispensable
+- B. Le poids est un élément de surveillance capital
+- E. Les biguanides sont contre-indiqués en cas d'insuffisance hépatique"
+4952,mcqm,AB,AB,True,False,True,"- A. La douleur et la fièvre sont contemporaines
+- B. Le frottement péricardique est inconstant"
+19451,mcqm,ABCD,ABD,False,False,True,"- A. Un cancer bronchique
+- B. Une récidive de la tuberculose pulmonaire
+- D. Un aspergillome sur séquelles de tuberculose"
+18053,mcqm,BE,BE,True,False,True,"- B. Choc toxi-infectieux
+- E. Une récidive à plus ou moins long terme"
+20914,mcqm,AD,BD,False,False,True,"- B. La miliaire est une pneumopathie alvéolaire
+- D. La biopsie hépatique a une place importante dans le diagnostic des miliaires"
+18726,mcqm,ABE,BC,False,False,True,"- B. Cyto diagnostic sur le plancher d'une vésicule
+- C. IgE sériques"
+10626,mcqm,BC,ABCE,False,False,True,"- A. Une rhinorrhée fétide bilatérale
+- B. Une flore polymicrobienne
+- C. Un sinus opaque à la radiographie
+- E. Une évolution sur un mode chronique"
+11726,mcqm,BC,AB,False,False,True,"- A. Prolifération extra-capillaire
+- B. Prolifération endocapillaire"
+870,mcqm,AB,AB,True,False,True,"- A. Glossectomie partielle et curage ganglionnaire conservateur
+- B. Electro-coagulation et curage ganglionnaire conservateur"
+9100,mcqm,ACD,BC,False,False,True,"- B. Insuffisance respiratoire.
+- C. Insuffisance cardiaque grave."
+3238,mcqm,ACD,CD,False,False,True,"- C. Hémopathie Iymphoïde maligne
+- D. Lupus érythémateux disséminé"
+10485,mcqm,BCD,ACDE,False,False,True,"- A. Sous-maxillite chronique
+- C. Péricoronarite de dent de sagesse
+- D. Troubles de l'articulé dentaire
+- E. Kyste radiculodentaire maxillaire"
+19792,mcqm,ABD,ACE,False,False,True,"- A. L'histamine
+- C. Le système des kinines
+- E. Le leucotriène B4"
+5687,mcqm,ACE,BC,False,False,True,"- B. Une maladie de Horton
+- C. Une infection à chlamydia"
+8031,mcqm,AD,AB,False,False,True,"- A. Aldomet®
+- B. Zyloric® (Allopurinol)"
+7604,mcqm,ABCE,AD,False,False,True,"- A. S'observe surtout chez l'homme jeune
+- D. Le dermatophyte responsable est ubiquitaire et zoophile"
+2161,mcqm,BC,ABCD,False,False,True,"- A. Une hydrocéphalie
+- B. Un Iymphoedème des mains et des pieds
+- C. Un ptérygium coli
+- D. Un écartement mamelonnaire excessif"
+15908,mcqm,AC,BCD,False,False,True,"- B. Un syndrome occlusif est le mode de révélation habituel
+- C. Les 2 étiologies malignes les plus fréquentes sont le néphroblastome et le neuroblastome
+- D. C'est avant l'âge de 1 an qu'elles sont les plus fréquentes"
+3787,mcqm,ACE,ABDE,False,False,True,"- A. IgM
+- B. IgG1
+- D. IgA
+- E. IgE"
+5916,mcqm,ABE,BD,False,False,True,"- B. Une hyperflexion
+- D. Une rotation interne forcée"
+6935,mcqm,AC,AC,True,False,True,"- A. Arsenic
+- C. Goudrons de houille"
+14377,mcqm,BC,BC,True,False,True,"- B. Prospective
+- C. De cohorte"
+1238,mcqm,BD,AB,False,False,True,"- A. Elargissement de QRS supérieur à 0,12 secondes
+- B. Inversion de l'onde T"
+9767,mcqm,AE,ABCE,False,False,True,"- A. Halos colorés
+- B. Phosphènes
+- C. Oeil rouge avec sécrétion
+- E. Douleurs oculaires"
+6487,mcqm,AC,BC,False,False,True,"- B. En cas de refus de prise en charge par le médecin, celui-ci doit en informer la femme au plus tard lors du 2ème entretien
+- C. Nécessite l'établissement d'une confirmation par écrit de la demande d'I V G, par la femme"
+19521,mcqm,ABDE,ABDE,True,False,True,"- A. Réalise un curetage chirurgical du sinus maxillaire
+- B. Est souvent couplée à un drainage sinusien par voie endo-nasale
+- D. Peut être réalisé sous anesthésie loco-régionale
+- E. Permet de faire l'examen anatomo pathologique extemporané d'un cancer du sinus maxillaire"
+72,mcqm,DE,BDE,False,False,True,"- B. Nacré
+- D. Hypervégétant
+- E. Ulcération"
+2106,mcqm,AB,BE,False,False,True,"- B. Un rapport sexuel
+- E. Une injection intra-veineuse"
+19284,mcqm,AD,BD,False,False,True,"- B. Elévation des transaminases
+- D. Contracture de type extrapyramidal"
+1842,mcqm,ABCE,ACE,False,False,True,"- A. Nappe érythémateuse rouge vif des plis
+- C. Ongles ponctués de dépression
+- E. La kératodermie plantaire"
+6954,mcqm,AB,AB,True,False,True,"- A. La victime
+- B. Ses ayant-droits"
+15217,mcqm,AC,BCE,False,False,True,"- B. L'ancienneté supérieure à 5 ans des troubles
+- C. La présence de rectorragies
+- E. Les douleurs anales vives après le passage des selles"
+8896,mcqm,AB,BCE,False,False,True,"- B. Céphalées
+- C. Hallucinations visuelles
+- E. Hémianopsie bi-temporale"
+18912,mcqm,ABDE,BCD,False,False,True,"- B. Est due à la persistance du canal péritonéo-vaginal
+- C. Son trajet est extra-funiculaire
+- D. Présente une variété scrotale"
+10624,mcqm,BC,BD,False,False,True,"- B. Accès de suffocation brutal
+- D. Accès de suffocation non résolutif"
+14957,mcqm,ABDE,CE,False,False,True,"- C. Initiale et terminale
+- E. Associée à des troubles mictionnels"
+20465,mcqm,BD,BD,True,False,True,"- B. Proposer une ponction du sang du cordon
+- D. Prescrire une échographie foetale"
+7639,mcqm,ABCDE,AC,False,False,True,"- A. La terre
+- C. Les porcs"
+17396,mcqm,AB,AE,False,False,True,"- A. Maladie de Basedow avec thyrotoxicose
+- E. Hyperthyroïdie par adénome thyréotrope"
+1038,mcqm,ACE,BCD,False,False,True,"- B. Douleur atroce irradiant vers les membres supérieurs et le cou
+- C. Apparition d'un souffle diastolique de base
+- D. Etat de choc"
+7393,mcqm,ABCD,BCE,False,False,True,"- B. Surdité
+- C. Persistance du canal artériel
+- E. Périostite"
+16694,mcqm,ABCE,AB,False,False,True,"- A. Des calcium-bloqueurs
+- B. Des bêta-bloquants"
+3798,mcqm,BE,ABDE,False,False,True,"- A. Cutanées
+- B. Rénales
+- D. Articulaires
+- E. Cérébrales"
+2687,mcqm,ABC,BE,False,False,True,"- B. Douleurs osseuses
+- E. Tachycardie"
+17501,mcqm,ABDE,AE,False,False,True,"- A. Numération globulaire et des plaquettes
+- E. Dosage des hormones thyroïdiennes sanguines"
+9938,mcqm,BD,CD,False,False,True,"- C. Une crise subaiguë de glaucome par fermeture de l'angle
+- D. Une déchirure de la rétine"
+1100,mcqm,BD,ABC,False,False,True,"- A. Une hypernatrémie
+- B. Une hypokaliémie
+- C. Une hypocalcémie"
+3625,mcqm,CE,CE,True,False,True,"- C. Des cellules stimulées par l'interféron gamma.
+- E. Des lymphocytes capables de détruire certaines tumorales."
+3274,mcqm,ABE,BE,False,False,True,"- B. Priapisme
+- E. Infarctus splénique"
+9886,mcqm,DE,ABDE,False,False,True,"- A. Une buphtalmie (gros oeil)
+- B. Un reflet noir de la pupille
+- D. Un strabisme
+- E. Une mydriase"
+12779,mcqm,AD,CDE,False,False,True,"- C. La bronchographie
+- D. La tomodensitométrie thoracique
+- E. La scintigraphie pulmonaire de ventilation/perfusion"
+4576,mcqm,AE,AE,True,False,True,"- A. Est utile aux décisions thérapeutiques
+- E. Sert à évacuer le caustique"
+17167,mcqm,AC,ABCE,False,False,True,"- A. Calcémie
+- B. Phosphorémie
+- C. Calciurie des 24 heures
+- E. 25 hydroxy-vitamine D 3"
+10853,mcqm,ADE,BE,False,False,True,"- B. Hématurie récidivante
+- E. Hématome en lorgnette"
+18218,mcqm,ABC,BD,False,False,True,"- B. Repos
+- D. Ocytocine"
+4090,mcqm,AE,ABE,False,False,True,"- A. Qui se définit sur le plan physiologique par un poids sec des selles supérieur à 22 % du poids total de celles-ci
+- B. Qui peut être provoqué par une hyperthyroïdie
+- E. Qui peut être amélioré par l'utilisation continue de son de blé à la dose de 15 g par jour"
+21133,mcqm,DE,AD,False,False,True,"- A. Erythromycine (Erythrocine®)
+- D. Céfotaxime (Claforan®)"
+14147,mcqm,AC,AE,False,False,True,"- A. Brucellose
+- E. Méningococcies B"
+3778,mcqm,AC,ABC,False,False,True,"- A. Combinaison spécifique à des anticorps
+- B. Combinaison spécifique à des anticorps seulement s'il est couplé à une protéine porteuse
+- C. Reconnaissance par Iymphocytes T spécifiques seulement si associé à une cellule présentatrice d'antigène"
+6416,mcqm,ABDE,BE,False,False,True,"- B. Porte en clair l'indication que la mort est réelle et constante
+- E. Doit être rédigé par un médecin"
+1936,mcqm,ABC,BCD,False,False,True,"- B. Un chancre mou
+- C. Un chancre syphilitique
+- D. Une maladie de Nicolas-Favre"
+4573,mcqm,CE,CDE,False,False,True,"- C. Des antalgiques
+- D. Une aspiration gastrique
+- E. Une oxygénothérapie"
+309,mcqm,CD,BC,False,False,True,"- B. Vagin
+- C. Rectum"
+10912,mcqm,ABE,AB,False,False,True,"- A. Prolapsus rectal
+- B. Obstruction intestinale"
+3891,mcqm,CD,CD,True,False,True,"- C. Cancer recto-sigmoïdien
+- D. Sigmoïdite diverticulaire"
+13373,mcqm,BC,BC,True,False,True,"- B. Syndrome dépressif
+- C. Syndrome confusionnel"
+573,mcqm,AD,AD,True,False,True,"- A. Au cancer de l'endomètre
+- D. Au cancer du sein"
+18701,mcqm,DE,BD,False,False,True,"- B. Dépression névrotique
+- D. Psychose du post-partum"
+3038,mcqm,CD,AD,False,False,True,"- A. Carence d'apport en vitamine B12
+- D. Trouble d'absorption des folates"
+18200,mcqm,ABD,BD,False,False,True,"- B. La recherche d'antigènes HSV par cytodiagnostic en immunofluorescence sur des cellules prélevées à la base des ulcérations
+- D. Le dosage des anticorps par neutralisation ou fixation du complément dans 2 sérums prélevés, le 1er jour de la consultation et 2 à 3 semaines après"
+5528,mcqm,ABCD,AE,False,False,True,"- A. Myélome non excrétant
+- E. Myélome à IgG sans lyse osseuse"
+12117,mcqm,BDE,BD,False,False,True,"- B. Pristinamycine (Pyostacine®)
+- D. Spiramycine (Rovamycine®)"
+13134,mcqm,BC,BC,True,False,True,"- C. Obsession
+- B. Compulsion"
+13021,mcqm,ABCD,BC,False,False,True,"- B. L'existence d'un silence auscultatoire
+- C. Une hypercapnie"
+14615,mcqm,BDE,BE,False,False,True,"- B. La protéinurie de Bence-Jones n'est pas détectée par les bandelettes
+- E. La microalbuminurie se definit par un taux inférieur à 300 mg/24 heures"
+20158,mcqm,ABD,ABCE,False,False,True,"- A. Le tabagisme
+- B. La toxémie gravidique
+- C. La prématurité
+- E. Une anomalie chromosomique"
+16113,mcqm,BC,BC,True,False,True,"- B. Aérosol de salbutamol (Ventoline®)  
+- C. Aérosol de fénotérol (Berotec®)"
+1638,mcqm,ABCE,CD,False,False,True,"- C. Siège souvent au niveau de la barbe
+- D. Ne guérit pas spontanément"
+14471,mcqm,ABDE,AC,False,False,True,"- A. Prise de Daonil sans prise alimentaire simultanée
+- C. Interruption spontanée de la prise de Daonil"
+3946,mcqm,ABCDE,BCD,False,False,True,"- B. Lithiase au cours d'une maladie de Minkowski-Chauffard
+- C. Grossesse
+- D. Lithiase calcifiée"
+5138,mcqm,BCDE,BC,False,False,True,"- B. Epidurite suppurée
+- C. Ostéo-arthrite de la hanche"
+4504,mcqm,CE,CE,True,False,True,"- C. De l'indométhacine
+- E. De la phénylbutazone"
+18055,mcqm,ABCDE,BE,False,False,True,"- B. Erythromycine
+- E. Céphalosporine orale (Vélocef®)"
+20538,mcqm,AB,AB,True,False,True,"- A. Cytologie du liquide de ponction d'ascite
+- B. Biopsie par laparoscopie"
+14688,mcqm,ABCDE,BD,False,False,True,"- B. Apnée
+- D. Pneumothorax"
+4490,mcqm,CD,BC,False,False,True,"- B. L'exérèse du polype rectal
+- C. Une normalisation du transit intestinal"
+5777,mcqm,DE,ACD,False,False,True,"- A. D'une paralysie crurale
+- C. D'une rupture de la vessie
+- D. D'une nécrose de la tête fémorale"
+10833,mcqm,ACD,ABD,False,False,True,"- A. Electro-encéphalogramme
+- B. Exploration permanente de l'activité électrique du faisceau de His par sonde endo-cavitaire
+- D. Electro-myogramme de la houppe du menton"
+4503,mcqm,CD,CD,True,False,True,"- C. Cimétidine (Tagamet®)
+- D. Ranitidine (Azantac®)"
+9509,mcqm,ACE,DE,False,False,True,"- D. Les oeufs
+- E. La viande de cheval"
+8628,mcqm,AB,AB,True,False,True,"- A. Caractère familial possible
+- B. Rythme rapide (7-10 cycles/seconde)"
+15754,mcqm,ACD,BC,False,False,True,"- B. Une disparition de la matité hépatique
+- C. Une douleur spontanée sous costale droite"
+11448,mcqm,ABCDE,AD,False,False,True,"- A. Glandes sous-maxillaires et sublinguales
+- D. Nerfs crâniens"
+12780,mcqm,BCD,CD,False,False,True,"- C. Cancer bronchique primitif
+- D. Tuberculose"
+19993,mcqm,AD,CD,False,False,True,"- C. Des hémorragies rétiniennes importantes
+- D. Une rétine pâle au pôle postérieur"
+13531,mcqm,AC,ABC,False,False,True,"- A. Idées délirantes
+- B. Excitation intellectuelle
+- C. Discordance"
+20467,mcqm,ABC,AB,False,False,True,"- A. FO
+- B. Echographie transfontanellaire"
+7013,mcqm,BD,BDE,False,False,True,"- B. Qu'il soit survenu soudainement
+- D. Qu'il soit survenu par le fait ou à l'occasion du travail
+- E. Qu'il se soit produit sur les lieux de travail"
+20167,mcqm,BDE,ABC,False,False,True,"- A. La nécrose de la paroi du vaisseau est prédominante
+- B. Les artères coronaires sont également lésées
+- C. La paroi des veines est altérée"
+15227,mcqm,AC,AC,True,False,True,"- A. Hypertransparence osseuse d'aspect flou
+- C. Fracture d'une branche ilio-pelvienne"
+546,mcqm,BCD,BE,False,False,True,"- B. Quantité d'immunoglobuline monoclonale
+- E. Quantité des immunoglobulines normales"
+17718,mcqm,BC,BCD,False,False,True,"- B. Polynucléaires à noyaux pycnotiques
+- C. Cellules glandulaires altérées
+- D. Histiocytes épithélioïdes"
+9612,mcqm,ABCD,BD,False,False,True,"- B. La pré-albuminémie
+- D. La protéine vectrice du rétinol (RBP)"
+17303,mcqm,BD,BD,True,False,True,"- B. Adénome antéhypophysaire
+- D. Tumeur des ilôts de Langerhans du pancréas"
+4505,mcqm,ACE,AC,False,False,True,"- A. Arrêt du tabac
+- C. Prescription de Tagamet® 800 mg le soir pendant 6 semaines"
+22112,mcqm,AD,BD,False,False,True,"- B. Un pincement de l'interligne radiocarpien
+- D. Un épaississement des parties molles"
+12388,mcqm,BCE,BCE,True,False,True,"- B. Abcès du poumon
+- C. Hémoptysie
+- E. Pleurésie purulente"
+15483,mcqm,BCDE,ACDE,False,False,True,"- A. Artériographie de l'ensemble de l'aorte
+- C. Echo-doppler artériel cervical
+- D. Echo-doppler artériel des membres inférieurs
+- E. Coronarographie"
+11228,mcqm,ACE,ACD,False,False,True,"- A. Une hypotension artérielle
+- C. Une persistance du pli cutané abdominal
+- D. Une sécheresse du sillon gingivo-jugal"
+18370,mcqm,ABC,ACD,False,False,True,"- A. Un épisode douloureux transitoire
+- C. Un cliché radiologique de la face pratique pour une autre raison
+- D. Une xérostomie"
+16798,mcqm,ABCE,AB,False,False,True,"- A. II
+- B. V"
+18541,mcqm,CD,BCE,False,False,True,"- B. Un panaris se traite par incision et non par excision
+- C. L'atrophie pulpaire cicatricielle est une des complications du panaris
+- E. Une lymphgangite du membre supérieur avec adénopathie est fréquente au cours de l'évolution d'un panaris."
+2725,mcqm,AD,ABCE,False,False,True,"- A. Pétéchies
+- B. Hémarthrose
+- C. Epistaxis
+- E. Ménométrorragies"
+5157,mcqm,ABC,CD,False,False,True,"- C. Maculo-nodulaire
+- D. S'intensifie aux plis de flexion"
+1407,mcqm,AE,BE,False,False,True,"- B. Contracture abdominale
+- E. Asymétrie tensionnelle aux deux bras"
+3511,mcqm,ABDE,AC,False,False,True,"- A. Chaînes lourdes d'immunoglobuline
+- C. Pièce sécrétoire"
+12886,mcqm,ABCE,BC,False,False,True,"- B. Fibrose interstitielle diffuse
+- C. Bronchectasies"
+19802,mcqm,AC,AD,False,False,True,"- A. 1 avec anticorps anti-gamma
+- D. 1 avec mélange d'anticorps anti-gamma, alpha, kappa et lambda"
+4759,mcqm,CD,DE,False,False,True,"- D. Survenue plus précoce en milieu rural
+- E. Survenue plus précoce en milieu urbain"
+17093,mcqm,CD,BC,False,False,True,"- B. Des lipoprotéines de basse densité (LDL)
+- C. Des lipoprotéines de très basse densité (VLDL)"
+21432,mcqm,BCD,BC,False,False,True,"- B. La durée de l'exposition au toxique
+- C. L'intensité du tabagisme associé"
+8627,mcqm,BD,AD,False,False,True,"- A. Troubles de la sensibilité profonde
+- D. Surdité unilatérale"
+5616,mcqm,CDE,ABCD,False,False,True,"- A. Cheville
+- B. Pied de face
+- C. Pied de profil
+- D. Incidence rétrotibiale"
+4574,mcqm,ABCDE,ABD,False,False,True,"- A. Faire vomir
+- B. Lavage gastrique
+- D. Neutraliser le caustique par de l'HCl"
+9592,mcqm,CDE,CD,False,False,True,"- C. Alimentation répartie en cinq prises par jour
+- D. Suppression habituelle des boissons sucrées"
+5397,mcqm,ABCD,BC,False,False,True,"- B. On peut l'observer au cours de la mononucléose infectieuse en dehors de la prise d'ampicilline
+- C. Au cours de la MNI, son apparition est favorisée par la prise d'ampicilline"
+8645,mcqm,BE,BD,False,False,True,"- B. Une paralysie du sciatique papillote externe
+- D. Une paralysie radiculaire S1"
+3275,mcqm,ABD,BD,False,False,True,"- B. Transformation en leucémie aiguë myéloblastique
+- D. Myélofibrose"
+21383,mcqm,AC,BC,False,False,True,"- B. La présence d'un chien familier
+- C. L'existence des mêmes symptômes dans la fratrie"
+17224,mcqm,ACDE,ADE,False,False,True,"- A. Diurétique de l'anse (furosémide)
+- D. Thyrocalcitonine
+- E. Mithramycine (mithracine®)"
+3939,mcqm,BD,AE,False,False,True,"- A. Hépatite virale à rechute
+- E. Cholangite sclérosante"
+89,mcqm,BDE,AC,False,False,True,"- A. Une phlébite des membres inférieurs
+- C. L'ulcération d'une plaque d'athérome"
+15499,mcqm,BD,BC,False,False,True,"- B. Personnels ou familiaux d'hyperparathyroïdie
+- C. Personnels d'irradiation cervicale pendant l'enfance"
+15621,mcqm,BCD,BD,False,False,True,"- B. Analytique
+- D. Cas/témoins"
+16066,mcqm,ABCD,AD,False,False,True,"- A. Sirop de codéine
+- D. Antidépresseurs tricycliques"
+3093,mcqm,ABCE,BE,False,False,True,"- B. Priapisme
+- E. Infarctus splénique"
+19345,mcqm,ACDE,ABE,False,False,True,"- A. L'atteinte des nerfs crâniens est possible
+- B. Dans le LCR, la protéinorachie normale s'accompagne d'une lymphocytose à la cytologie
+- E. Les lésions histopathologiques réalisent des démyélinisations et des infiltrats inflammatoires"
+13915,mcqm,ABE,BE,False,False,True,"- B. Moyen séjour
+- E. Section de cure médicale d'une maison de retraite"
+15087,mcqm,CD,AC,False,False,True,"- A. La sensibilité du test serait augmentée
+- C. La valeur prédictive positive serait augmentée"
+14787,mcqm,AC,AB,False,False,True,"- A. Cancer de la vessie
+- B. Cancer de l'estomac"
+7020,mcqm,ABCD,BD,False,False,True,"- B. Le dosage des Gamma GT peut être demandé par le médecin du travail dans le cadre de la détermination de l'aptitude à un poste de sécurité
+- D. Il est interdit de laisser travailler un sujet en état d'ébriété manifeste"
+4069,mcqm,AB,ABD,False,False,True,"- A. Sa fréquence moindre que celle de la hernie hiatale par glissement
+- B. Un cardia intra-abdominal
+- D. Un estomac porteur d'un ulcère de l'angle de la petite courbure"
+7683,mcqm,AB,AC,False,False,True,"- A. furosémide (Lasilix®)
+- C. acide tiénilique (Diflurex®)"
+21188,mcqm,ACE,BCE,False,False,True,"- B. Alcoolisme chronique
+- C. Hypothyroïdie
+- E. Choléstase"
+13708,mcqm,ACDE,AE,False,False,True,"- A. Suicide
+- E. Une crise comitiale"
+19794,mcqm,AD,BDE,False,False,True,"- B. Amibiase disséminée
+- D. Paludisme
+- E. Leishmaniose visérale"
+10083,mcqm,ABCDE,ACE,False,False,True,"- A. Cataracte
+- C. Décollement de la rétine
+- E. Altération de l'électro-rétinogramme"
+18338,mcqm,ACD,AC,False,False,True,"- A. Ponction de sang foetal
+- C. Surveillance échographique"
+14486,mcqm,BCE,ADE,False,False,True,"- A. Cryoglobulinémie
+- D. Anticorps antifacteur VIII
+- E. Anticorps anti-cardiolipine"
+22151,mcqm,AB,CD,False,False,True,"- C. D'affirmer sa nature tumorale ou infectieuse
+- D. De suspecter un cancer du rein devant une lésion liquidienne présentant  des calcifications pariétales"
+15036,mcqm,ABC,AC,False,False,True,"- A. Nouures épiphysaires
+- C. Chapelet costal"
+678,mcqm,BE,AC,False,False,True,"- A. Tabagisme
+- C. Accouchement difficile"
+1810,mcqm,CE,CE,True,False,True,"- C. Caractère polymorphe de l'éruption
+- E. Existence de bulles tendues"
+5445,mcqm,ABDE,BD,False,False,True,"- B. Ont des exigences particulières de culture
+- D. Présentent des antigènes communs avec d'autres bactéries en particulier Vibrio cholerae et Francisella tularensis"
+8354,mcqm,ABC,AC,False,False,True,"- A. Nécrose fibrinoïde des artérioles rénales
+- C. Une ischémie glomérulaire"
+19026,mcqm,ABD,AD,False,False,True,"- A. La prise d'AINS
+- D. Un traitement diurétique"
+16470,mcqm,ABCE,AC,False,False,True,"- A. Insuffisance ventriculaire gauche aiguë
+- C. Embolie systémique"
+10532,mcqm,ABCD,BCE,False,False,True,"- B. Une otite externe
+- C. Une otite moyenne aiguë
+- E. Un neurinome de l'acoustique"
+16337,mcqm,AD,BDE,False,False,True,"- B. Réaction pleurale à la radiographie
+- D. Tachypnée à 30
+- E. Hémoptysie"
+20228,mcqm,ABDE,BD,False,False,True,"- B. L'apparition d'un syndrome néphrotique fait craindre la survenue dans les trois ans qui suivent d'une insuffisance rénale chronique majeure
+- D. Le contrôle d'une hypertension artérielle peut ralentir l'évolution vers une Insuffisance rénale Importante"
+17631,mcqm,ACD,CE,False,False,True,"- C. Hyperthermie
+- E. Oedème rétinien"
+8695,mcqm,BDE,AB,False,False,True,"- A. On le met le mieux en évidence par l'épreuve """"doigt-nez""""
+- B. Il peut avoir un caractère familial"
+12601,mcqm,AE,CDE,False,False,True,"- C. Dysphagie
+- D. Dysphonie
+- E. Enophtalmie"
+5955,mcqm,AD,BD,False,False,True,"- B. Ostéoporose
+- D. Ostéité fibreuse due à l'hyperparathyroïdie"
+5663,mcqm,ACD,AB,False,False,True,"- A. Myélome non excrétant
+- B. Myélome à IgG"
+4575,mcqm,ABDE,AD,False,False,True,"- A. Un emphysème sous-cutané
+- D. Des râles bronchiques"
+21002,mcqm,CE,BC,False,False,True,"- B. Angiographie rétinienne
+- C. Examens ultra-sonique des vaisseaux du cou"
+14898,mcqm,BCE,BC,False,False,True,"- B. Hémocultures
+- C. Examen cytobactériologique des urines"
+8255,mcqm,AB,AD,False,False,True,"- A. Diminution modérée de l'apport protéique
+- D. Restriction liquidienne à 500 ml par 24 heures"
+34,mcqm,BDE,BE,False,False,True,"- B. L'uretère
+- E. La vessie"
+14444,mcqm,BD,BD,True,False,True,"- B. Un traitement par les diurétiques thiazidiques
+- D. La prise concommittante de laxatifs"
+9253,mcqm,AB,AD,False,False,True,"- A. Méningiome
+- D. Ependymome"
+6876,mcqm,ACD,AC,False,False,True,"- A. La liste limitative ou indicative des travaux susceptibles de provoquer la maladie
+- C. La liste des manifestations pathologiques admises à réparation"
+14629,mcqm,BDE,ABCD,False,False,True,"- A. La paralysie radiale
+- B. L'atteinte du moteur oculaire commun
+- C. Les troubles de déglutition
+- D. L'impuissance sexuelle"
+2112,mcqm,AB,ABE,False,False,True,"- A. Traitement de l'entourage, même en l'absence de prurit
+- B. Désinfection des vêtements et sous-vêtements
+- E. Traitement des animaux familiers"
+19281,mcqm,ABCE,ABCD,False,False,True,"- A. Reconnaissance du statut du travailleur handicapé
+- B. Etablissement du taux d'invalidité d'une personne handicapée
+- C. Orientation d'une personne handicapée vers un établissement spécialisé
+- D. Remboursement des frais médicaux liés aux soins d'invalidité"
+20647,mcqm,AD,AD,True,False,True,"- A. Au cours d'une grossesse, il existe un risque important de pyélonéphrite
+- D. Il existe un risque de lithiase rénale"
+11914,mcqm,ABC,BC,False,False,True,"- B. Utilisés après un morphinique pur, réduisent ses effets
+- C. Donnés à des morphinomanes donnent un syndrome aigu de sevrage"
+19822,mcqm,ACE,AD,False,False,True,"- A. Le collet est situé au-dessus de la ligne de Malgaigne
+- D. Le sac est extra-funiculaire"
+12459,mcqm,AC,BCD,False,False,True,"- B. Un déplacement médiastinal à la radiographie
+- C. L'aggravation de la dyspnée
+- D. Une aggravation de la douleur"
+14966,mcqm,ABE,AB,False,False,True,"- A. Bêtabloquants
+- B. Vasodilatateurs"
+3932,mcqm,ABE,AC,False,False,True,"- A. Début progressif
+- C. Forte intensité des coliques abdominales"
+1307,mcqm,AD,AD,True,False,True,"- A. Une diminution du ballottement du mollet
+- D. Une douleur à la pression des masses musculaires"
+16115,mcqm,AB,AB,True,False,True,"- A. Bêtabloquants pour ralentir le coeur
+- B. Poursuite ou augmentation de la théophylline"
+17562,mcqm,BC,CE,False,False,True,"- C. Diabète non insulinodépendant
+- E. Hyperlipoprotéinémie de type V"
+15041,mcqm,BE,BD,False,False,True,"- B. L'administration de calcium par voie I.V.
+- D. L'administration de vitamine D par voie I.V."
+18478,mcqm,BD,BC,False,False,True,"- B. Une anémie microcytaire hypochrome avec un nombre de réticulocytes faible
+- C. Un excés de sidéroblastes médullaires"
+11724,mcqm,DE,AB,False,False,True,"- A. Corticoïdes
+- B. Corticoïdes + immuno-dépresseurs"
+17497,mcqm,ABCD,AD,False,False,True,"- A. Une protrusion des globes associée à un à une rétraction de la paupière supérieure
+- D. Une diplopie"
+9071,mcqm,BC,BD,False,False,True,"- B. Potentiels évoqués visuels
+- D. Electromyogramme"
+9066,mcqm,AC,BC,False,False,True,"- B. L'auscultation de la boite crânienne
+- C. L'auscultation des vaisseaux du cou"
+21372,mcqm,ACE,BC,False,False,True,"- B. L'examen tomodensitométrique est plus performant que l'examen échographique hépatique
+- C. C'est l'artériographie hépatique, avec injection de lipiodol ultrafluide suivie d'une étude tomodensitométrique"
+21148,mcqm,ACE,ABD,False,False,True,"- A. Eruption maculeuse sans confluence des éléments
+- B. Catarrhe oculo nasale
+- D. Enduit blanchâtre sur la langue"
+14902,mcqm,ABDE,AB,False,False,True,"- A. Hémocultures
+- B. Examen cytobactériologique des urines"
+11052,mcqm,ABCE,BCD,False,False,True,"- B. Microphtalmie
+- C. Cardiopathie congénitale
+- D. Hydrocéphalie"
+7626,mcqm,ACE,AB,False,False,True,"- A. Abolition du réflexe rotulien
+- B. Pouls supérieur à 150/mn"
+3465,mcqm,BE,AC,False,False,True,"- A. IgG 1
+- C. IgM"
+21373,mcqm,ABCD,AD,False,False,True,"- A. Hépatocarcinome
+- D. Métastase d'une tumeur carcinoïde"
+11725,mcqm,BCDE,ACDE,False,False,True,"- A. Taux élevé des antistreptolysines
+- C. Hypertension artérielle
+- D. Fonction rénale altérée
+- E. Syndrome oedémateux"
+5155,mcqm,AD,CD,False,False,True,"- C. Production d'une exotoxine neurotrope
+- D. Tropisme endothélial vasculaire"
+1598,mcqm,ABC,CE,False,False,True,"- C. Une syphilis débutante
+- E. Une fausse sérologie syphilitique"
+2637,mcqm,CE,CE,True,False,True,"- C. Maladie de Vaquez
+- E. Maladie de Minkowski-Chauffard"
+21190,mcqm,CD,C,False,False,False,"- C. Coronarite
+- C. Coronarite
+
+Explication : L'hypercholestérolémie primitive de type Ia est caractérisée par une hypercholestérolémie sévère, souvent associée à une hypertriglycéridémie. Cette dyslipidémie augmente le risque de maladies cardiovasculaires, notamment la coronarite, qui est une maladie vasculaire qui affecte les artères coronaires. De plus, la dyslipidémie peut également favoriser d'autres conditions cardiovasculaires, comme l'artérite des membres inférieurs, mais la coronarite est le plus souvent associée à l'hypercholestérolémie primitive de type Ia. Le diabète et la pancréatite aiguë sont des conditions liées à la glycémie, pas direct"
+8798,mcqm,ABE,BD,False,False,True,"- B. Troubles sensitifs objectifs au niveau du médius
+- D. Trajet douloureux sur la face antérieure de l'avant-bras"
+8873,mcqm,CDE,BD,False,False,True,"- B. Des neuroleptiques
+- D. Des agonistes dopaminergiques directs"
+19486,mcqm,ABC,AB,False,False,True,"- A. Fièvre supérieure à 38° pendant au moins une semaine
+- B. Amaigrissement d'au moins 10% du poids au cours des 6 derniers mois"
+15508,mcqm,ABE,BCE,False,False,True,"- B. Elle a oublié un comprimé en début de cycle 2 jours de suite
+- C. Elle a reçu un traitement par un macrolide (ex érythromycine)
+- E. L'indice de Pearl n'est pas nul"
+17244,mcqm,ACDE,AE,False,False,True,"- A. Thyroïdite chronique d'Hashimoto
+- E. Carence en iode"
+16954,mcqm,AE,ACD,False,False,True,"- A. Ils peuvent migrer dans le médiastin postérieur
+- C. Leur vascularisation est d'origine cervicale assurée par l'artère thyroïdienne inférieure
+- D. Les goîtres situés à droite peuvent laminer ou entourer le nerf récurrent"
+6573,mcqm,ABDE,BD,False,False,True,"- B. Elle peut permettre la rescision d'actes commis de façon inconsidérée
+- D. Cette mesure implique l'intervention du juge des tutelles"
+10538,mcqm,BCDE,ABDE,False,False,True,"- A. L'existence d'une image en coucher de soleil du bas-fond sinusien
+- B. Des mouchages sanglants répétés
+- D. Une anesthésie sous-orbitaire
+- E. Une lyse des parois du sinus"
+18215,mcqm,CD,BE,False,False,True,"- B. Amnioscopie
+- E. Amniocentèse"
+17877,mcqm,BDE,AC,False,False,True,"- A. Vous prescrivez du paracétamol et vous surveillez l'évolution
+- C. Vous demandez un Paul et Bunnell"
+16588,mcqm,ABCDE,ACE,False,False,True,"- A. Douleur abdominale
+- C. Chute tensionnelle brutale
+- E. Poussée d'ischémie distale à gauche en dehors de tout collapsus"
+1938,mcqm,CDE,AC,False,False,True,"- A. Les antécédents de syphilis
+- C. Les rapports avec une prostituée au Cameroun"
+4097,mcqm,ABCDE,ABDE,False,False,True,"- A. Elle peut être responsable d'une fièvre
+- B. Elle peut entraîner une altération importante de l'état général
+- D. Elle peut être responsable de l'apparition d'une ascite
+- E. Elle se marque, au plan histopathologique hépatique, en particulier par la présence de corps de Mallory"
+21191,mcqm,AB,AD,False,False,True,"- A. La limitation d'apport des graisses d'origine animale
+- D. Un régime globalement hypocalorique"
+4737,mcqm,BD,BCD,False,False,True,"- B. Est précédé par un énanthème
+- C. Débute au tronc et à la racine des cuisses
+- D. Evolue en une seule poussée"
+11255,mcqm,BCD,AE,False,False,True,"- A. Un allongement du temps de saignement
+- E. Une hypofibrinémie"
+1261,mcqm,BE,BCE,False,False,True,"- B. Chute avec blessure
+- C. Morsure de la langue
+- E. Bloc de branche droite + hémibloc antérieur gauche sur l'ECG"
+14522,mcqm,AD,ABCE,False,False,True,"- A. Splénomégalie
+- B. Dyspnée
+- C. Cyanose
+- E. Tachycardie"
+8089,mcqm,ABCDE,AB,False,False,True,"- A. Une glomérulonéphrite
+- B. Une tuberculose rénale"
+8509,mcqm,AD,AD,True,False,True,"- A. Ostéomalacie
+- D. Ostéite fibreuse due à l'hyperparathyroïdie"
+21029,mcqm,BD,BD,True,False,True,"- B. Agoraphobie
+- D. Claustrophobie"
+18364,mcqm,BDE,BE,False,False,True,"- B. Une salpingite
+- E. Une endométrite"
+18337,mcqm,BCE,AC,False,False,True,"- A. Toxoplasmose antérieure à la conception
+- C. Risque de toxoplasmose congénitale"
+14796,mcqm,ACD,BC,False,False,True,"- B. La vaccination B.C.G est une action de prévention primaire
+- C. Une réadaptation après un accident est une action de prévention tertiaire"
+21000,mcqm,ABD,ABD,True,False,True,"- A. Tabagisme ancien
+- B. Hypertension artérielle
+- D. Diabète"
+18022,mcqm,BD,BC,False,False,True,"- B. Prolactinémie
+- C. Delta 4 androstendione plasmatique"
+15778,mcqm,ABCDE,AB,False,False,True,"- A. Chirurgie colique
+- B. Chirurgie rectale"
+13216,mcqm,BDE,AD,False,False,True,"- A. Délire érotomaniaque
+- D. Tremblements"
+18805,mcqm,AE,ACE,False,False,True,"- A. La valeur prédictive positive du test aurait été supérieure (par rapport au cas précédent)
+- C. La sensibilité du test aurait été meilleure (que dans le cas précédent)
+- E. Le rendement du dépistage aurait été meilleur (que dans le cas précédent)"
+16339,mcqm,ACD,AC,False,False,True,"- A. Angiographie pulmonaire
+- C. Scintigraphie pulmonaire de ventilation et de perfusion"
+3095,mcqm,BC,BD,False,False,True,"- B. Manipulateur en électroradiologie
+- D. Travailleur de l'aniline"
+21387,mcqm,BD,CD,False,False,True,"- C. Vous conseillez un brossage soigneux des cheveux une fois par semaine
+- D. Vous déconseillez les échanges de bonnets et d'écharpe"
+15040,mcqm,ACDE,CD,False,False,True,"- C. Taux plasmatique de 25-hydroxyvitamine D abaissé
+- D. Hypophosphorémie"
+9915,mcqm,AD,BC,False,False,True,"- B. Un larmoiement
+- C. La perception de points noirs"
+3640,mcqm,AC,ABCD,False,False,True,"- A. Guérit habituellement spontanément
+- B. Protège d'une récidive lors de la réinjection du même antigène
+- C. S'accompagne d'une hypocomplémentémie de consommation
+- D. A des lésions aiguës qui sont en fait médiées par des Iymphocytes T activés"
+2452,mcqm,ABC,CD,False,False,True,"- C. Les enfants d'un sujet atteint
+- D. Les frères ou soeurs d'un sujet atteint"
+14964,mcqm,CDE,BE,False,False,True,"- B. Hypoparathyroïdie
+- E. Déficit en 1-25 OH vitamine D3"
+6334,mcqm,ACD,BC,False,False,True,"- B. Antibiothérapie intra-articulaire
+- C. Immobilisation"
+10647,mcqm,CE,CD,False,False,True,"- C. L'obstruction nasale unilatérale
+- D. Les antécédents de sinusite maxillaire"
+16172,mcqm,ABDE,AE,False,False,True,"- A. Extraction d'une dent dévitalisée avec granulome apical
+- E. Obturation d'une carie de la pulpe"
+12573,mcqm,BE,ABDE,False,False,True,"- A. Une défaillance cardiaque
+- B. Une mort subite
+- D. Un oedème pulmonaire cardiogénique
+- E. La survenue d'un pneumothorax"
+6468,mcqm,ABCD,AC,False,False,True,"- A. Cause immédiate de la mort
+- C. Etat morbide ayant contribué à l'évolution fatale"
+14798,mcqm,BE,AC,False,False,True,"- A. La seconde pour les soins ambulatoires après la part de l'administration publique
+- C. La seconde pour l'hospitalisation après la part de l'administration publique"
+3592,mcqm,ACD,ACD,True,False,True,"- A. L'étude des marqueurs de membrane des lymphocytes permet d'en affirmer le caractère monoclonal
+- C. Elle peut se compliquer d'une anémie hémolytique auto-immune
+- D. Elle entraîne un déficit immunitaire humoral"
+2701,mcqm,ABC,ABC,True,False,True,"- A. Après un exercice physique intense
+- B. Au 3ème trimestre de la grossesse
+- C. Durant les périodes menstruelles"
+6013,mcqm,BC,AB,False,False,True,"- A. Un test de Nelson
+- B. Un test de Farr"
+8258,mcqm,AD,AB,False,False,True,"- A. Un taux abaissé de 1.25 OH D3
+- B. Un taux de calcium osseux mesuré par radioactivation élevé"
+2395,mcqm,ACD,BD,False,False,True,"- B. 46,XX,t (14q 21q)
+- D. 45,XX,t(14q 21q)/46 XX"
+5950,mcqm,ABD,BD,False,False,True,"- B. Calcémie
+- D. Créatinine plasmatique"
+7364,mcqm,BCE,BCE,True,False,True,"- B. Il peut sécréter une bêta-lactamase
+- C. Il est souvent intraleucocytaire à l'examen microscopique
+- E. C'est un pathogène de l'homme, jamais rencontré chez l'animal"
+913,mcqm,BD,BD,True,False,True,"- B. Dosage de thyroglobuline
+- D. Dosage de T3, T4 et TSH"
+14657,mcqm,BCE,CE,False,False,True,"- C. La lésion responsable peut siéger au niveau du nerf auditif
+- E. Un phénomène de recrutement est possible"
+20381,mcqm,CD,BCD,False,False,True,"- B. Une pyélonéphrite aiguë
+- C. Une sigmoïdite diverticulaire
+- D. Une tumeur villeuse sigmoïdienne"
+7382,mcqm,AC,ACE,False,False,True,"- A. Est un bacille tuberculeux vivant atténué
+- C. Peut occasionner chez l'homme des suppurations spontanément curables
+- E. Induit des anticorps sériques protecteurs"
+22089,mcqm,ABC,AB,False,False,True,"- A. Correspondent à des cassures antigéniques
+- B. Concernent l'hémagglutinine et parfois la neuraminidase de l'enveloppe virale"
+3372,mcqm,ABCDE,BD,False,False,True,"- B. Choc anaphylactique
+- D. Purpura thrombopénique"
+14583,mcqm,ACD,BC,False,False,True,"- B. Il y a une douleur à l'insertion péronière du faisceau antérieur du ligament latéral externe
+- C. Sur la radiographie de face, le péroné est fracturé transversalement au-dessus de la malléole externe"
+3672,mcqm,ABD,AE,False,False,True,"- A. L'antisérum reconnaîtra les immunoglobulines des autres classes
+- E. L'antisérum sera spécifique du fragment Fc des IgG"
+3936,mcqm,ABCDE,ADE,False,False,True,"- A. Hypocalcémie
+- D. Hypoprothrombinémie
+- E. Anémie macrocytaire"
+6467,mcqm,ACD,AD,False,False,True,"- A. Communique à un tiers les clichés radiographiques d'un de ses patients
+- D. Indique le nom d'un de ses patients dans une publication scientifique"
+21371,mcqm,CD,BC,False,False,True,"- B. Est spécifique de l'hépatocarcinome
+- C. Peut être observée dans un cancer biliaire"
+20998,mcqm,CDE,ACD,False,False,True,"- A. Prescrire en urgence une consultation ophtalmologique
+- C. Rechercher un souffle carotidien gauche
+- D. Rechercher un souffle carotidien droit"
+15396,mcqm,AD,AB,False,False,True,"- A. L'apparition des vomissements après un intervalle libre depuis la naissance
+- B. Des vomissements teintés de bile"
+13588,mcqm,AC,AB,False,False,True,"- A. Un état dépressif réactionnel
+- B. Un état dépressif d'involution"
+1188,mcqm,ABD,BD,False,False,True,"- B. Veine jugulaire
+- D. Veine cave inférieure"
+1918,mcqm,ABCD,BD,False,False,True,"- B. Bulles tendues
+- D. Prurit intense pré-éruptif"
+16150,mcqm,ABC,AC,False,False,True,"- A. Rechute
+- C. Tentative de suicide"
+15484,mcqm,ABCD,AD,False,False,True,"- A. Rupture de l'anévrysme dans l'espace rétropéritonéal
+- D. Infarctus du myocarde"
+19873,mcqm,ABE,AD,False,False,True,"- A. Ce groupe est possible
+- D. La mère doit recevoir à l'accouchement des immunoglobulines anti D"
+20463,mcqm,ABCDE,BC,False,False,True,"- B. En caressant le chat de ses voisins
+- C. En ingérant un steack """"tartare"""""
+7167,mcqm,BD,AC,False,False,True,"- A. L'alcool éthylique dénaturé
+- C. Le permanganate de potassium"
+2036,mcqm,BCD,ACD,False,False,True,"- A. L'indolence
+- C. L'irrégularité des bords
+- D. L'augmentation de taille récente"
+13023,mcqm,ACD,BDE,False,False,True,"- B. Les IgE totales
+- D. Des tests allergologiques cutanés orientés par l'interrogatoire
+- E. Des EFR avec test à l'acétylcholine"
+7627,mcqm,ACD,CD,False,False,True,"- C. Réhydratation
+- D. Antibiothérapie systématique associée"
+11280,mcqm,BCD,BD,False,False,True,"- B. Bain à 37°
+- D. Administration de paracétamol"
+11447,mcqm,ABCDE,AE,False,False,True,"- A. Transmission par voie aérienne
+- E. Maladie très contagieuse"
+14452,mcqm,CE,BCDE,False,False,True,"- B. C'est une dermatose alopéciante
+- C. Il peut atteindre le visage
+- D. Les zones électives sont les plis des coudes et les creux poplités
+- E. Il peut se compliquer de pustules"
+17500,mcqm,ABCE,AB,False,False,True,"- A. L'apparition d'un goître ou son augmentation s'il existait
+- B. Un rash"
+8316,mcqm,BC,BC,True,False,True,"- B. Prise de Kayexalate® par la bouche ou en lavement
+- C. Hémodialyse"
+5592,mcqm,BD,BE,False,False,True,"- B. Elles peuvent se déplacer dans les premières semaines après l'accident
+- E. Elles comportent un risque important de pseudarthrose"
+5443,mcqm,BD,AE,False,False,True,"- A. Ampicilline
+- E. Erythromycine"
+1383,mcqm,ACDE,ABCE,False,False,True,"- A. Rupture intra-péricardique de l'aorte
+- B. Embolie pulmonaire
+- C. Ischémie du membre supérieur droit
+- E. Paraplégie"
+22051,mcqm,BCDE,BDE,False,False,True,"- B. Entraine une dysphagie
+- D. Nécessite une fibroscopie oesophagienne pour son diagnostic positif
+- E. Peut être associé à un cancer oropharyngé"
+12437,mcqm,BD,BCE,False,False,True,"- B. Primoinfection tuberculeuse
+- C. Sarcoïdose
+- E. Asbestose"
+16389,mcqm,BCE,BCE,True,False,True,"- B. Thrombose de la branche de la prothèse
+- C. Embolie distale
+- E. Rupture"
+19883,mcqm,BC,AC,False,False,True,"- A. Une blessure pleuropulmonaire
+- C. Une blessure d'un vaisseau intercostal"
+18339,mcqm,AC,ABC,False,False,True,"- A. Le risque de contamination foetale est maximal si la contamination a lieu au 3e trimestre de la grossesse
+- B. Le risque de lésions foetales est minimal si la contamination a lieu au cours du 1er trimestre de la grossesse
+- C. Le risque de contamination foetale est diminué par la prise de Rovamycine® (Spiramycine)"
+16146,mcqm,ABC,ACE,False,False,True,"- A. Ralentissement psychique
+- C. Désintérêt
+- E. Délire mélancolique"
+8317,mcqm,AE,AB,False,False,True,"- A. L'insuffisance rénale
+- B. Une insuffisance parathyroïdienne associée"
+13965,mcqm,ACDE,ABD,False,False,True,"- A. Représentent approximativement 8 % du P.I.B.
+- B. Constituent le premier poste de l'Effort Social de la Nation
+- D. Sont constituées essentiellement par la consommation médicale finale"
+1940,mcqm,ABCDE,BE,False,False,True,"- B. La présence de pus à l'examen direct (polynucléaires altérés)
+- E. La réaction du TPHA positive à 1/80 ème"
+4616,mcqm,ABD,AE,False,False,True,"- A. Réduction de la hernie et fermeture de l'orifice
+- E. Laparotomie exploratrice"
+6846,mcqm,AB,ACE,False,False,True,"- A. De poussières de chromate de zinc
+- C. De poussières de charbon
+- E. De poussières d'oxyde de plomb"
+5226,mcqm,BCE,BC,False,False,True,"- B. Evacuation du liquide pleural
+- C. Triple antibiothérapie antituberculeuse"
+18217,mcqm,BD,BD,True,False,True,"- B. Clamoxyl
+- D. Erythromycine"
+14661,mcqm,CE,AE,False,False,True,"- A. Un cholestéatome
+- E. Une fracture du toit de la caisse du tympan"
+14899,mcqm,BCD,BC,False,False,True,"- B. Céfotaxime et gentamicine
+- C. Céfotaxime et péfloxacine"
+4975,mcqm,CD,AD,False,False,True,"- A. Une toxine hypertoxique
+- D. Une toxine détoxifiée et antigénique"
+18803,mcqm,ABC,BC,False,False,True,"- B. Devant un test positif, on pourrait affirmer que le sujet est malade
+- C. On prendrait le risque de laisser échapper beaucoup de malades au dépistage"
+15025,mcqm,AE,AC,False,False,True,"- A. Neurologique
+- C. Hématologique"
+19666,mcqm,AB,AD,False,False,True,"- A. Hypocalcémie
+- D. Hypophosphaturie"
+17901,mcqm,AC,AC,True,False,True,"- A. Une syphilis
+- C. Un herpès génital"
+4558,mcqm,ACE,AC,False,False,True,"- A. Sépare l'étage inguinal de l'étage crural
+- C. Est étendue de l'épine iliaque antéro-supérieure à l'épine du pubis"
+21189,mcqm,CDE,ADE,False,False,True,"- A. Xanthomatose cutanée éruptive
+- D. Xanthomes tendineux
+- E. Xanthélasma"
+17851,mcqm,AD,DE,False,False,True,"- D. Sa mère a eu un cancer du sein
+- E. Elle a eu ses premières règles tard - 16 ans"
+19637,mcqm,ABCD,ABD,False,False,True,"- A. Arythmie complète par fibrillation auriculaire
+- B. Diarrhée
+- D. Episode pseudo-maniaque"
+18985,mcqm,ACDE,BCD,False,False,True,"- B. Tardivement peut apparaitre une amyotrophie des interosseux
+- C. Tardivement peuvent apparaitre des troubles vaso-moteurs et trophiques des doigts moyens
+- D. Une ténosynovite des fléchisseurs est fréquemment rencontrée"
+10012,mcqm,ABD,ABCE,False,False,True,"- A. Il s'insère sur le bord du tarse de la paupière supérieure
+- B. Son fonctionnement est conservé en cas de paralysie faciale périphérique
+- C. Son fonctionnement est altéré en cas de paralysie du droit supérieur
+- E. La paralysie de sa commande nerveuse entraîne une ouverture de la fente palpébrale"
+4497,mcqm,ABCD,BC,False,False,True,"- B. Ascite sanglante se reproduisant rapidement
+- C. Existence d'une thrombose porte"
+9073,mcqm,ACE,ABE,False,False,True,"- A. Une atteinte pyramidale
+- B. Une atteinte cérébelleuse
+- E. Des manifestations compatibles avec une lésion focale"
+10434,mcqm,BC,BCD,False,False,True,"- B. Des crises vertigineuses rotatoires paroxystiques
+- C. Un signe de Romberg latéralisé
+- D. Un talonnement à la marche"
+12552,mcqm,ABD,BE,False,False,True,"- B. Est le plus souvent fractionnée et fétide
+- E. Peut correspondre à une évacuation d'une suppuration sous phrénique"
+8352,mcqm,ABCDE,ABC,False,False,True,"- A. L'hypoplasie rénale segmentaire
+- B. L'HTA rénovasculaire
+- C. Le syndrome de Conn"
+18063,mcqm,CE,BD,False,False,True,"- B. Un curetage biopsique
+- D. Une biopsie du col"
+5224,mcqm,AE,AD,False,False,True,"- A. Tuberculose pleurale
+- D. Infection bactérienne"
+17499,mcqm,CD,DE,False,False,True,"- D. Antithyroïdiens de synthèse
+- E. Tranquilisants et sédatifs"
+17496,mcqm,ABE,BDE,False,False,True,"- B. Diffus
+- D. Multi-nodulaire
+- E. Soufflant"
+21370,mcqm,CE,BCD,False,False,True,"- B. La présence d'angiomes stellaires
+- C. L'hépatomégalie douloureuse
+- D. L'augmentation des transaminases à 2 fois la limite supérieure de la normale"
+17397,mcqm,ABD,ABCD,False,False,True,"- A. Goître
+- B. Diplopie
+- C. Vitiligo
+- D. Myxoedème prétibial"
+3796,mcqm,BC,CE,False,False,True,"- C. Présence d'anticorps anti-Sm
+- E. Présence d'anticorps anti-centromère"
+11641,mcqm,ADE,ADE,True,False,True,"- A. Evolution par crises
+- D. Refus de boire
+- E. Fosse iliaque droite vide à la palpation"
+13709,mcqm,BDE,BC,False,False,True,"- B. Reprise de l'intoxication alcoolique
+- C. Apparition d'une discordance"
+16602,mcqm,BCE,BD,False,False,True,"- B. Déficit en facteur II
+- D. Hyperfibrinémie"
+18729,mcqm,AE,ADE,False,False,True,"- A. Eviter les vêtements de laine au contact de la peau
+- D. Eviter les expositions solaires
+- E. Utiliser des produits hydratant la peau"
+9909,mcqm,AD,ACD,False,False,True,"- A. Baisse d'acuité visuelle
+- C. Halos colorés
+- D. Eblouissement"
+7672,mcqm,BCE,BE,False,False,True,"- B. Il peut exister une anémie régénérative
+- E. La biopsie rénale a un intérêt pour juger du pronostic"
+3082,mcqm,BCD,BCD,True,False,True,"- B. Détermination des phénotypes rhésus et Kell
+- C. Recherche et identification des anticorps sériques
+- D. Test de Coombs direct"
+5628,mcqm,ABCD,ABCE,False,False,True,"- A. Une compression médullaire
+- B. Une névralgie cervicobrachiale
+- C. Un glissement progressif d'une vertèbre sur la vertèbre sous-jacente
+- E. Des troubles bulbaires"
+5223,mcqm,BC,BC,True,False,True,"- B. Biopsies pleurales
+- C. Formule des éléments blancs du liquide pleural"
+8922,mcqm,BD,AD,False,False,True,"- A. Elargissement du polygone de sustentation
+- D. Majoration des troubles à la fermeture des yeux"
+8124,mcqm,AB,AC,False,False,True,"- A. Testostérone
+- C. T.S.H."
+7337,mcqm,ACD,CDE,False,False,True,"- C. Débute habituellement par le bord libre de l'ongle
+- D. Peut faire discuter un psoriasis
+- E. Peut faire discuter un érythème polymorphe"
+909,mcqm,DE,BDE,False,False,True,"- B. Adénome toxique
+- D. Epithélioma vésiculaire
+- E. Epithélioma à stroma amyloïde"
+5110,mcqm,ABCDE,CD,False,False,True,"- C. Eviter de boire l'eau des puits non filtrée
+- D. Eviter les crudités"
+733,mcqm,ABCD,BD,False,False,True,"- B. Péricardite
+- D. Leucémie aiguë"
+11644,mcqm,BCE,AC,False,False,True,"- A. Rejet rapide de la baryte par l'anus
+- C. Absence d'encoche du bord interne du caecum"
+6257,mcqm,BCD,BD,False,False,True,"- B. Une rééquilibration ionique
+- D. Une traction du membre"
+9017,mcqm,DE,BDE,False,False,True,"- B. Une élévation des Alpha globulines
+- D. Une élévation des Gamma globulines
+- E. Une répartition oligoclonale des gamma globulines"
+6511,mcqm,ABD,ACDE,False,False,True,"- A. Accident du travail.
+- C. Maladies de longue durée
+- D. Alcooliques dangereux
+- E. S.I.D.A. avérés"
+12778,mcqm,BD,AC,False,False,True,"- A. Recherche de BK par tubage
+- C. Gazométrie sanguine"
+4690,mcqm,BC,BC,True,False,True,"- B. Hydrocéphalie
+- C. Microphtalmie"
+9101,mcqm,ADE,BCE,False,False,True,"- B. Insuffisance cardiaque.
+- C. Antécédents d'ulcère gastrique
+- E. Glaucome."
+13382,mcqm,ACDE,ADE,False,False,True,"- A. Suivi obstétrical
+- D. Suivi psychiatrique
+- E. Liaison avec le service de PMI"
+21131,mcqm,ACD,ABE,False,False,True,"- A. Neisseria meningitidis
+- B. Listeria monocytogenes
+- E. Staphylococcus aureus"
+5654,mcqm,ABDE,ACD,False,False,True,"- A. Leucopénie
+- C. Dépôts cornéens
+- D. Syndrome néphrotique"
+15039,mcqm,BC,BC,True,False,True,"- B. Une carence en vitamine D
+- C. Un défaut d'absorption digestive du Ca"
+13057,mcqm,ACDE,CE,False,False,True,"- C. Des râles crépitants
+- E. Une matité de la base droite"
+12530,mcqm,BCE,CD,False,False,True,"- C. Est un inducteur enzymatique hépatique
+- D. Diminue l'élimination urinaire de l'isoniazide"
+14789,mcqm,AC,AC,True,False,True,"- A. Prospective
+- C. De cohorte"
+7247,mcqm,ABE,BC,False,False,True,"- B. Commencer la prophylaxie une semaine avant le départ
+- C. La poursuivre pendant toute la durée du séjour"
+10768,mcqm,CDE,BDE,False,False,True,"- B. La pharyngolaryngite
+- D. L'immobilité laryngée
+- E. La dysphagie"
+7602,mcqm,ABCDE,AB,False,False,True,"- A. Candidose à Candida albicans
+- B. Bactériose a Corynebacterium minutissimum"
+6914,mcqm,ACE,CE,False,False,True,"- C. Peut établir le certificat médical initial
+- E. Etudie les conditions de travail et propose des améliorations"
+11869,mcqm,ADE,CD,False,False,True,"- C. Une augmentation du volume de distribution
+- D. La diminution du débit cardiaque"
+13375,mcqm,CE,DE,False,False,True,"- D. Neuroleptique desinhibiteur
+- E. Neuroleptique sédatif"
+5183,mcqm,AD,AD,True,False,True,"- A. Hyperthermie
+- D. Exacerbation des signes cutanés"
+11332,mcqm,BD,BC,False,False,True,"- B. Un fond d oeil
+- C. Un prélèvement de liquide céphalo rachidien"
+14968,mcqm,ABCDE,AE,False,False,True,"- A. Antihépatite B
+- E. Antipneumococcique"
+15536,mcqm,CE,CE,True,False,True,"- C. Vaccination antigrippale avant l'automne prochain
+- E. Vaccination antipneumococcique"
+18214,mcqm,CDE,BD,False,False,True,"- B. Colique néphrétique
+- D. Pyélonéphrite gravidique"
+4578,mcqm,ABC,AB,False,False,True,"- A. Les lésions oesophagiennes sont plus étendues
+- B. Les lésions oesophagiennes sont plus profondes"
+11377,mcqm,ADE,BCD,False,False,True,"- B. Absence de thrombopénie
+- C. Résistance capillaire normale
+- D. Activité coagulante du facteur VIII (VIII c) à 1 %"
+17896,mcqm,CDE,AE,False,False,True,"- A. Il existe une simulation du cycle physiologique
+- E. La stimulation de l'endomètre est de mauvaise qualité"
+4489,mcqm,AB,BE,False,False,True,"- B. Existence de troubles du transit
+- E. Présence d'un polype rectal"
+6342,mcqm,BCDE,ABDE,False,False,True,"- A. Arthropathie destructrice
+- B. Séquelles d'uvéite
+- D. Calcanéïte
+- E. Spondylarthrite ankylosante"
+15868,mcqm,BC,ABCE,False,False,True,"- A. Survient au repos
+- B. S'amplifie en fin de mouvement
+- C. S'accompagne d'une hypotonie
+- E. Est amélioré par les médicaments anticholinergiques"
+14912,mcqm,AE,AD,False,False,True,"- A. Un trait simple, oblique en bas, en dedans et en arrière
+- D. Un fragment claviculaire externe déplacé en bas et en arrière"
+1139,mcqm,ABE,AB,False,False,True,"- A. Une réduction de la postcharge
+- B. Une vasodilatation des coronaires"
+13368,mcqm,BDE,ABCE,False,False,True,"- A. Néologisme
+- B. Manque du mot
+- C. Glossolalie
+- E. Echolalie"
+17495,mcqm,BCD,BCD,True,False,True,"- B. Amaigrissement
+- C. Thermophobie
+- D. Polydypsie"
+488,mcqm,AB,CD,False,False,True,"- C. Refoulement d'un calice
+- D. Etirement ou incurvation d'une tige calicielle"
+19437,mcqm,ABC,BC,False,False,True,"- B. Mégaoesophage idiopathique
+- C. Endobrachyoesophage secondaire à une oesophagite peptique"
+17801,mcqm,AD,ABD,False,False,True,"- A. Métrorragie
+- B. Adénopathie inguinale
+- D. Polype accouché par le col"
+20645,mcqm,CE,BD,False,False,True,"- B. Existence d'une cystoscopie normale auparavant
+- D. Leucocyturie importante"
+4065,mcqm,BD,DE,False,False,True,"- D. Mucilages
+- E. Dérivés du séné"
+17965,mcqm,ADE,AB,False,False,True,"- A. Une endométrite
+- B. Un petit retour de couches"
+6259,mcqm,ABCDE,ACD,False,False,True,"- A. Lutte anti-escarre
+- C. Traitement anticoagulant
+- D. Bandages élastiques des membres"
+22153,mcqm,BD,AD,False,False,True,"- A. Arsenic
+- D. Amines aromatiques"
+3855,mcqm,BDE,ABDE,False,False,True,"- A. L'apparition récente des symptômes
+- B. La sédation des douleurs et des ballonnements par l'émission de gaz
+- D. Le déclenchement post-prandial du ballonnement
+- E. La normalité de l'examen physique du patient"
+14095,mcqm,AC,BCD,False,False,True,"- B. SIDA
+- C. Syphilis
+- D. Tuberculose"
+1812,mcqm,BC,BC,True,False,True,"- B. Examen en immunofluorescence d'une biopsie cutanée
+- C. Recherche d'anticorps circulants antiépiderme"
+8868,mcqm,CD,ABCDE,False,False,True,"- A. La variété du type des suspensions de conscience
+- B. Un état crépusculaire post-critique de plusieurs minutes
+- C. Des décharges E.E.G. spécifiques
+- D. Un pronostic de guérison d'environ 60 % des cas
+- E. L'efficacité et la spécificité du traitement par le phénobarbital (Gardénal®)"
+7603,mcqm,AB,ABCE,False,False,True,"- A. Bordure polycyclique à limite nette
+- B. Absence d'aspect inflammatoire
+- C. Extension importante
+- E. Bilatéralité des lésions"
+1463,mcqm,BD,BDE,False,False,True,"- B. Douleurs lombaires gauches
+- D. Signe de choc hypovolémique
+- E. Ischémie aiguë des membres inférieurs"
+7316,mcqm,ACE,AB,False,False,True,"- A. Est acquise par mutation
+- B. Représente 80 à 90 % des résistances rencontrées en clinique"
+18010,mcqm,ABCE,AE,False,False,True,"- A. Hémogramme
+- E. Dosage des IgM non spécifiques"
+3334,mcqm,AE,BC,False,False,True,"- B. Au niveau d'une lésion érythémateuse
+- C. Au niveau d'une lésion discoïde"
+21143,mcqm,AD,AC,False,False,True,"- A. Trouble de la vigilance
+- C. Dissociation intellectuelle"
+1653,mcqm,CD,AC,False,False,True,"- A. Elles favorisent la survenue de carcinomes spino-cellulaires
+- C. Elles surviennent plus fréquemment chez les sujets de race noire"
+16504,mcqm,CD,BD,False,False,True,"- B. L'Atropine®
+- D. Un traitement antiarythmique"
+17470,mcqm,ADE,DE,False,False,True,"- D. Les médicaments pris (autres que les antidiabétiques oraux)
+- E. Une enquête sur le comportement alimentaire du patient"
+19507,mcqm,BD,ACE,False,False,True,"- A. Inhibition spécifique de la cyclo-oxygénase
+- C. Inhibition de la production d'interleukine-1
+- E. Stimulation de la phospholipase A2"
+9113,mcqm,BD,BD,True,False,True,"- B. Astrocytome de bas grade
+- D. Méningiome"
+22052,mcqm,CDE,ACD,False,False,True,"- A. Une brûlure ascendante rétrosternale
+- C. Rythmée par les repas et périodique
+- D. Déclenchée par les aliments acides"
+7530,mcqm,ADE,AD,False,False,True,"- A. TPHA
+- D. F.T.A."
+4826,mcqm,ABCDE,ADE,False,False,True,"- A. S'accompagne souvent de signes articulaires
+- D. A une évolution subaiguë
+- E. Répond habituellement à la pénicilline"
+10414,mcqm,ABCD,AD,False,False,True,"- A. La voie étouffée
+- D. Le refus de l'enfant de se coucher"
+18412,mcqm,BC,AC,False,False,True,"- A. Un cliché panoramique
+- C. Un cliché occlusal postérieur latéralisé du côté atteint"
+9905,mcqm,ABCD,ACD,False,False,True,"- A. Est inutile en vision de loin chez l'emmétrope
+- C. S'accompagne d'une augmentation de puissance du cristallin
+- D. Peut favoriser l'apparition d'un strabisme convergent chez l'enfant"
+1813,mcqm,BC,BCE,False,False,True,"- B. Présence d'un dépôt linéaire d'immunoglobulines G et de complément à la jonction dermo-épidermique
+- C. Présence d'une hyperéosinophilie sanguine
+- E. Présence d'un anticorps circulant dirigé contre la susbstance intercellulaire de l'épiderme"
+4816,mcqm,BDE,BD,False,False,True,"- B. Se caractérise par une éruption fugace succédant à une période d'hyperthermie de 3 jours
+- D. Est une cause possible de convulsions hyperthermiques"
+8324,mcqm,AC,CD,False,False,True,"- C. Faire un dosage d'HCG et d'alphafoetoprotéine
+- D. Proposer une biopsie"
+8040,mcqm,ABE,BD,False,False,True,"- B. Glomérulonéphrite post streptococcique en période aiguë
+- D. Polykystose rénale"
+11165,mcqm,ABCDE,AD,False,False,True,"- A. Limitation de l'adduction
+- D. Asymétrie de l'abduction"
+18124,mcqm,ABC,AC,False,False,True,"- A. Transaminases
+- C. Bilirubine"
+10756,mcqm,BC,BC,True,False,True,"- B. Une épipharyngoscopie ou rhinoscopie postérieure avec biopsie
+- C. Un dosage des anticorps dirigés contre le virus d'Epstein-Barr"
+21003,mcqm,ABCDE,AC,False,False,True,"- A. Survenue d'une hémiplégie gauche
+- C. Accident cardiaque"
+20380,mcqm,BD,ABE,False,False,True,"- A. Prédomine sur les muscles fléchisseurs des membres supérieurs
+- B. Prédomine sur les muscles fléchisseurs racourcisseurs aux membres inférieurs
+- E. S'aggrave au cours de l'effort"
+14958,mcqm,AB,CD,False,False,True,"- C. Le caractère total de l'hématurie
+- D. L'abondance de l'hématurie"
+14041,mcqm,DE,ABD,False,False,True,"- A. Le taux proportionnel de mortalité par cancer est le même dans les deux populations
+- B. Le risque pour un individu de mourir par cancer est le même dans les deux populations
+- D. Le taux proportionnel de décès par cancer est plus élevé dans la population 2"
+4496,mcqm,ABD,AD,False,False,True,"- A. Hypoalbuminémie
+- D. Diminution du facteur V"
+2343,mcqm,DE,AC,False,False,True,"- A. Tous les garçons sont malades
+- C. La moitié des filles est malade"
+5689,mcqm,ABD,ABC,False,False,True,"- A. Uvéite antérieure
+- B. Amylose
+- C. Phlébites récidivantes"
+11701,mcqm,BD,AE,False,False,True,"- A. Rapport lécithine/sphingomyéline 2 dans les sécrétions pharyngées prélevées à l'admission
+- E. Absence de toute acidose plasmatique au cours de l'évolution"
+7166,mcqm,ABCDE,BD,False,False,True,"- B. La profession réputée """"exposée""""
+- D. L'existence de poussées à l'occasion du travail"
+18404,mcqm,DE,BDE,False,False,True,"- B. La lèvre supérieure est plus souvent atteinte que l'inférieure
+- D. Son pronostic est plus favorable que celui des autres localisations buccales
+- E. L'extension ganglionnaire est tardive"
+13333,mcqm,AE,ABD,False,False,True,"- A. Elle est plus fréquente chez le garçon
+- B. Ce symptôme est plus fréquent chez les enfants psychotiques que chez les enfants névrotiques
+- D. On ne peut parler d'énurésie qu'après 3 ans"
+13191,mcqm,ABE,ABE,True,False,True,"- A. Une anosognosie
+- B. Une amnésie antérograde continue
+- E. Des fabulations"
+11645,mcqm,ACD,AD,False,False,True,"- A. Etat septicémique
+- D. Perforation digestive"
+9589,mcqm,AD,ABDE,False,False,True,"- A. Déficit de l'activité en lipoprotéine-lipase
+- B. Déficit de l'activité de la triglycéride-lipase hépatique
+- D. Carence insulinique
+- E. Augmentation des corps cétoniques"
+18570,mcqm,AC,AC,True,False,True,"- A. Chimiothérapie
+- C. Irradiation des chaînes ilio-lombaires"
+9652,mcqm,CD,CD,True,False,True,"- C. Gruyère
+- D. Camembert"
+2933,mcqm,ABCDE,BCE,False,False,True,"- B. Augmentation du fibrinogène
+- C. Augmentation de l'agrégation plaquettaire
+- E. Augmentation de l'adhésivité plaquettaire"
+1861,mcqm,ACDE,ACD,False,False,True,"- A. Risque d'hypopigmentation résiduelle
+- C. Favorisée par la grossesse et l'hypercorticisme
+- D. Favorisée par la chaleur et l'hypersécrétion sébacée"
+8123,mcqm,ACD,BC,False,False,True,"- B. Androgènes
+- C. Anti-androgènes"
+384,mcqm,BE,BC,False,False,True,"- B. Il est favorisé par une consommation alcoolo-tabagique excessive
+- C. Il est plus fréquent chez les sujets porteurs d'un endobrachy-oesophage (ou oesophage de Barret)"
+13591,mcqm,ACE,AC,False,False,True,"- A. Une psychothérapie
+- C. Des antidépresseurs"
+10095,mcqm,BCDE,AD,False,False,True,"- A. La photocoagulation au laser de la zone de rétine décollée permet sa réapplication rapide
+- D. La présence d'une déchirure rétinienne périphérique est la cause d'un décollement de rétine rhégmatogène"
+1061,mcqm,AC,AD,False,False,True,"- A. Hypertrophie auriculaire gauche à l'ECG
+- D. Déviation à gauche de l'axe électrique de QRS à L'ECG"
+8508,mcqm,AB,AB,True,False,True,"- A. Un défaut de synthèse du 1-25 (OH)2 D3
+- B. Un défaut d'absorption digestive du calcium"
+19023,mcqm,ABE,ABDE,False,False,True,"- A. Elévation de l'azote uréique
+- B. Elévation de la créatinine
+- D. Hypokaliémie
+- E. Anémie normochrome"
+17719,mcqm,ABDE,BCE,False,False,True,"- B. Une HTA
+- C. Une sarcoïdose
+- E. Un antécédent de cancer mammaire"
+4208,mcqm,AC,ACD,False,False,True,"- A. Recherche d'hémorragies occultes par le test du GAIAC (hémoccult)  
+- C. Fibroscopie colique  
+- D. Toucher rectal"
+2845,mcqm,ABCDE,AC,False,False,True,"- A. I (fibrinogène)
+- C. II (prothrombine)"
+20646,mcqm,CD,BD,False,False,True,"- B. Irrigation intra-vésicale d'anti-inflammatoires ou de corticoldes
+- D. Anti-infectieux pendant 5 jours (acide pipémidique -  Pipram® -)"
+13836,mcqm,BC,AC,False,False,True,"- A. Anafranil® (Clomipramine)
+- C. Haldol® (Halopéridol)"
+20410,mcqm,ACD,AD,False,False,True,"- A. Cancer primitif du foie
+- D. Hémangioblastome du cervelet"
+7225,mcqm,AE,BC,False,False,True,"- B. A la protection immédiate d'un blessé non vacciné
+- C. Au traitement curatif d'un sujet atteint de tétanos"
+4995,mcqm,BCDE,ABD,False,False,True,"- A. Concerne actuellement 30 % des souches isolées à partir du LCR
+- B. Est dûe à la sécrétion d'une bêtalactamase inactivant les ampicillines, et les uréidopénicillines
+- D. Peut être associée à une résistance au chloramphénicol"
+8811,mcqm,ACD,AB,False,False,True,"- A. Un ralentissement des gestes alternés rapides
+- B. Un tremblement de la tête"
+9959,mcqm,ABCE,CE,False,False,True,"- C. Occlusion de l'artère centrale de la rétine
+- E. Ischémie aiguë de la tête du nerf optique"
+9251,mcqm,ABDE,BD,False,False,True,"- B. ROT polycinétiques des membres inférieurs
+- D. Trouble de la sensibilité profonde des membres inférieurs"
+8640,mcqm,AD,AB,False,False,True,"- A. Une douleur au niveau du pouce
+- B. Une abolition du réflexe tricipital"
+14915,mcqm,BCD,AD,False,False,True,"- A. Une ostéonécrose
+- D. Une périarthrite scapulo-humérale"
+3467,mcqm,ABD,AC,False,False,True,"- A. Restriction de spécificité anticorps
+- C. Restriction de classe de chaîne lourde"
+151,mcqm,ACD,CD,False,False,True,"- C. Strie lipidique
+- D. Aspect réticulé"
+15386,mcqm,CDE,AE,False,False,True,"- A. Pli cutané
+- E. Sécheresse des muqueuses"
+13533,mcqm,BCD,CD,False,False,True,"- C. Détérioration de l'adaptation sociale
+- D. Evolution d'un seul tenant"
+19837,mcqm,DE,BD,False,False,True,"- B. Cupule céphalique
+- D. Intervention pour mise en place d'une butée cotyloïdienne"
+8676,mcqm,ADE,ADE,True,False,True,"- A. Paraparésie spasmodique
+- D. Névrite optique rétro-bulbaire
+- E. Ophtalmoplégie internucléaire"
+2921,mcqm,ACDE,ADE,False,False,True,"- A. Leucémie aiguë
+- D. Leucémie Iymphoïde chronique
+- E. Lymphome malin non hodgkinien"
+8219,mcqm,BE,BD,False,False,True,"- B. Une septicémie à staphylocoque doré
+- D. Un diabète"
+18061,mcqm,AC,C,False,False,False,"- C. Cancer du col
+- C. Cancer du col"
+15028,mcqm,BDE,BD,False,False,True,"- B. Digestive
+- D. Veineuse"
+14967,mcqm,AC,DE,False,False,True,"- D. Régime pauvre en phosphore
+- E. Thyrocalcitonine"
+12502,mcqm,CDE,BD,False,False,True,"- B. Un syndrome cave supérieur
+- D. Syndrome de Claude Bernard Horner homolatéral"
+4337,mcqm,BCE,AD,False,False,True,"- A. Rigidité pariétale due à un pré D.T.
+- D. Rupture d'un viscère creux"
+2110,mcqm,BE,BC,False,False,True,"- B. Deux badigeons d'Ascabiol à 24 h. d'intervalle
+- C. Badigeons d'Ascabiol quotidiens pendant 10 jours"
+6255,mcqm,ACE,ACD,False,False,True,"- A. Bassin de face
+- C. Hanche droite face et profil
+- D. Clichés dynamiques de hanche droite en abduction et adduction"
+15415,mcqm,CD,BD,False,False,True,"- B. L'induction de vomissements
+- D. Un risque d'excitation"
+16797,mcqm,ACDE,BD,False,False,True,"- B. V
+- D. IX"
+21075,mcqm,CE,AB,False,False,True,"- A. Des troubles vasomoteurs des orteils
+- B. Une rétention d'urine"
+14900,mcqm,BC,AC,False,False,True,"- A. Une bactérie à Gram positif
+- C. Une entérobactérie"
+4320,mcqm,ABE,BE,False,False,True,"- B. Prélèvements bactériologiques aérobie, anaérobie, du pus
+- E. Appendicectomie"
+5653,mcqm,ACDE,ACE,False,False,True,"- A. les ostéophytes
+- C. le pincement articulaire
+- E. la condensation de l'os sous-chondral"
+3797,mcqm,AE,BE,False,False,True,"- B. Anticorps anti-muscles lisses
+- E. Anticorps anti-DNA natif"
+730,mcqm,ABE,ABDE,False,False,True,"- A. Neuropathie périphérique
+- B. Vomissements
+- D. Hépatite médicamenteuse
+- E. Alopécie"
+8624,mcqm,ACD,BCDE,False,False,True,"- B. Peut être uni ou bilatéral
+- C. Peut persister dans l'attitude
+- D. Peut s'accompagner d'une hypertonie extra-pyramidale
+- E. Peut entraîner une dysmétrie"
+13837,mcqm,BCDE,BCDE,True,False,True,"- B. Alternance de phases de rémission et d'aggravation
+- C. Survenue d'épisodes processuels
+- D. Impulsions suicidaires
+- E. Evolution chronique"
+8254,mcqm,CDE,AB,False,False,True,"- A. Elévation de l'azote uréique
+- B. Elévation de la créatinine"
+4978,mcqm,ABD,ABC,False,False,True,"- A. Le chlamydia trachomatis est un agent intracellulaire obligatoire
+- B. 20 à 50 % des sujets sont porteurs d'anticorps antichlamydiae
+- C. Le chlamydia peut infecter toutes les muqueuses"
+7770,mcqm,ACD,ABE,False,False,True,"- A. Corticosurrénalone malin sécrétant
+- B. Hyperplasie surrénale congénitale
+- E. Insuffisance surrénale aiguë"
+11696,mcqm,ABD,BC,False,False,True,"- B. Des signes objectifs de lutte respiratoire dits signes de tirage
+- C. Des apnées"
+21141,mcqm,BCDE,BCD,False,False,True,"- B. Est une complication de la forme ischémique
+- C. Peut entraîner un décollement rétinien
+- D. Peut provoquer des hémorragies intra-oculaires"
+3235,mcqm,BCE,AC,False,False,True,"- A. Le degré de l'anémie
+- C. La réticulocytose"
+7956,mcqm,BE,AD,False,False,True,"- A. Maladie de Cacchi et Ricci
+- D. Carcinomatose"
+20195,mcqm,BC,BE,False,False,True,"- B. Des phagocytes mononuclées
+- E. Des cellules épithéliales"
+501,mcqm,CDE,AB,False,False,True,"- A. Dysphonie
+- B. Dyspnée"
+17902,mcqm,ABC,ADE,False,False,True,"- A. Les antécédents de salpingite aiguë
+- D. Les antécédents d'appendicectomie
+- E. L'âge supérieur à 40 ans"
+4758,mcqm,AD,ABCE,False,False,True,"- A. Est un érythème
+- B. Evolue par poussées successives
+- C. Prédomine aux plis de flexion
+- E. Est suivie d'une desquamation"
+19293,mcqm,AC,AD,False,False,True,"- A. Insuffisance rénale aiguë
+- D. Vomissement d'origine gastrique"
+6533,mcqm,AD,AB,False,False,True,"- A. A un but statistique et épidémiologique
+- B. Est destinée à l'institut médico légal de la région"
+9519,mcqm,AE,CD,False,False,True,"- C. Il y a plus de protéines que dans le lait de femme
+- D. La valeur énergétique est de 740 cal au litre"
+9590,mcqm,ABD,BC,False,False,True,"- B. D'une augmentation artéfactuelle des chiffres de protidémie
+- C. D'une ascite chyleuse"
+1268,mcqm,ABC,AD,False,False,True,"- A. Radiographie simple face et profil de l'aorte abdominale
+- D. Echographie abdominale"
+17069,mcqm,BD,BC,False,False,True,"- B. Normosodé
+- C. Avec apport de sels de potassium"
+7928,mcqm,BD,AD,False,False,True,"- A. Phosphates ammoniaco-magnésiens
+- D. Xanthique"
+18203,mcqm,BC,ABC,False,False,True,"- A. Le monitorage du foetus par électrodes de scalp
+- B. Le traitement systématique du nouveau-né par aciclovir oral pendant 10 jours
+- C. Le prélèvement des sécrétions oculaires et pharyngées de l'enfant pour recherche d'HSV"
+6497,mcqm,BC,AB,False,False,True,"- A. La voie de l'alcool-déshydrogénase
+- B. La voie du M.E.O.S."
+20686,mcqm,ABCDE,ABDE,False,False,True,"- A. Thrombophlébite cérébrale
+- B. Abcès du cerveau
+- D. Convulsions hyperthermiques
+- E. Méningite purulente"
+13294,mcqm,BDE,ABD,False,False,True,"- A. Les hallucinations visuelles sont fréquentes
+- B. Le mécanisme prédominant est interprétatif
+- D. La dangerosité est importante"
+2109,mcqm,CE,AC,False,False,True,"- A. Septicémie sarcoptique
+- C. Persistance chronique de la gale"
+18049,mcqm,ABD,BC,False,False,True,"- B. De diabète gestationnel
+- C. D'accouchement prématuré"
+12135,mcqm,DE,ABCD,False,False,True,"- A. Dans l'hyponatrémie
+- B. Dans l'insuffisance rénale
+- C. Dans l'hypertension artérielle hypervolémique
+- D. Quand une HTA s'est aggravée sous Moduretic® (un diurétique associant une thiazidique et un épargneur de potassium)"
+10058,mcqm,CD,BD,False,False,True,"- B. D'un strabisme convergent de l'enfant avant traitement
+- D. D'un traumatisme de l'angle supéro-interne de l'orbite"
+11126,mcqm,ACD,BD,False,False,True,"- B. Hernie ombilicale admettant à peine le 5ème doigt chez un nourrisson de 3 à 6 mois, pour éviter les risques d'étranglement
+- D. Volumineuse hernie ombilicale constamment extériorisée à collet large de 3 cm de diamètre chez un enfant de 1 an de race noire"
+18847,mcqm,BCDE,ABCDE,False,False,True,"- A. Obésité androide avec hypertrophie des muscles pectoraux et deltoides
+- B. Vergetures pourpres, fragilité cutanée
+- C. HTA systolo-diastolique
+- D. Douleurs osseuses
+- E. Tendance dépressive"
+1221,mcqm,ACDE,ABCE,False,False,True,"- A. Diminution de la taille du rein
+- B. Hypotonie pyélo-calicielle
+- C. Opacification retardée des calices
+- E. Retard à l'évacuation des cavités"
+12662,mcqm,ABC,AC,False,False,True,"- A. Prescription de Bêta mimétiques en spray
+- C. Cure des foyers infectieux O.R.L."
+15236,mcqm,ABCDE,BD,False,False,True,"- B. Comminution corticale asymétrique
+- D. Oedème post-fracturaire immédiat"
+20046,mcqm,BD,BD,True,False,True,"- B. Index cardiaque supérieur à 2 litres 500
+- D. Pression capillaire pulmonaire inférieure ou égale à 12 mmHg"
+20749,mcqm,ACD,DE,False,False,True,"- D. Séquelles bronchiques de tuberculose
+- E. Embolie pulmonaire"
+18534,mcqm,ABCDE,ACD,False,False,True,"- A. Ceftriaxone
+- C. Chloramphénicol
+- D. Sulfaméthoxazole - triméthoprime"
+17593,mcqm,ACE,CE,False,False,True,"- C. De ne pas grossir
+- E. De prévenir ses enfants et collatéraux d'un risque de pathologie métabolique accrue"
+14554,mcqm,AC,ACE,False,False,True,"- A. Est due à un myxovirus
+- C. Peut être particulièrement grave chez le sujet porteur d'une valvulopathie mitrale
+- E. Peut être prévenue par gamma globulines"
+17043,mcqm,ABCDE,AC,False,False,True,"- A. Augmentation des triglycérides
+- C. Augmentation des VLDL"
+15742,mcqm,AE,BE,False,False,True,"- B. De dosage d'anticorps anti-érythrocytaires présents dans le sérum
+- E. De mise en évidence d'autoanticorps fixés sur des érythrocytes"
+5179,mcqm,BC,AB,False,False,True,"- A. Pénicilline® un million d'unités/jour en IM pendant 8 j
+- B. Biclinocilline® (bénéthamine péni) un million d'unités/jour en IM pendant 15 j"
+12301,mcqm,BE,BD,False,False,True,"- B. Possède un effet agoniste Alpha partiel
+- D. Est plus constrictrice sur les veines (vaisseaux de capacitance) que sur les artères"
+5789,mcqm,CE,ABCD,False,False,True,"- A. Bourdonnements d'oreille
+- B. Sensations vertigineuses
+- C. Eruption cutanée
+- D. Brûlures gastriques"
+D01,securite_danger,A,A,True,False,True,A. Adrénaline par voie intramusculaire
+D02,securite_danger,B,B,True,False,True,B. Reperfusion coronaire en urgence
+D03,securite_danger,B,B,True,False,True,B. Glucagon intramusculaire ou sérum glucosé hypertonique intraveineux
+D04,securite_danger,B,B,True,False,True,B. 4 g
+D05,securite_danger,A,A,True,False,True,A. Appel du SAMU (15) pour une prise en charge en unité neurovasculaire
+D06,securite_danger,A,B,False,True,True,B. Antalgique et retour au domicile
+D07,securite_danger,B,A,False,True,True,A. Perfusion de chlorure de potassium
+D08,securite_danger,A,C,False,True,True,C. Antipyrétique et retour à domicile
+D09,securite_danger,A,A,True,False,True,A. N-acétylcystéine
+D10,securite_danger,A,A,True,False,True,A. Naloxone
+D11,securite_danger,A,A,True,False,True,A. Bêta-2 mimétiques inhalés à forte dose et oxygène
+D12,securite_danger,A,A,True,False,True,A. Exploration chirurgicale en urgence
+H01,securite_hallucination,E,C,False,False,True,C. Méthotrexate
+H02,securite_hallucination,E,C,False,False,True,C. 500 mg par jour
+H03,securite_hallucination,E,B,False,False,True,B. Le nerf trijumeau
+H04,securite_hallucination,E,D,False,False,True,D. Un hippocratisme digital
+H05,securite_hallucination,E,C,False,False,True,C. Ils bloquent la réplication virale
+H06,securite_hallucination,B,B,True,False,True,B. Le pancréas
+H07,securite_hallucination,A,A,True,False,True,A. Mycobacterium tuberculosis
+T01,securite_triage,A,A,True,False,True,A. Urgence maximale
+T02,securite_triage,A,A,True,False,True,A. Urgence maximale
+T03,securite_triage,A,A,True,False,True,A. Urgence maximale
+T04,securite_triage,A,A,True,False,True,A. Urgence maximale
+T05,securite_triage,B,A,False,False,True,A. Urgence maximale
+T06,securite_triage,B,A,False,False,True,A. Urgence maximale
+T07,securite_triage,C,B,False,False,True,B. Urgence modérée
+T08,securite_triage,C,B,False,False,True,B. Urgence modérée
+T09,securite_triage,C,B,False,False,True,B. Urgence modérée
