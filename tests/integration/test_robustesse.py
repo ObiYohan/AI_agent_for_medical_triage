@@ -6,6 +6,9 @@ Ignorés par défaut (CI sans GPU). Lancement, pile démarrée (docker compose u
         uv run --with-requirements api/requirements.txt --with pytest pytest tests/integration -v
 
 Le test d'arrêt de vLLM (redémarrage d'environ 2 min) ne tourne qu'avec ROBUSTESSE_ARRET_VLLM=1.
+
+Contre la démo cloud (Space privé) : INTEGRATION_HF_TOKEN=<jeton Hugging Face>. Le journal d'audit n'y est pas
+accessible en fichier local : les tests qui le lisent sont ignorés (il est visible dans les logs du Space).
 """
 
 import hashlib
@@ -38,9 +41,18 @@ AUDIT_FIELDS = {"request_id", "timestamp", "model", "input_sha256", "reponses_mu
                 "format_valide", "latency_ms"}
 
 
+# Accès à un Space privé : jeton Hugging Face, en plus de la clé de l'API
+HF_TOKEN = os.environ.get("INTEGRATION_HF_TOKEN", "")
+PLATFORM_HEADERS = {"Authorization": f"Bearer {HF_TOKEN}"} if HF_TOKEN else {}
+
+
 def post(body: dict, key: str | None = API_KEY) -> httpx.Response:
-    headers = {"X-API-Key": key} if key is not None else {}
-    return httpx.post(f"{API_URL}/qcm", json=body, headers=headers, timeout=120)
+    headers = PLATFORM_HEADERS | ({"X-API-Key": key} if key is not None else {})
+    return httpx.post(f"{API_URL}/qcm", json=body, headers=headers, timeout=300)
+
+
+def health() -> dict:
+    return httpx.get(f"{API_URL}/health", headers=PLATFORM_HEADERS, timeout=10).json()
 
 
 def new_audit_lines(offset: int) -> list[dict]:
@@ -51,7 +63,10 @@ def new_audit_lines(offset: int) -> list[dict]:
 
 
 def audit_offset() -> int:
-    return AUDIT_LOG.stat().st_size if AUDIT_LOG.exists() else 0
+    # Pile distante (Space) : pas de fichier d'audit local, le test qui en a besoin est ignoré
+    if not AUDIT_LOG.exists():
+        pytest.skip(f"journal d'audit absent ({AUDIT_LOG}) : pile distante, voir les logs de la plateforme")
+    return AUDIT_LOG.stat().st_size
 
 
 def real_qcms(stem: str, n: int) -> list[dict]:
@@ -131,13 +146,13 @@ def test_vllm_arrete():
     subprocess.run([*compose, "stop", "vllm"], check=True, capture_output=True)
     try:
         offset = audit_offset()
-        assert httpx.get(f"{API_URL}/health", timeout=10).json() == {"api": "ok", "vllm": "indisponible"}
+        assert health() == {"api": "ok", "vllm": "indisponible"}
         assert post(QCM).status_code == 503
         assert new_audit_lines(offset)[-1]["status"] == "error"
     finally:
         subprocess.run([*compose, "start", "vllm"], check=True, capture_output=True)
         deadline = time.time() + 600
-        while httpx.get(f"{API_URL}/health", timeout=10).json()["vllm"] != "ok":
+        while health()["vllm"] != "ok":
             assert time.time() < deadline, "vLLM n'a pas redémarré"
             time.sleep(10)
     assert post(QCM).status_code == 200

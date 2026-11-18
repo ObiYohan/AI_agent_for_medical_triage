@@ -164,6 +164,66 @@ def test_vllm_indisponible(client, monkeypatch, tmp_path):
     assert audit_lines(tmp_path)[0]["status"] == "error"
 
 
+@pytest.fixture
+def vllm_server(monkeypatch):
+    # Faux serveur vLLM au niveau HTTP : enregistre les requêtes reçues (en-têtes, délai) et répond comme vLLM
+    requests, timeouts = [], []
+    real_client = httpx.AsyncClient
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        requests.append(request)
+        if request.url.path.endswith("/health"):
+            return httpx.Response(200)
+        return httpx.Response(200, json={"choices": [{"message": {"content": "D. PS IIIB"}}]})
+
+    def client_factory(*args, timeout=None, **kwargs):
+        timeouts.append(timeout)
+        return real_client(transport=httpx.MockTransport(handler), timeout=timeout)
+
+    monkeypatch.setattr(main.httpx, "AsyncClient", client_factory)
+    return requests, timeouts
+
+
+def test_vllm_local_sans_jeton(client, vllm_server):
+    requests, timeouts = vllm_server
+    client.post("/qcm", json=QCM, headers={"X-API-Key": API_KEY})
+    assert "authorization" not in requests[0].headers
+    assert timeouts == [60.0]  # délai par défaut
+
+
+def test_vllm_distant_avec_jeton(client, vllm_server, monkeypatch):
+    # Inference Endpoint privé : jeton Bearer, délai long et attente du réveil
+    monkeypatch.setenv("VLLM_URL", "https://exemple.endpoints.huggingface.cloud")
+    monkeypatch.setenv("VLLM_API_KEY", "hf_jeton_de_test")
+    monkeypatch.setenv("VLLM_TIMEOUT", "300")
+    requests, timeouts = vllm_server
+
+    body = client.post("/qcm", json=QCM, headers={"X-API-Key": API_KEY}).json()
+    assert body["lettres"] == ["D"]
+    request = requests[0]
+    assert str(request.url) == "https://exemple.endpoints.huggingface.cloud/v1/chat/completions"
+    assert request.headers["authorization"] == "Bearer hf_jeton_de_test"
+    assert request.headers["x-scale-up-timeout"] == "300"
+    assert timeouts == [300.0]
+
+    # /health : même jeton, mais sans attendre un réveil
+    assert client.get("/health").json() == {"api": "ok", "vllm": "ok"}
+    assert requests[1].headers["authorization"] == "Bearer hf_jeton_de_test"
+    assert "x-scale-up-timeout" not in requests[1].headers
+    assert timeouts[1] == 5
+
+
+def test_audit_sur_sortie_standard(client, fake_vllm, capsys):
+    # Chaque ligne d'audit est aussi écrite sur la sortie standard (logs de la plateforme), sans texte patient
+    fake_vllm("D. PS IIIB")
+    request_id = client.post("/qcm", json=QCM, headers={"X-API-Key": API_KEY}).json()["request_id"]
+    lines = [line for line in capsys.readouterr().out.splitlines() if line.startswith("AUDIT ")]
+    assert len(lines) == 1
+    record = json.loads(lines[0].removeprefix("AUDIT "))
+    assert record["request_id"] == request_id
+    assert "adénopathies" not in lines[0]
+
+
 def test_health_sans_vllm(client, monkeypatch):
     monkeypatch.setenv("VLLM_URL", "http://127.0.0.1:9")  # aucun serveur à cette adresse
     assert client.get("/health").json() == {"api": "ok", "vllm": "indisponible"}

@@ -2,6 +2,7 @@
 # - À chaque push et pull request : tests de l'API (sans GPU, vLLM simulé), puis construction de son image Docker
 # - Sur master : publication de l'image sur GHCR, puis déploiement sur la machine GPU (runner auto-hébergé)
 #   et tests d'intégration contre la pile déployée
+# - Sur master : déploiement de l'API de démonstration cloud sur le Space Hugging Face, puis test de fumée
 name: CI/CD
 
 on:
@@ -83,3 +84,22 @@ jobs:
           export AUDIT_LOG="$HOME/p14-deploy/logs/audit.jsonl" INTEGRATION_API_URL=http://localhost:8080
           "$HOME/.local/bin/uv" run --no-project --python 3.12 --with-requirements api/requirements.txt --with pytest \
             pytest tests/integration -v
+
+  deploy-cloud:
+    # Démo cloud : l'API sur le Space Hugging Face (CPU), qui reconstruit son image à partir du code envoyé.
+    # L'inférence (Inference Endpoint) n'est pas touchée : elle reste en pause hors démonstration.
+    if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    needs: tests
+    env:
+      HF_TOKEN: ${{ secrets.HF_TOKEN_SPACE }}  # jeton en écriture, limité au Space
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Déploiement sur le Space et test de fumée
+        if: env.HF_TOKEN != ''  # secret pas encore créé : étape ignorée plutôt qu'en échec
+        run: |
+          pip install huggingface_hub httpx
+          python scripts/deploy_space.py --revision "${GITHUB_SHA::7}" --wait

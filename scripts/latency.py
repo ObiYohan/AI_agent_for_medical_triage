@@ -83,7 +83,12 @@ def percentile(values: list[float], p: float) -> float:
 
 async def measure_api(url: str, api_key: str, qcms: list[dict], levels: list[int]) -> tuple[pd.DataFrame, dict]:
     metrics, all_rows = {}, []
-    async with httpx.AsyncClient(base_url=url, headers={"X-API-Key": api_key}, timeout=300) as client:
+    headers = {"X-API-Key": api_key}
+    if ".hf.space" in url:  # démo cloud : Space privé, jeton Hugging Face en plus de la clé de l'API
+        from huggingface_hub import get_token
+
+        headers["Authorization"] = f"Bearer {get_token()}"
+    async with httpx.AsyncClient(base_url=url, headers=headers, timeout=300) as client:
         await run_level(client, qcms[:5], 1)  # échauffement : premières compilations, caches
         for concurrency in levels:
             rows, duration = await run_level(client, qcms, concurrency)

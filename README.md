@@ -109,3 +109,21 @@ remplace le conteneur de l'API sans redémarrer vLLM. Retour à une version pré
 le workflow d'un commit antérieur dans l'onglet *Actions*.
 
 Le port de vLLM n'est pas publié : seule l'API est accessible. Démonstration technique, ne remplace pas un avis médical.
+
+## Démo cloud (Hugging Face)
+
+| Brique | Où | Coût |
+|---|---|---|
+| API FastAPI | Space Docker privé [`0biyohan/triage-api`](https://huggingface.co/spaces/0biyohan/triage-api) (CPU) | gratuit |
+| Inférence vLLM | Inference Endpoint Hugging Face (GPU L4), mis en pause hors démonstration | ~0,80 $/h, seulement allumé |
+| Journal d'audit | logs du conteneur du Space (lignes `AUDIT {…}`, sans texte patient) | gratuit |
+
+- **Déploiement de l'API** : `scripts/deploy_space.py` envoie au Space le code de l'API et le module du prompt
+  (`deploy/space/` : `Dockerfile`, `README.md`) ; le Space reconstruit son image. La CI le fait à chaque commit sur
+  `master` (job `deploy-cloud`, secret GitHub `HF_TOKEN_SPACE` : jeton en écriture limité au Space).
+- **Configuration du Space** (*Settings → Variables and secrets*) : secrets `API_KEY`, `VLLM_URL` (URL de l'endpoint),
+  `VLLM_API_KEY` (jeton Hugging Face en lecture) ; variables `MODEL_NAME=qwen3-medical`, `VLLM_TIMEOUT=300`.
+- **Allumer et éteindre** : `uv run python scripts/cloud.py start` (relance l'endpoint et le Space, attend qu'ils soient
+  prêts), `stop` (met l'endpoint en pause : plus de facturation GPU), `status`. Nom de l'endpoint : `HF_ENDPOINT_NAME`.
+- **Démonstration** : `API_URL=https://0biyohan-triage-api.hf.space ./scripts/demo.sh`. Le Space étant privé, le
+  script ajoute le jeton Hugging Face de la connexion locale ; la clé de l'API reste exigée.

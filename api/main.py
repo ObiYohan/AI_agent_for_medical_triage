@@ -4,10 +4,12 @@ Le prompt est construit avec `projet_14.mediqal`, comme à l'entraînement : le 
 Chaque requête est tracée dans un journal d'audit JSONL, sans le texte du cas (seulement son empreinte SHA-256).
 
 Variables d'environnement :
-    API_KEY     clé attendue dans l'en-tête X-API-Key (obligatoire)
-    VLLM_URL    adresse du serveur vLLM (défaut : http://vllm:8000)
-    MODEL_NAME  nom du modèle servi par vLLM (défaut : qwen3-medical)
-    AUDIT_LOG   chemin du journal d'audit (défaut : logs/audit.jsonl)
+    API_KEY       clé attendue dans l'en-tête X-API-Key (obligatoire)
+    VLLM_URL      adresse du serveur vLLM (défaut : http://vllm:8000) ; local ou distant (Inference Endpoint)
+    VLLM_API_KEY  jeton envoyé à vLLM (Authorization: Bearer), pour un serveur distant protégé (défaut : aucun)
+    VLLM_TIMEOUT  délai maximal d'une génération, en secondes (défaut : 60 ; 300 pour couvrir un réveil)
+    MODEL_NAME    nom du modèle servi par vLLM (défaut : qwen3-medical)
+    AUDIT_LOG     chemin du journal d'audit (défaut : logs/audit.jsonl), aussi écrit sur la sortie standard
 """
 
 import hashlib
@@ -38,9 +40,16 @@ def settings() -> dict:
     return {
         "api_key": os.environ.get("API_KEY", ""),
         "vllm_url": os.environ.get("VLLM_URL", "http://vllm:8000"),
+        "vllm_api_key": os.environ.get("VLLM_API_KEY", ""),
+        "vllm_timeout": float(os.environ.get("VLLM_TIMEOUT", "60")),
         "model": os.environ.get("MODEL_NAME", "qwen3-medical"),
         "audit_log": Path(os.environ.get("AUDIT_LOG", "logs/audit.jsonl")),
     }
+
+
+def vllm_headers(config: dict) -> dict:
+    # Jeton pour un vLLM distant (Inference Endpoint privé) ; aucun en local
+    return {"Authorization": f"Bearer {config['vllm_api_key']}"} if config["vllm_api_key"] else {}
 
 
 def check_api_key(key: str | None = Security(APIKeyHeader(name="X-API-Key", auto_error=False))) -> None:
@@ -103,25 +112,35 @@ def build_messages(request: QCMRequest) -> list[dict]:
 async def call_vllm(messages: list[dict], max_tokens: int) -> str:
     config = settings()
     payload = {"model": config["model"], "messages": messages, "temperature": 0, "max_tokens": max_tokens}
-    async with httpx.AsyncClient(timeout=60) as client:
-        response = await client.post(f"{config['vllm_url']}/v1/chat/completions", json=payload)
+    # X-Scale-Up-Timeout : un Inference Endpoint en veille fait patienter la requête pendant son réveil, au lieu de
+    # répondre 503 (en-tête ignoré par un vLLM local)
+    headers = vllm_headers(config) | {"X-Scale-Up-Timeout": str(int(config["vllm_timeout"]))}
+    async with httpx.AsyncClient(timeout=config["vllm_timeout"]) as client:
+        response = await client.post(f"{config['vllm_url']}/v1/chat/completions", json=payload, headers=headers)
         response.raise_for_status()
     return response.json()["choices"][0]["message"]["content"].strip()
 
 
 def write_audit(record: dict) -> None:
+    line = json.dumps(record, ensure_ascii=False)
     path = settings()["audit_log"]
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("a", encoding="utf-8") as f:
-        f.write(json.dumps(record, ensure_ascii=False) + "\n")
+        f.write(line + "\n")
+    # Aussi sur la sortie standard : visible dans les logs de la plateforme (Space, conteneur), même si le disque est
+    # effacé au redémarrage
+    print(f"AUDIT {line}", flush=True)
 
 
 @app.get("/health")
 async def health() -> dict:
     # L'API répond ; vLLM est-il prêt ?
+    # Sans X-Scale-Up-Timeout ni long délai : un endpoint en veille est signalé « indisponible » sans attendre son réveil
+    config = settings()
     try:
         async with httpx.AsyncClient(timeout=5) as client:
-            vllm_ready = (await client.get(f"{settings()['vllm_url']}/health")).status_code == 200
+            response = await client.get(f"{config['vllm_url']}/health", headers=vllm_headers(config))
+            vllm_ready = response.status_code == 200
     except httpx.HTTPError:
         vllm_ready = False
     return {"api": "ok", "vllm": "ok" if vllm_ready else "indisponible"}

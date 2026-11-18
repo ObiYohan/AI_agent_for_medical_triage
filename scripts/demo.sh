@@ -4,6 +4,7 @@
 #   ./scripts/demo.sh              toutes les étapes, avec une pause entre chacune (Entrée pour continuer)
 #   ./scripts/demo.sh 5            une seule étape (1 à 8)
 #   ./scripts/demo.sh --no-pause   sans pause (répétition, vérification avant la présentation)
+#   API_URL=https://0biyohan-triage-api.hf.space ./scripts/demo.sh    démo cloud (après scripts/cloud.py start)
 #
 # Prérequis : pile démarrée (docker compose ou CD), clé d'API dans API_KEY ou dans .env (jamais affichée).
 
@@ -18,7 +19,7 @@ for arg in "$@"; do
   case "$arg" in
     --no-pause) PAUSE=0 ;;
     [1-8]) ONLY="$arg" ;;
-    -h|--help) sed -n '2,9p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,10p' "$0"; exit 0 ;;
     *) echo "Argument inconnu : $arg (voir --help)"; exit 1 ;;
   esac
 done
@@ -28,6 +29,15 @@ if [ -z "${API_KEY:-}" ] && [ -f .env ]; then
   API_KEY=$(grep -E '^API_KEY=' .env | cut -d= -f2-)
 fi
 export API_KEY="${API_KEY:-}"
+
+# Démo cloud (Space Hugging Face privé) : jeton Hugging Face en plus de la clé de l'API (jamais affiché)
+CLOUD=0
+PLATFORM=()
+if [[ "$API_URL" == *.hf.space* ]]; then
+  CLOUD=1
+  HF_TOKEN="${HF_TOKEN:-$(cat ~/.cache/huggingface/token 2>/dev/null)}"
+  if [ -n "$HF_TOKEN" ]; then PLATFORM=(-H "Authorization: Bearer $HF_TOKEN"); fi
+fi
 
 # Journal d'audit de la pile en cours : dossier de la pile déployée (~/p14-deploy) ou du projet
 STACK_DIR=$(docker inspect -f '{{ index .Config.Labels "com.docker.compose.project.working_dir" }}' p14-api-1 2>/dev/null)
@@ -66,7 +76,7 @@ ask() {
   fi
   local body status
   body=$(mktemp)
-  status=$(curl -s -o "$body" -w '%{http_code} %{time_total}' -X POST "$API_URL/qcm" \
+  status=$(curl -s -o "$body" -w '%{http_code} %{time_total}' -X POST "$API_URL/qcm" "${PLATFORM[@]}" \
            ${key:+-H "X-API-Key: $key"} -H 'Content-Type: application/json' -d @"$file")
   python3 - "$file" "$status" "$body" <<'EOF'
 import json, sys
@@ -96,7 +106,7 @@ step1() {
   title "1. Le service est en ligne"
   say "L'API répond, et vérifie elle-même que le serveur d'inférence vLLM (GPU) est prêt."
   cmd "curl $API_URL/health"
-  curl -s "$API_URL/health" | python3 -m json.tool
+  curl -s "${PLATFORM[@]}" "$API_URL/health" | python3 -m json.tool
 }
 
 step2() {
@@ -129,8 +139,21 @@ step5() {
 step6() {
   title "6. Traçabilité : le journal d'audit"
   say "Une ligne par requête (heures UTC), sans aucun texte patient : seule l'empreinte SHA-256 de l'entrée est conservée."
-  cmd "tail -n 6 $AUDIT_LOG"
-  tail -n 6 "$AUDIT_LOG" | python3 <(cat <<'EOF'
+  local lines
+  lines=$(mktemp)
+  if [ "$CLOUD" = 1 ]; then
+    # Démo cloud : le journal est lu dans les logs du conteneur du Space (lignes « AUDIT {…} »)
+    cmd "logs du Space 0biyohan/triage-api | grep AUDIT | tail -n 6"
+    uv run -q --no-project --with huggingface_hub python -c '
+from huggingface_hub import HfApi
+for line in HfApi().fetch_space_logs("0biyohan/triage-api"):
+    if "AUDIT {" in str(line):
+        print(str(line).split("AUDIT ", 1)[1])' > "$lines"
+  else
+    cmd "tail -n 6 $AUDIT_LOG"
+    cp "$AUDIT_LOG" "$lines"
+  fi
+  tail -n 6 "$lines" | python3 <(cat <<'EOF'
 import json, sys
 for line in sys.stdin:
     r = json.loads(line)
@@ -141,15 +164,19 @@ for line in sys.stdin:
 EOF
 )
   echo
-  cmd "grep -c \"embolie\" $AUDIT_LOG     # le texte du cas apparaît-il dans le journal ?"
-  printf '  %s occurrence(s)\n' "$(grep -c "embolie" "$AUDIT_LOG")"
+  cmd "grep -c \"embolie\" <journal>     # le texte du cas apparaît-il dans le journal ?"
+  printf '  %s occurrence(s)\n' "$(grep -c "embolie" "$lines")"
+  rm -f "$lines"
 }
 
 step7() {
   title "7. Tests d'intégration contre la pile réelle"
   say "Robustesse et audit : les mêmes tests sont relancés automatiquement à chaque déploiement."
   cmd "pytest tests/integration"
-  INTEGRATION_API_URL="$API_URL" AUDIT_LOG="$AUDIT_LOG" \
+  # Démo cloud : pas de journal local à relire (les tests d'audit sont alors ignorés)
+  local audit="$AUDIT_LOG"
+  if [ "$CLOUD" = 1 ]; then audit=/nonexistent/audit.jsonl; fi
+  INTEGRATION_API_URL="$API_URL" AUDIT_LOG="$audit" INTEGRATION_HF_TOKEN="${HF_TOKEN:-}" \
     uv run -q --with-requirements api/requirements.txt --with pytest pytest tests/integration -q -p no:warnings
 }
 
