@@ -105,10 +105,12 @@ démonstration</a>
 vLLM</a></li>
 <li><a href="#lapi-et-la-sécurité-daccès" id="toc-lapi-et-la-sécurité-daccès">6.2 L’API et la sécurité
 d’accès</a></li>
-<li><a href="#latence-et-débit" id="toc-latence-et-débit">6.3 Latence et
+<li><a href="#deux-déploiements-local-et-cloud" id="toc-deux-déploiements-local-et-cloud">6.3 Deux déploiements : local
+et cloud</a></li>
+<li><a href="#latence-et-débit" id="toc-latence-et-débit">6.4 Latence et
 débit</a></li>
-<li><a href="#robustesse" id="toc-robustesse">6.4 Robustesse</a></li>
-<li><a href="#audit-de-traçabilité" id="toc-audit-de-traçabilité">6.5
+<li><a href="#robustesse" id="toc-robustesse">6.5 Robustesse</a></li>
+<li><a href="#audit-de-traçabilité" id="toc-audit-de-traçabilité">6.6
 Audit de traçabilité</a></li>
 </ul></li>
 <li><a href="#limites" id="toc-limites">7. Limites</a></li>
@@ -134,9 +136,10 @@ puis un alignement par préférences (DPO), sur une seule carte graphique
 de 10 Go. Le modèle est publié sur Hugging Face Hub, et chaque run est
 tracé dans MLflow.</li>
 <li><strong>Service</strong> : une API FastAPI protégée par clé, servie
-par vLLM dans Docker, avec un journal d’audit sans donnée patient. Un
-pipeline GitHub Actions teste, publie et redéploie automatiquement
-chaque nouvelle version.</li>
+par vLLM, avec un journal d’audit sans donnée patient. Elle est déployée
+en local (Docker, RTX 3080) et dans le cloud (Space et Inference
+Endpoint Hugging Face). Un pipeline GitHub Actions teste, publie et
+redéploie automatiquement chaque nouvelle version.</li>
 </ul>
 <p><strong>Résultats clés.</strong></p>
 <table>
@@ -166,8 +169,8 @@ les réponses multiples</td>
 reconnues</td>
 </tr>
 <tr>
-<td>Latence (1 requête)</td>
-<td>168 ms en médiane</td>
+<td>Latence (1 requête, médiane)</td>
+<td>168 ms en local ; 745 ms dans le cloud, réseau compris</td>
 </tr>
 <tr>
 <td>Débit (50 requêtes simultanées)</td>
@@ -281,7 +284,8 @@ la réponse de l’API.</p>
  [3] Hugging Face Hub : modèle fusionné, dépôt privé, révision fixée
         |
         v
- [4] Service (Docker Compose, GPU)
+ [4] Service : local (Docker Compose, RTX 3080)
+               ou cloud (Inference Endpoint L4 + Space Hugging Face)
      vLLM (inférence)  &lt;---  API FastAPI (clé d&#39;API, audit)  &lt;--- client
         ^
         |
@@ -353,6 +357,12 @@ la réponse de l’API.</p>
 <td><code>docker-compose.yml</code></td>
 </tr>
 <tr>
+<td>Démo cloud</td>
+<td>HF Inference Endpoints, Spaces</td>
+<td>Servir le modèle et l’API en ligne</td>
+<td>Endpoint L4, Space privé</td>
+</tr>
+<tr>
 <td>CI/CD</td>
 <td>GitHub Actions, GHCR</td>
 <td>Tester, publier, déployer</td>
@@ -362,7 +372,7 @@ la réponse de l’API.</p>
 </table>
 <h2 id="le-déploiement-automatisé">2.3 Le déploiement automatisé</h2>
 <p>À chaque modification du code, le pipeline GitHub Actions enchaîne
-trois étapes.</p>
+quatre étapes.</p>
 <table>
 <colgroup>
 <col style="width: 33%" />
@@ -380,7 +390,7 @@ trois étapes.</p>
 <tr>
 <td><code>tests</code></td>
 <td>serveur GitHub</td>
-<td>17 tests de l’API, vLLM simulé (pas de GPU)</td>
+<td>20 tests de l’API, vLLM simulé (pas de GPU)</td>
 </tr>
 <tr>
 <td><code>image</code></td>
@@ -391,7 +401,12 @@ GHCR</td>
 <tr>
 <td><code>deploy</code></td>
 <td>machine GPU</td>
-<td>mise à jour de la pile, puis tests d’intégration</td>
+<td>mise à jour de la pile locale, puis tests d’intégration</td>
+</tr>
+<tr>
+<td><code>deploy-cloud</code></td>
+<td>serveur GitHub</td>
+<td>mise à jour de l’API sur le Space, puis test de fumée</td>
 </tr>
 </tbody>
 </table>
@@ -1407,38 +1422,96 @@ conforme</td>
 </tr>
 </tbody>
 </table>
-<p>Le modèle est servi en local, sur la machine GPU qui héberge aussi le
-runner de déploiement.</p>
-<h2 id="latence-et-débit">6.3 Latence et débit</h2>
-<p>Mesures sur la RTX 3080, avec 100 QCM du jeu de test par niveau de
-charge, enregistrées dans MLflow.</p>
+<h2 id="deux-déploiements-local-et-cloud">6.3 Deux déploiements : local
+et cloud</h2>
 <table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th></th>
+<th>Local</th>
+<th>Cloud (démonstration)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Inférence</td>
+<td>vLLM 0.32 sur la RTX 3080</td>
+<td>Inference Endpoint Hugging Face : vLLM 0.32, GPU L4, accès par
+jeton</td>
+</tr>
+<tr>
+<td>API</td>
+<td>conteneur Docker</td>
+<td>Space Docker privé (CPU gratuit)</td>
+</tr>
+<tr>
+<td>Modèle</td>
+<td>même dépôt, même révision</td>
+<td>même dépôt, même révision</td>
+</tr>
+<tr>
+<td>Journal d’audit</td>
+<td>fichier JSONL</td>
+<td>logs du Space (disque effacé au redémarrage)</td>
+</tr>
+<tr>
+<td>Coût</td>
+<td>—</td>
+<td>~0,80 $/h, seulement allumé ; pause manuelle, veille après 15
+min</td>
+</tr>
+</tbody>
+</table>
+<p>L’endpoint se réveille en 3 minutes ; un test complet (démonstration,
+latence, tests d’intégration) a coûté environ 0,25 $. Sur les mêmes
+questions, le cloud donne les mêmes réponses que la pile locale.</p>
+<h2 id="latence-et-débit">6.4 Latence et débit</h2>
+<p>Mesures avec 100 QCM du jeu de test par niveau de charge,
+enregistrées dans MLflow. Pour le cloud, la latence est mesurée depuis
+le client, réseau compris.</p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
 <thead>
 <tr>
 <th>Requêtes simultanées</th>
-<th>Latence médiane</th>
-<th>Latence p95</th>
-<th>Débit</th>
+<th>Local : médiane / p95</th>
+<th>Local : débit</th>
+<th>Cloud : médiane / p95</th>
+<th>Cloud : débit</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>1</td>
-<td>168 ms</td>
-<td>433 ms</td>
+<td>168 / 433 ms</td>
 <td>4,7 req/s</td>
+<td>745 / 1 432 ms</td>
+<td>1,2 req/s</td>
 </tr>
 <tr>
 <td>10</td>
-<td>234 ms</td>
-<td>657 ms</td>
+<td>234 / 657 ms</td>
 <td>31,8 req/s</td>
+<td>910 / 2 159 ms</td>
+<td>8,8 req/s</td>
 </tr>
 <tr>
 <td>50</td>
-<td>823 ms</td>
-<td>1 234 ms</td>
+<td>823 / 1 234 ms</td>
 <td>45,0 req/s</td>
+<td>2 127 / 3 575 ms</td>
+<td>17,0 req/s</td>
 </tr>
 </tbody>
 </table>
@@ -1454,12 +1527,18 @@ temps est passé à générer la réponse.</li>
 <li>Le p95 est environ trois fois la médiane à faible charge : une
 réponse à plusieurs propositions est plus longue à générer qu’une
 réponse unique.</li>
+<li><strong>Dans le cloud, l’écart vient du réseau</strong>, pas du GPU
+(un L4 vaut une RTX 3080) : chaque requête traverse Internet jusqu’au
+Space, puis du Space à l’endpoint. Toutes les requêtes aboutissent, même
+à 50 simultanées. En production, placer l’API et le GPU au même endroit
+supprimerait l’essentiel de ce surcoût.</li>
 </ul>
-<h2 id="robustesse">6.4 Robustesse</h2>
+<h2 id="robustesse">6.5 Robustesse</h2>
 <p>Quatorze tests d’intégration, lancés contre la pile réelle, vérifient
 le comportement dans les cas limites. La plupart sont relancés
 automatiquement à chaque déploiement ; l’arrêt de vLLM n’est testé qu’à
-la demande.</p>
+la demande. Contre le cloud, les 8 tests applicables réussissent (ceux
+qui relisent le fichier d’audit local sont ignorés).</p>
 <table>
 <colgroup>
 <col style="width: 50%" />
@@ -1516,7 +1595,7 @@ entrée trop longue ».</li>
 <li><strong>Propositions vides acceptées</strong> : un QCM pouvait ne
 contenir qu’une seule vraie proposition.</li>
 </ul>
-<h2 id="audit-de-traçabilité">6.5 Audit de traçabilité</h2>
+<h2 id="audit-de-traçabilité">6.6 Audit de traçabilité</h2>
 <p>Chaque requête produit une ligne dans un journal d’audit (JSONL)
 :</p>
 <table>
@@ -1606,9 +1685,13 @@ significatifs.</li>
 </ul>
 <p><strong>Le déploiement.</strong></p>
 <ul>
-<li><strong>Endpoint local</strong> : le service tourne sur un poste de
-travail, sans haute disponibilité ni accès public. Il n’est pas hébergé
-chez un hébergeur certifié pour les données de santé (HDS).</li>
+<li><strong>Hébergement non conforme pour des données de santé</strong>
+: la démo cloud tourne chez Hugging Face (endpoint chez AWS aux
+États-Unis), sans certification HDS. C’est acceptable pour des QCM
+publics, pas pour des données de patients.</li>
+<li><strong>Disponibilité de démonstration</strong> : réveil de 3
+minutes, Space gratuit (créé avant que Hugging Face ne restreigne cette
+offre), sans haute disponibilité.</li>
 <li><strong>Surveillance minimale</strong> : état de santé et journal
 d’audit, sans tableau de bord ni alertes.</li>
 <li><strong>Non-déterminisme</strong> : 2 à 3 % des réponses peuvent
