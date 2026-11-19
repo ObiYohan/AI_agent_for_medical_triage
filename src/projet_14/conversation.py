@@ -66,6 +66,25 @@ def conversation_windows(case: str | None, turns: list[dict]) -> list[tuple[int,
     return windows
 
 
+def history_prompt(case: str | None, turns: list[dict], k: int, max_chars: int = MAX_CHARS) -> list[dict]:
+    """Prompt de la question `k` d'un cas (DPO, évaluation) : consigne, cas, questions précédentes avec leurs
+    réponses de référence, puis la question `k`, sans sa réponse.
+
+    Comme à l'entraînement SFT, la question est vue avec l'historique de son cas. Si le prompt dépasse `max_chars`,
+    les questions les plus anciennes sont retirées ; le cas clinique reste en tête du premier message.
+    """
+    start = 0
+    while start < k and _length(case, turns[start:k + 1]) - len(turns[k]["answer"]) > max_chars:
+        start += 1
+    messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+    for j, turn in enumerate(turns[start:k + 1]):
+        messages.append({"role": "user", "content": user_message(
+            turn["question"], case if j == 0 else None, turn.get("options"), turn.get("multiple"))})
+        if start + j < k:
+            messages.append({"role": "assistant", "content": turn["answer"]})
+    return messages
+
+
 def _length(case: str | None, turns: list[dict]) -> int:
     # Longueur des messages tels qu'ils seront écrits (cas en tête du premier message gardé)
     return sum(

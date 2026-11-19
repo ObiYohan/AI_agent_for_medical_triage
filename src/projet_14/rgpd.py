@@ -37,9 +37,9 @@ OPERATORS = {"PERSON": OperatorConfig("replace", {"new_value": "<PERSON>"})}
 # Civilités : elles sont conservées (le sexe est une information clinique), seul le nom est remplacé.
 TITLES = ["Monsieur", "Madame", "Mademoiselle", "Mme", "Mlle", "M.", "Mr", "Mrs", "Docteur", "Dr"]
 
-# Nom ou initiale juste après une civilité : « Monsieur R. », « Mme Dupont ».
+# Nom ou initiale juste après une civilité : « Monsieur R. », « Mme Dupont », « Monsieur DURAND ».
 # Un lookbehind par civilité, car Python n'accepte que des lookbehinds de longueur fixe.
-TITLE_NAME = "(?:" + "|".join(rf"(?<={re.escape(t)} )" for t in TITLES) + r")[A-ZÀ-Ý](?:[a-zà-ÿ]+|\.)"
+TITLE_NAME = "(?:" + "|".join(rf"(?<={re.escape(t)} )" for t in TITLES) + r")[A-ZÀ-Ý](?:[a-zà-ÿ]+|[A-ZÀ-Ý]+|\.)"
 
 # Éponymes médicaux : « maladie d'Addison », « épreuve de Weber », « temps de Quick », « Addison's disease ».
 # Mots qui, placés devant un nom propre, en font un objet médical et non une personne.
@@ -62,6 +62,11 @@ EXCLUDED_WORDS = {
     "fibrinogène", "na", "céto",  # biologie
     "osseuses", "schuller",  # termes médicaux
     "il", "elle", "ils", "elles", "le", "la", "les", "on",  # pronoms et articles en début de phrase
+    # genres bactériens et fongiques (« Escherichia coli », « Pseudomonas aeruginosa »)
+    "escherichia", "pseudomonas", "haemophilus", "staphylococcus", "streptococcus", "klebsiella", "moraxella",
+    "candida", "listeria", "neisseria", "legionella", "mycoplasma", "clostridium", "clostridioides", "enterococcus",
+    "salmonella", "shigella", "proteus", "enterobacter", "acinetobacter", "chlamydia", "treponema", "borrelia",
+    "aspergillus", "cryptococcus", "pneumocystis", "toxoplasma", "plasmodium", "mycobacterium", "bordetella",
 }
 
 TITLE_RECOGNIZER = "TitleNameRecognizer"
@@ -109,6 +114,8 @@ def rejection_reason(text: str, result, tokens=None) -> str | None:
     span = text[result.start : result.end]
     if not span or not span[0].isupper():
         return "pas de majuscule"
+    if result.recognition_metadata.get("recognizer_name") == TITLE_RECOGNIZER:
+        return None  # nom après une civilité (« Monsieur CAM. ») : toujours remplacé, même court et en majuscules
     if span.isalpha() and span.isupper() and len(span) <= 4:
         return "sigle"  # ECG, RAA, VIH...
     if span.lower() in EXCLUDED_WORDS:
@@ -121,8 +128,6 @@ def rejection_reason(text: str, result, tokens=None) -> str | None:
         return "éponyme médical"
     if span.endswith("®") or after.lstrip().startswith("®"):
         return "marque déposée"  # Aldomet®, Sectral ®
-    if result.recognition_metadata.get("recognizer_name") == TITLE_RECOGNIZER:
-        return None  # nom après une civilité : toujours gardé
     if VALUE_AFTER.search(after):
         return "valeur chiffrée"  # paramètre biologique : « PaO2 96 mmHg », « Tiffeneau 60 % »
     if tokens is not None:
