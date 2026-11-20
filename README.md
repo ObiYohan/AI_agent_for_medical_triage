@@ -6,6 +6,7 @@
 |---|---|---|---|---|
 | [ANR-MALADES/MediQAl](https://huggingface.co/datasets/ANR-MALADES/MediQAl) | Cas cliniques rédigés par des enseignants en médecine, avec leurs questions : ouvertes à réponse rédigée (`oeq`), QCM à une bonne réponse (`mcqu`) ou à plusieurs (`mcqm`), avec leur corrigé | fr | CC-BY-4.0 | SFT (cas sélectionnés pour le triage) et DPO (QCM d'autres cas : `rejected` construite à partir du corrigé) |
 | [TsinghuaC3I/UltraMedical-Preference](https://huggingface.co/datasets/TsinghuaC3I/UltraMedical-Preference) | Vignettes cliniques d'examen (MedQA, MedMCQA) et questions de patients (ChatDoctor), réponses de plusieurs LLM notées par GPT-4 ; split `test` revu par des experts (Medical RewardBench) | en | MIT | SFT (meilleure réponse vérifiée) et DPO (paires vérifiées ; test expert), sur des questions distinctes |
+| [BenoitJT-GIRARD/clinical-triage-bilingual](https://huggingface.co/datasets/BenoitJT-GIRARD/clinical-triage-bilingual) | 60 cas de triage rédigés à la main (`clinical_eval`), avec un niveau de référence fixé par l'auteur du jeu, sans validation médicale | fr, en | CC-BY-4.0 | Évaluation externe du niveau de triage seulement (`scripts/evaluate_triage.py`) ; rien n'est redistribué |
 | [Qwen/Qwen3-1.7B-Base](https://huggingface.co/Qwen/Qwen3-1.7B-Base) | Modèle de base | — | Apache 2.0 | Point de départ du SFT LoRA puis du DPO |
 
 Jeux étudiés et non retenus : **MedQuAD** (questions générales sur les maladies, « What are the symptoms of X? », sans
@@ -150,12 +151,13 @@ curl -X POST localhost:8080/triage -H "X-API-Key: $API_KEY" -H "Content-Type: ap
 
 | Élément | Rôle |
 |---|---|
-| `POST /triage` | patient décrit en langage naturel (âge, motif, symptômes, antécédents, constantes) → niveau de priorité (maximale, modérée, différée), signes de gravité, justification, conduite à tenir, questions complémentaires. Le modèle évalue le niveau sur un choix fermé ; des garde-fous sur les constantes (seuils de démonstration) ne peuvent que le relever. Clé obligatoire (`X-API-Key`) |
+| `POST /triage` | patient décrit en langage naturel (âge, motif, symptômes, antécédents, constantes) → niveau de priorité (maximale, modérée, différée), signes de gravité, justification, conduite à tenir, questions complémentaires. Le modèle évalue le niveau sur un choix fermé (calibration expérimentale de son a priori avec `TRIAGE_CALIBRATION=1`, désactivée par défaut : elle sous-trie des urgences vitales) ; des garde-fous sur les constantes (seuils de démonstration) ne peuvent que le relever. Clé obligatoire (`X-API-Key`) |
 | `GET /health` | état de l'API et de vLLM |
 | `scripts/ui.py` | interface web de test (Gradio) : formulaire patient, cas de démonstration, niveau et explication ; cible locale ou cloud au choix dans la page. `uv run --with gradio python scripts/ui.py`, puis http://127.0.0.1:7860 (écoute sur la machine seulement : la clé d'API reste côté serveur) |
 | `logs/audit.jsonl` | une ligne par requête : identifiant, horodatage, modèle, niveau retenu et sa source, latence, empreinte SHA-256 de l'entrée (le texte du patient n'est pas conservé) |
 | `tests/test_api.py` | tests de l'API sans GPU (vLLM simulé), lancés aussi par la CI : `uv run --with-requirements api/requirements.txt --with pytest pytest tests` |
 | `tests/integration/` | robustesse et audit de traçabilité contre la pile démarrée : `INTEGRATION_API_URL=http://localhost:8080 API_KEY=<clé> uv run --with-requirements api/requirements.txt --with pytest pytest tests/integration` (arrêt / redémarrage de vLLM avec `ROBUSTESSE_ARRET_VLLM=1`) |
+| `scripts/evaluate_triage.py` | évaluation externe du niveau de triage, modèle seul, avec et sans calibration, sur 60 cas d'un jeu public (`reports/evaluation/triage_externe.csv`) : `uv run --with-requirements api/requirements.txt python scripts/evaluate_triage.py --vllm-url http://<vLLM>:8000` |
 | `scripts/latency.py` | latence et débit à 1, 10 et 50 requêtes simultanées (API de bout en bout sur les cas de `scripts/triage_cases.json`, puis vLLM seul : TTFT, TPOT), niveaux conformes et urgences vitales sous-triées ; résultats dans MLflow (expérience `qwen3-1.7b-serving`) : `API_KEY=<clé> uv run python scripts/latency.py [--mlflow dagshub]` |
 | `.github/workflows/ci.yml` | CI/CD : à chaque push, tests puis construction de l'image de l'API ; sur `master`, publication sur GHCR (`ghcr.io/obiyohan/triage-api:<commit>`), déploiement sur la machine GPU (runner auto-hébergé, étiquette `gpu`, dossier `~/p14-deploy`) et tests d'intégration contre la pile déployée |
 

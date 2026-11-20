@@ -1326,6 +1326,19 @@ la moins dangereuse, mais elle engorgerait le service. Le point d’accès
 langage naturel, avec les deux modèles : 5 urgences vitales en urgence
 maximale, mais les 6 autres cas sur-triés, dont une entorse de
 cheville.</p>
+<p><strong>Évaluation externe du triage.</strong> Le jeu public
+<code>clinical-triage-bilingual</code> (Hugging Face, CC BY 4.0) fournit
+60 cas rédigés à la main, en français et en anglais (20 par niveau, dont
+des cas piégeux), avec des niveaux fixés par son auteur, sans validation
+médicale. Le modèle seul y trouve 23 niveaux sur 60, sous-trie 1 urgence
+vitale sur 20 et sur-trie 36 cas.</p>
+<p>Corriger l’a priori du modèle pour l’urgence maximale (0,74 pour un
+patient sans information) semblait sûr sur nos 20 cas : 14 bons niveaux
+au lieu de 9, sans sous-triage. Sur les 60 cas externes, cette
+calibration gagne 5 niveaux mais sous-trie 11 à 12 urgences vitales sur
+20 : la probabilité d’urgence maximale se recouvre entre urgences
+vitales (médiane 0,73) et modérées (0,61). Elle reste donc désactivée ;
+le sur-triage est l’erreur la moins dangereuse.</p>
 <p><strong>Conclusion.</strong> Le modèle ne peut en aucun cas être
 utilisé de façon autonome. Ses erreurs sont précisément celles qu’un
 outil de triage ne peut pas se permettre : recommandations dangereuses
@@ -1615,9 +1628,9 @@ donnée : c’est la trace de référence.</p>
 <p><strong>Par rapport au besoin du CHSA.</strong></p>
 <ul>
 <li><strong>Pas de triage appris</strong> : le modèle répond à des QCM
-médicaux ; il n’a jamais appris à attribuer un niveau de priorité. Ses
-premiers résultats sur neuf cas de triage montrent une tendance au
-sur-triage.</li>
+médicaux ; il n’a jamais appris à attribuer un niveau de priorité. Il
+sur-trie (36 cas sur 60 dans l’évaluation externe), et distingue mal une
+urgence vitale d’une urgence modérée.</li>
 <li><strong>Pas de questionnaire adaptatif</strong> : le modèle répond à
 une question complète, il ne mène pas d’entretien avec le patient.</li>
 <li><strong>Peu d’explications</strong> : en français, les réponses

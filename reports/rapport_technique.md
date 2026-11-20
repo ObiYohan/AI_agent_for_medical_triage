@@ -398,6 +398,10 @@ Le modèle final en ajoute une quatrième : **antalgiques et réévaluation dans
 
 **Triage.** Les quatre urgences vitales (arrêt cardiaque, état de choc, hémorragie, convulsions) sont toutes classées en urgence maximale : aucun sous-triage. En revanche, les cas modérés sont classés en urgence maximale, et les trois cas bénins en urgence modérée. Les deux modèles **sur-trient** : c'est l'erreur la moins dangereuse, mais elle engorgerait le service. Le point d'accès `/triage` (partie 6.2) le confirme sur 11 patients décrits en langage naturel, avec les deux modèles : 5 urgences vitales en urgence maximale, mais les 6 autres cas sur-triés, dont une entorse de cheville.
 
+**Évaluation externe du triage.** Le jeu public `clinical-triage-bilingual` (Hugging Face, CC BY 4.0) fournit 60 cas rédigés à la main, en français et en anglais (20 par niveau, dont des cas piégeux), avec des niveaux fixés par son auteur, sans validation médicale. Le modèle seul y trouve 23 niveaux sur 60, sous-trie 1 urgence vitale sur 20 et sur-trie 36 cas.
+
+Corriger l'a priori du modèle pour l'urgence maximale (0,74 pour un patient sans information) semblait sûr sur nos 20 cas : 14 bons niveaux au lieu de 9, sans sous-triage. Sur les 60 cas externes, cette calibration gagne 5 niveaux mais sous-trie 11 à 12 urgences vitales sur 20 : la probabilité d'urgence maximale se recouvre entre urgences vitales (médiane 0,73) et modérées (0,61). Elle reste donc désactivée ; le sur-triage est l'erreur la moins dangereuse.
+
 **Conclusion.** Le modèle ne peut en aucun cas être utilisé de façon autonome. Ses erreurs sont précisément celles qu'un outil de triage ne peut pas se permettre : recommandations dangereuses et réponses assurées sur ce qu'il ignore.
 
 # 6. Mise en service de la démonstration
@@ -489,7 +493,7 @@ Les tests d'audit vérifient que chaque requête est tracée avec tous ses champ
 
 **Par rapport au besoin du CHSA.**
 
-- **Pas de triage appris** : le modèle répond à des QCM médicaux ; il n'a jamais appris à attribuer un niveau de priorité. Ses premiers résultats sur neuf cas de triage montrent une tendance au sur-triage.
+- **Pas de triage appris** : le modèle répond à des QCM médicaux ; il n'a jamais appris à attribuer un niveau de priorité. Il sur-trie (36 cas sur 60 dans l'évaluation externe), et distingue mal une urgence vitale d'une urgence modérée.
 - **Pas de questionnaire adaptatif** : le modèle répond à une question complète, il ne mène pas d'entretien avec le patient.
 - **Peu d'explications** : en français, les réponses donnent la ou les propositions retenues, sans justification. Seule la partie anglaise a appris à raisonner.
 - **Pas d'intégration au SIH** : l'API reçoit une description du patient en JSON, pas un dossier patient.
