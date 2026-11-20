@@ -8,7 +8,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Le module partagé avec la préparation des données : même prompt qu'à l'entraînement
 COPY src/projet_14/__init__.py src/projet_14/mediqal.py projet_14/
-COPY api/main.py .
+COPY api/main.py api/triage.py ./
 
 EXPOSE 8080
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]

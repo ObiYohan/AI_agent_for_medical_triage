@@ -1,0 +1,9 @@
+{
+  "_titre": "Détresse respiratoire : les garde-fous détectent les signes de gravité",
+  "_attendu": "urgence maximale",
+  "age": 72,
+  "sexe": "F",
+  "motif": "essoufflement",
+  "symptomes": "essoufflement brutal depuis ce matin, ne peut pas finir ses phrases",
+  "constantes": {"spo2": 85, "fr": 34, "fc": 118}
+}

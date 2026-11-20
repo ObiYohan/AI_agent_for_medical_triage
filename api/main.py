@@ -1,7 +1,9 @@
-"""API de démonstration : réponse à un QCM médical par le modèle Qwen3-1.7B adapté (SFT + DPO), servi par vLLM.
+"""API de démonstration : triage d'un patient aux urgences par le modèle Qwen3-1.7B adapté (SFT + DPO), servi par vLLM.
 
-Le prompt est construit avec `projet_14.mediqal`, comme à l'entraînement : le modèle reçoit exactement le format appris.
-Chaque requête est tracée dans un journal d'audit JSONL, sans le texte du cas (seulement son empreinte SHA-256).
+Le patient est décrit en langage naturel (âge, motif, symptômes, antécédents, constantes) ; l'API renvoie un niveau
+de priorité, les signes de gravité, une justification, la conduite à tenir et des questions complémentaires
+(voir `triage.py`). Le prompt reprend le format de l'entraînement (`projet_14.mediqal`).
+Chaque requête est tracée dans un journal d'audit JSONL, sans le texte du patient (seulement son empreinte SHA-256).
 
 Variables d'environnement :
     API_KEY       clé attendue dans l'en-tête X-API-Key (obligatoire)
@@ -15,28 +17,26 @@ Variables d'environnement :
 import hashlib
 import json
 import os
-import re
 import secrets
 import time
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Annotated, Literal
 
 import httpx
 from fastapi import Depends, FastAPI, HTTPException, Security
 from fastapi.security import APIKeyHeader
-from pydantic import AfterValidator, BaseModel, Field, StringConstraints
 
-from projet_14.mediqal import LETTERS, SYSTEM_PROMPT, answer_letters, user_content
+import triage as tri
+from projet_14.mediqal import SYSTEM_PROMPT, answer_letters, user_content
 
 WARNING = "Démonstration technique : ne remplace pas un avis médical."
 
-app = FastAPI(title="Agent de triage médical — démonstration", version="0.1.0")
+app = FastAPI(title="Agent de triage médical — démonstration", version="0.2.0")
 
 
 def settings() -> dict:
-    # Lu à chaque requête : la configuration vient de l'environnement (docker compose, tests)
+    # Lu à chaque requête : la configuration vient de l'environnement (docker compose, Space, tests)
     return {
         "api_key": os.environ.get("API_KEY", ""),
         "vllm_url": os.environ.get("VLLM_URL", "http://vllm:8000"),
@@ -58,55 +58,6 @@ def check_api_key(key: str | None = Security(APIKeyHeader(name="X-API-Key", auto
         # Accès refusé : tracé aussi (sans la clé reçue)
         write_audit({"timestamp": datetime.now(timezone.utc).isoformat(), "status": "unauthorized"})
         raise HTTPException(status_code=401, detail="Clé d'API absente ou invalide")
-
-
-SPECIAL_TOKEN = re.compile(r"<\|[^|<>]*\|>")
-
-
-def no_special_tokens(text: str) -> str:
-    # Les balises du gabarit (<|im_start|>, <|im_end|>, <|endoftext|>…) écrites dans le texte deviennent de vrais
-    # tokens spéciaux : l'utilisateur pourrait fermer son message et injecter un faux message système
-    if SPECIAL_TOKEN.search(text):
-        raise ValueError("balise de gabarit interdite (<|…|>)")
-    return text
-
-
-Safe = AfterValidator(no_special_tokens)
-# Proposition : texte non vide après suppression des espaces
-Option = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=1_000), Safe]
-
-
-class QCMRequest(BaseModel):
-    cas_clinique: Annotated[str, Safe] | None = Field(default=None, max_length=10_000)
-    question: Annotated[str, Safe] = Field(min_length=1, max_length=2_000)
-    propositions: dict[Literal["A", "B", "C", "D", "E"], Option] = Field(min_length=2)
-    reponses_multiples: bool = False
-
-
-class QCMResponse(BaseModel):
-    request_id: str
-    lettres: list[str]
-    reponse: str
-    # Réponse exploitable : au moins une lettre, seulement des lettres proposées, en nombre conforme à la consigne
-    format_valide: bool
-    modele: str
-    latence_ms: int
-    avertissement: str = WARNING
-
-
-def valid_format(letters: list[str], request: QCMRequest) -> bool:
-    expected_count_ok = len(letters) >= 2 if request.reponses_multiples else len(letters) == 1
-    return bool(letters) and set(letters) <= set(request.propositions) and expected_count_ok
-
-
-def build_messages(request: QCMRequest) -> list[dict]:
-    # Même structure que les données d'entraînement (colonnes MediQAl) : même prompt, consigne comprise
-    row = {"clinical_case": request.cas_clinique, "question": request.question}
-    row |= {f"answer_{letter.lower()}": request.propositions.get(letter, "") for letter in LETTERS}
-    return [
-        {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user", "content": user_content(row, multiple_answers=request.reponses_multiples)},
-    ]
 
 
 async def call_vllm(messages: list[dict], max_tokens: int) -> str:
@@ -132,6 +83,10 @@ def write_audit(record: dict) -> None:
     print(f"AUDIT {line}", flush=True)
 
 
+def elapsed_ms(start: float) -> int:
+    return round((time.perf_counter() - start) * 1000)
+
+
 @app.get("/health")
 async def health() -> dict:
     # L'API répond ; vLLM est-il prêt ?
@@ -146,42 +101,59 @@ async def health() -> dict:
     return {"api": "ok", "vllm": "ok" if vllm_ready else "indisponible"}
 
 
-@app.post("/qcm", response_model=QCMResponse, dependencies=[Depends(check_api_key)])
-async def qcm(request: QCMRequest) -> QCMResponse:
+@app.post("/triage", response_model=tri.TriageResponse, dependencies=[Depends(check_api_key)])
+async def triage(request: tri.TriageRequest) -> tri.TriageResponse:
+    """Triage d'un patient décrit en langage naturel (âge, motif, symptômes, antécédents, constantes).
+
+    Le modèle évalue le niveau de priorité sur un choix fermé ; des garde-fous sur les constantes ne peuvent que
+    relever ce niveau. La réponse explique la décision et propose des questions complémentaires.
+    """
     request_id = str(uuid.uuid4())
     model = settings()["model"]
     start = time.perf_counter()
+    flags = tri.red_flags(request.constantes)
     audit = {
         "request_id": request_id,
         "timestamp": datetime.now(timezone.utc).isoformat(),
+        "endpoint": "triage",
         "model": model,
         # Empreinte de l'entrée : retrouver une requête sans conserver de donnée patient
         "input_sha256": hashlib.sha256(request.model_dump_json().encode("utf-8")).hexdigest(),
-        "reponses_multiples": request.reponses_multiples,
+        "red_flags": len(flags),
     }
+    messages = [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user", "content": user_content(tri.prompt_row(request), multiple_answers=False)},
+    ]
+    model_level = None
     try:
-        answer = await call_vllm(build_messages(request), max_tokens=192 if request.reponses_multiples else 64)
+        letters = sorted(answer_letters(await call_vllm(messages, max_tokens=32)))
+        if len(letters) == 1 and letters[0] in tri.LEVELS:
+            model_level = tri.LEVELS[letters[0]]
     except httpx.HTTPStatusError as error:
-        if error.response.status_code != 400:
-            raise_unavailable(audit, start, error)
-        # vLLM refuse la requête : le prompt dépasse la longueur maximale du modèle (--max-model-len)
-        write_audit(audit | {"status": "rejected", "error": "input_too_long", "latency_ms": elapsed_ms(start)})
-        raise HTTPException(status_code=422, detail="Entrée trop longue pour le modèle") from error
+        if error.response.status_code == 400:
+            # vLLM refuse la requête : le texte dépasse la longueur maximale du modèle (--max-model-len)
+            write_audit(audit | {"status": "rejected", "error": "input_too_long", "latency_ms": elapsed_ms(start)})
+            raise HTTPException(status_code=422, detail="Description trop longue pour le modèle") from error
+        unavailable(audit, start, error, flags)
     except httpx.HTTPError as error:
-        raise_unavailable(audit, start, error)
+        unavailable(audit, start, error, flags)
 
+    level, source = tri.decide(model_level, flags)
     latency_ms = elapsed_ms(start)
-    letters = sorted(answer_letters(answer))
-    format_ok = valid_format(letters, request)
-    write_audit(audit | {"status": "ok", "letters": letters, "format_valide": format_ok, "latency_ms": latency_ms})
-    return QCMResponse(request_id=request_id, lettres=letters, reponse=answer, format_valide=format_ok,
-                       modele=model, latence_ms=latency_ms)
+    write_audit(audit | {"status": "ok", "niveau": level, "source": source, "niveau_modele": model_level,
+                         "latency_ms": latency_ms})
+    return tri.TriageResponse(
+        request_id=request_id, niveau=level, source=source, niveau_modele=model_level, signes_de_gravite=flags,
+        justification=tri.justification(level, source, model_level, flags), conduite=tri.CONDUITE[level],
+        questions_complementaires=tri.follow_up_questions(request), modele=model, latence_ms=latency_ms,
+        avertissement=WARNING,
+    )
 
 
-def elapsed_ms(start: float) -> int:
-    return round((time.perf_counter() - start) * 1000)
-
-
-def raise_unavailable(audit: dict, start: float, error: Exception):
+def unavailable(audit: dict, start: float, error: Exception, flags: list[str]) -> None:
+    # Modèle indisponible : avec un signe de gravité, les garde-fous suffisent à décider (on continue) ; sinon, 503
+    if flags:
+        return
     write_audit(audit | {"status": "error", "error": type(error).__name__, "latency_ms": elapsed_ms(start)})
     raise HTTPException(status_code=503, detail="Serveur d'inférence indisponible") from error

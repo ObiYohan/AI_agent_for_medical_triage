@@ -1,8 +1,0 @@
-{
-  "_titre": "Cas de triage : situation bénigne (cas T08) - le modèle sur-trie",
-  "_attendu": "C",
-  "cas_clinique": "Une femme de 35 ans consulte pour un rhume depuis 3 jours, sans fièvre, avec des constantes normales.",
-  "question": "Quel niveau de priorité attribuez-vous à cette patiente ?",
-  "propositions": {"A": "Urgence maximale", "B": "Urgence modérée", "C": "Urgence différée"},
-  "reponses_multiples": false
-}

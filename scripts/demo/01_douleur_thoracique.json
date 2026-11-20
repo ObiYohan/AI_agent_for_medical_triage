@@ -1,0 +1,10 @@
+{
+  "_titre": "Douleur thoracique typique",
+  "_attendu": "urgence maximale",
+  "age": 58,
+  "sexe": "M",
+  "motif": "douleur thoracique",
+  "symptomes": "douleur constrictive depuis 40 minutes, irradiant dans le bras gauche, avec des sueurs",
+  "antecedents": "tabagisme",
+  "constantes": {"fc": 105, "pas": 150, "pad": 90, "spo2": 96}
+}

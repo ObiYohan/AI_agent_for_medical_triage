@@ -1,9 +1,9 @@
 """Évaluation d'un modèle servi par vLLM : QCM du jeu de test et contrôles de sécurité.
 
-Le prompt est construit par la même fonction que l'API (`api/main.py`) : le modèle est évalué exactement comme il est
-servi. Les requêtes partent une par une, pour limiter l'effet du regroupement des requêtes sur les réponses.
+Mesure les connaissances médicales du modèle, au format de son entraînement (`projet_14.mediqal`), en interrogeant
+vLLM directement. Les requêtes partent une par une, pour limiter l'effet du regroupement des requêtes sur les réponses.
 
-    uv run --with-requirements api/requirements.txt python scripts/evaluate.py --vllm-url http://localhost:8001 --label sft
+    uv run python scripts/evaluate.py --vllm-url http://localhost:8001 --label sft
 
 Sorties : `reports/evaluation/<label>_answers.csv` (une ligne par question) et `<label>_summary.json`.
 """
@@ -11,21 +11,31 @@ Sorties : `reports/evaluation/<label>_answers.csv` (une ligne par question) et `
 import argparse
 import asyncio
 import json
-import sys
 from pathlib import Path
 
 import httpx
 import pandas as pd
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "api"))
-from main import QCMRequest, build_messages, valid_format  # noqa: E402  (même prompt que l'API)
+from projet_14.mediqal import LETTERS, SYSTEM_PROMPT, answer_letters, parse_user_content, user_content
 
-from projet_14.mediqal import answer_letters, parse_user_content  # noqa: E402
+ROOT = Path(__file__).resolve().parents[1]
 
 DATA = ROOT / "data" / "anonymized"
 OUT = ROOT / "reports" / "evaluation"
-FIELDS = ("cas_clinique", "question", "propositions", "reponses_multiples")
+
+
+def build_messages(question: dict) -> list[dict]:
+    # Même prompt qu'à l'entraînement : cas, question, propositions, consigne
+    row = {"clinical_case": question.get("cas_clinique"), "question": question["question"]}
+    row |= {f"answer_{letter.lower()}": question["propositions"].get(letter, "") for letter in LETTERS}
+    return [{"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": user_content(row, multiple_answers=question["reponses_multiples"])}]
+
+
+def valid_format(letters: list[str], question: dict) -> bool:
+    # Réponse exploitable : au moins une lettre, seulement des lettres proposées, en nombre conforme à la consigne
+    count_ok = len(letters) >= 2 if question["reponses_multiples"] else len(letters) == 1
+    return bool(letters) and set(letters) <= set(question["propositions"]) and count_ok
 
 
 def test_questions() -> list[dict]:
@@ -47,9 +57,8 @@ def safety_questions() -> list[dict]:
 
 
 async def answer(client: httpx.AsyncClient, question: dict) -> dict:
-    request = QCMRequest(**{key: question.get(key) for key in FIELDS if question.get(key) is not None})
-    payload = {"model": "qwen3-medical", "messages": build_messages(request), "temperature": 0,
-               "max_tokens": 192 if request.reponses_multiples else 64}
+    payload = {"model": "qwen3-medical", "messages": build_messages(question), "temperature": 0,
+               "max_tokens": 192 if question["reponses_multiples"] else 64}
     response = await client.post("/v1/chat/completions", json=payload)
     response.raise_for_status()
     text = response.json()["choices"][0]["message"]["content"].strip()
@@ -58,7 +67,7 @@ async def answer(client: httpx.AsyncClient, question: dict) -> dict:
         "id": question["id"], "jeu": question["jeu"], "attendu": "".join(question["attendu"]),
         "lettres": "".join(letters), "juste": letters == question["attendu"],
         "dangereuse": bool(set(letters) & set(question["dangereuses"])),
-        "format_valide": valid_format(letters, request), "reponse": text,
+        "format_valide": valid_format(letters, question), "reponse": text,
     }
 
 

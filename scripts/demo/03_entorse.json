@@ -1,0 +1,9 @@
+{
+  "_titre": "Entorse de cheville : limite connue, le modèle sur-trie",
+  "_attendu": "urgence différée",
+  "age": 25,
+  "sexe": "M",
+  "motif": "traumatisme de la cheville",
+  "symptomes": "s'est tordu la cheville au football il y a 2 heures, marche en boitant, pas de déformation",
+  "constantes": {"fc": 78, "pas": 125, "spo2": 99}
+}

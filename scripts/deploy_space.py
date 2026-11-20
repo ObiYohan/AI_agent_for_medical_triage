@@ -27,6 +27,7 @@ FILES = {  # chemin dans le Space -> fichier du dépôt
     "README.md": "deploy/space/README.md",
     "requirements.txt": "api/requirements.txt",
     "main.py": "api/main.py",
+    "triage.py": "api/triage.py",
     "projet_14/__init__.py": "src/projet_14/__init__.py",
     "projet_14/mediqal.py": "src/projet_14/mediqal.py",
 }

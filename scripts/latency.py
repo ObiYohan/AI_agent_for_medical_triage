@@ -1,8 +1,9 @@
 """Mesures de latence de la démonstration (API FastAPI + vLLM), enregistrées dans MLflow.
 
-1. **Bout en bout, à travers l'API** : des QCM du jeu de test (`mcqu` et `mcqm` en alternance) sont rejoués
-   contre `POST /qcm` à plusieurs niveaux de concurrence (requêtes simultanées). Pour chaque niveau : latence
-   p50 / p95 / max, débit (requêtes par seconde), erreurs, et exactitude des réponses par rapport au corrigé.
+1. **Bout en bout, à travers l'API** : les cas de triage en langage naturel (`scripts/triage_cases.json`) sont
+   rejoués contre `POST /triage` à plusieurs niveaux de concurrence (requêtes simultanées). Pour chaque niveau :
+   latence p50 / p95 / max, débit (requêtes par seconde), erreurs. Sur ces cas : part des niveaux conformes à
+   l'attendu, et part des urgences vitales sous-triées (doit être nulle).
 2. **vLLM seul** (`vllm bench serve`, dans le conteneur) : TTFT (délai avant le premier token), TPOT (temps par
    token généré) et débit en tokens par seconde, sur des prompts synthétiques de la taille des nôtres.
 
@@ -28,52 +29,41 @@ import httpx
 import mlflow
 import pandas as pd
 
-from projet_14.mediqal import answer_letters, parse_user_content
-
 ROOT = Path(__file__).resolve().parents[1]
-DATA = ROOT / "data" / "anonymized"
+CASES = ROOT / "scripts" / "triage_cases.json"
 EXPERIMENT = "qwen3-1.7b-serving"
 DAGSHUB_REPO_OWNER, DAGSHUB_REPO_NAME = "obiyohan", "my-ml-mlflow"
-# Taille des prompts synthétiques de vllm bench : proche de nos QCM (~800 caractères, ~300 tokens ; réponses courtes)
+# Taille des prompts synthétiques de vllm bench : proche des nôtres (~300 tokens ; réponses courtes)
 BENCH_INPUT_TOKENS, BENCH_OUTPUT_TOKENS = 300, 32
 MODEL_REPO = "0biyohan/qwen3-1.7b-medical-qcm-fr"  # tokenizer des prompts synthétiques (déjà en cache dans vLLM)
 
 
-def load_qcms(n: int) -> list[dict]:
-    # QCM du jeu de test, avec leur corrigé : mcqu et mcqm en alternance
-    sources = {}
-    for stem in ("sft_mediqal_mcqu", "sft_mediqal_mcqm"):
-        with (DATA / f"{stem}_test.anonymized.jsonl").open(encoding="utf-8") as f:
-            records = [json.loads(line) for line in f]
-        sources[stem] = [
-            parse_user_content(r["messages"][1]["content"]) | {
-                "source": stem, "expected": sorted(answer_letters(r["messages"][2]["content"]))}
-            for r in records
-        ]
-    mixed = [qcm for pair in zip(*sources.values()) for qcm in pair]
-    return mixed[:n]
+def load_cases(n: int) -> list[dict]:
+    # n requêtes, en parcourant les cas de triage ; l'âge varie pour que les requêtes ne soient pas identiques
+    cases = json.loads(CASES.read_text(encoding="utf-8"))
+    return [cases[i % len(cases)] | {"age": min(cases[i % len(cases)]["age"] + i // len(cases), 120)} for i in range(n)]
 
 
-async def run_level(client: httpx.AsyncClient, qcms: list[dict], concurrency: int) -> tuple[list[dict], float]:
+async def run_level(client: httpx.AsyncClient, cases: list[dict], concurrency: int) -> tuple[list[dict], float]:
     # Toutes les requêtes du niveau, au plus `concurrency` à la fois ; renvoie le détail et la durée totale
     semaphore = asyncio.Semaphore(concurrency)
 
-    async def one(qcm: dict) -> dict:
-        body = {key: qcm[key] for key in ("cas_clinique", "question", "propositions", "reponses_multiples")}
+    async def one(case: dict) -> dict:
+        body = {key: value for key, value in case.items() if key not in ("id", "attendu", "vital")}
         async with semaphore:
             start = time.perf_counter()
-            response = await client.post("/qcm", json=body)
+            response = await client.post("/triage", json=body)
             latency_ms = (time.perf_counter() - start) * 1000
-        row = {"concurrency": concurrency, "source": qcm["source"], "status": response.status_code,
-               "latency_ms": latency_ms}
+        row = {"concurrency": concurrency, "case": case["id"], "status": response.status_code, "latency_ms": latency_ms}
         if response.status_code == 200:
             answer = response.json()
-            row |= {"server_latency_ms": answer["latence_ms"], "letters": answer["lettres"],
-                    "format_valide": answer["format_valide"], "correct": answer["lettres"] == qcm["expected"]}
+            row |= {"server_latency_ms": answer["latence_ms"], "niveau": answer["niveau"], "source": answer["source"],
+                    "conforme": answer["niveau"] == case["attendu"],
+                    "sous_triage_vital": case["vital"] and answer["niveau"] != "urgence maximale"}
         return row
 
     start = time.perf_counter()
-    rows = await asyncio.gather(*(one(qcm) for qcm in qcms))
+    rows = await asyncio.gather(*(one(case) for case in cases))
     return rows, time.perf_counter() - start
 
 
@@ -81,7 +71,7 @@ def percentile(values: list[float], p: float) -> float:
     return statistics.quantiles(values, n=100, method="inclusive")[p - 1] if len(values) > 1 else values[0]
 
 
-async def measure_api(url: str, api_key: str, qcms: list[dict], levels: list[int]) -> tuple[pd.DataFrame, dict]:
+async def measure_api(url: str, api_key: str, cases: list[dict], levels: list[int]) -> tuple[pd.DataFrame, dict]:
     metrics, all_rows = {}, []
     headers = {"X-API-Key": api_key}
     if ".hf.space" in url:  # démo cloud : Space privé, jeton Hugging Face en plus de la clé de l'API
@@ -89,9 +79,9 @@ async def measure_api(url: str, api_key: str, qcms: list[dict], levels: list[int
 
         headers["Authorization"] = f"Bearer {get_token()}"
     async with httpx.AsyncClient(base_url=url, headers=headers, timeout=300) as client:
-        await run_level(client, qcms[:5], 1)  # échauffement : premières compilations, caches
+        await run_level(client, cases[:5], 1)  # échauffement : premières compilations, caches
         for concurrency in levels:
-            rows, duration = await run_level(client, qcms, concurrency)
+            rows, duration = await run_level(client, cases, concurrency)
             all_rows += rows
             ok = [r for r in rows if r["status"] == 200]
             latencies = [r["latency_ms"] for r in ok]
@@ -109,9 +99,10 @@ async def measure_api(url: str, api_key: str, qcms: list[dict], levels: list[int
 
     details = pd.DataFrame(all_rows)
     first_level = details[(details["concurrency"] == levels[0]) & (details["status"] == 200)]
-    for source, group in first_level.groupby("source"):
-        metrics[f"accuracy_{source}"] = group["correct"].mean()
-        metrics[f"format_valide_{source}"] = group["format_valide"].mean()
+    metrics["triage_niveau_conforme"] = float(first_level["conforme"].mean())
+    metrics["triage_sous_triage_vital"] = int(first_level["sous_triage_vital"].sum())
+    print(f"niveaux conformes à l'attendu : {metrics['triage_niveau_conforme']:.0%} ; "
+          f"urgences vitales sous-triées : {metrics['triage_sous_triage_vital']}")
     return details, metrics
 
 
@@ -182,10 +173,10 @@ def main() -> None:
 
     params = serving_params() | {"api_url": args.url, "requests_per_level": args.n,
                                  "concurrency_levels": " ".join(map(str, args.concurrency))}
-    qcms = load_qcms(args.n)
+    cases = load_cases(args.n)
     with mlflow.start_run(run_name=f"latency-{time.strftime('%Y%m%d-%H%M')}"):
         mlflow.log_params(params)
-        details, metrics = asyncio.run(measure_api(args.url, api_key, qcms, args.concurrency))
+        details, metrics = asyncio.run(measure_api(args.url, api_key, cases, args.concurrency))
         if not args.no_vllm_bench:
             metrics |= measure_vllm(args.concurrency, num_prompts=args.n)
         mlflow.log_metrics(metrics)
