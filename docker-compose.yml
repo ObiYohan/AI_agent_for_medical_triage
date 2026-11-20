@@ -7,9 +7,9 @@ services:
   vllm:
     image: vllm/vllm-openai:v0.32.0
     command:
-      # Modèle fusionné SFT + DPO v3, sur Hugging Face Hub (dépôt privé), à une révision fixe : reproductible
+      # Modèle fusionné SFT (données v4) + DPO (v5), sur Hugging Face Hub (dépôt privé), à une révision fixe : reproductible
       - --model=${MODEL:-0biyohan/qwen3-1.7b-medical-qcm-fr}
-      - --revision=${MODEL_REVISION:-476fed3104b92d446e5c915a6adea7338825c255}
+      - --revision=${MODEL_REVISION:-4af91a7aa052c092cfb64568d441b84f8f4a88e8}
       - --served-model-name=qwen3-medical
       - --max-model-len=2048
       - --gpu-memory-utilization=0.8  # ~1 Go du GPU est déjà pris par l'affichage Windows

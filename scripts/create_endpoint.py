@@ -1,8 +1,8 @@
-"""Crée l'Inference Endpoint de la démo cloud : moteur vLLM, GPU L4, modèle fusionné à une révision fixée.
+"""Crée l'Inference Endpoint de la démo cloud : moteur vLLM, GPU T4, modèle fusionné à une révision fixée.
 
     uv run python scripts/create_endpoint.py
 
-ATTENTION : la création démarre l'endpoint, donc la facturation (~0,80 $/h sur L4). Le script attend qu'il soit
+ATTENTION : la création démarre l'endpoint, donc la facturation (0,50 $/h sur T4). Le script attend qu'il soit
 prêt, vérifie /v1/models, puis le met en pause (plus de facturation). Ensuite : `scripts/cloud.py start | stop`.
 
 Prérequis : crédits sur le compte (huggingface.co/settings/billing) et un jeton autorisé à gérer les Inference
@@ -16,7 +16,7 @@ from huggingface_hub import create_inference_endpoint, get_token
 
 NAME = os.environ.get("HF_ENDPOINT_NAME", "qwen3-medical-qcm-fr")
 REPOSITORY = "0biyohan/qwen3-1.7b-medical-qcm-fr"
-REVISION = "476fed3104b92d446e5c915a6adea7338825c255"  # même révision que docker-compose.yml
+REVISION = "4af91a7aa052c092cfb64568d441b84f8f4a88e8"  # même révision que docker-compose.yml (SFT v4 + DPO v5)
 VLLM_IMAGE = "vllm/vllm-openai:v0.32.0"  # même version que la pile locale
 
 
@@ -29,8 +29,8 @@ def main() -> None:
         task="text-generation",
         accelerator="gpu",
         vendor="aws",
-        region="us-east-1",
-        instance_type="nvidia-l4",
+        region="eu-west-1",  # Irlande
+        instance_type="nvidia-t4",  # 16 Go, 0,50 $/h ; pas de bf16 : vLLM sert le modèle en float16
         instance_size="x1",
         type="authenticated",  # appel avec un jeton Hugging Face (VLLM_API_KEY de l'API) ; ex-« protected »
         min_replica=0,  # 0 réplique au repos : condition de la mise en veille automatique
