@@ -25,14 +25,17 @@ vertical-align: middle;
 </style>
   <style type="text/css">
 @page { size: A4; margin: 2.2cm; @bottom-center { content: counter(page); font-size: 9pt; } }
-body { font-family: "DejaVu Serif"; font-size: 10.5pt; line-height: 1.4; }
+body { font-family: "DejaVu Serif"; font-size: 10.5pt; line-height: 1.35; }
 h1, h2, h3 { font-family: "DejaVu Sans"; } h1 { font-size: 17pt; margin-top: 1.4em; }
 h1, h2, h3 { break-after: avoid; }  h2 { font-size: 13pt; }
-table { border-collapse: collapse; width: 100%; font-size: 9pt; margin: 0.6em 0; page-break-inside: avoid; }
+table { border-collapse: collapse; width: 100%; font-size: 9pt; margin: 0.6em 0; }
+tr { break-inside: avoid; } 
+thead { display: table-header-group; } 
 th, td { border: 1px solid #999; padding: 3px 5px; vertical-align: top; } th { background: #eee; }
 pre { font-family: "DejaVu Sans Mono"; font-size: 7.8pt; background: #f6f6f6; padding: 6px; page-break-inside: avoid; white-space: pre; }
 code { font-family: "DejaVu Sans Mono"; font-size: 8.5pt; }
-nav#TOC { page-break-after: always; }
+nav#TOC { columns: 2; column-gap: 1.5em; font-size: 9pt; line-height: 1.25; margin-bottom: 1.5em; } 
+nav#TOC ul { margin: 0; padding-left: 1.2em; }
 </style>
 </head>
 <body>
@@ -73,11 +76,12 @@ datasets SFT et DPO</a>
 choix</a></li>
 <li><a href="#principes-de-construction" id="toc-principes-de-construction">3.2 Principes de
 construction</a></li>
-<li><a href="#les-jeux-sft" id="toc-les-jeux-sft">3.3 Les jeux
+<li><a href="#sélection-pour-le-triage" id="toc-sélection-pour-le-triage">3.3 Sélection pour le triage</a></li>
+<li><a href="#les-jeux-sft" id="toc-les-jeux-sft">3.4 Les jeux
 SFT</a></li>
-<li><a href="#les-jeux-dpo" id="toc-les-jeux-dpo">3.4 Les jeux
+<li><a href="#les-jeux-dpo" id="toc-les-jeux-dpo">3.5 Les jeux
 DPO</a></li>
-<li><a href="#anonymisation-et-conformité-rgpd" id="toc-anonymisation-et-conformité-rgpd">3.5 Anonymisation et
+<li><a href="#anonymisation-et-conformité-rgpd" id="toc-anonymisation-et-conformité-rgpd">3.6 Anonymisation et
 conformité RGPD</a></li>
 </ul></li>
 <li><a href="#entraînement" id="toc-entraînement">4. Entraînement</a>
@@ -127,19 +131,26 @@ service déployé, avec un modèle compact : Qwen3-1.7B-Base.</p>
 <ul>
 <li><strong>Données</strong> : un corpus médical bilingue, construit à
 partir de deux sources ouvertes (MediQAl en français, UltraMedical en
-anglais). Il est vérifié par corrigé, réparti par cas clinique pour
-éviter toute fuite entre entraînement et test, et anonymisé avec
-Presidio. Il compte 6 354 exemples d’entraînement SFT et 3 357 paires
-DPO.</li>
+anglais) et <strong>sélectionné pour le triage</strong> : chaque exemple
+décrit un patient, en priorité avec des constantes et des signes
+d’urgence. Il compte 4 998 paires SFT (2 998 en français, 2 000 en
+anglais) et 3 712 paires DPO vérifiées (2 156 en français, 1 556 en
+anglais, dont 756 paires de test revues par des experts). Il est réparti
+par cas clinique pour éviter toute fuite entre entraînement et test, et
+anonymisé avec Presidio.</li>
 <li><strong>Modèle</strong> : un fine-tuning supervisé (SFT) avec LoRA,
 puis un alignement par préférences (DPO), sur une seule carte graphique
-de 10 Go. Le modèle est publié sur Hugging Face Hub, et chaque run est
-tracé dans MLflow.</li>
-<li><strong>Service</strong> : une API FastAPI protégée par clé, servie
-par vLLM, avec un journal d’audit sans donnée patient. Elle est déployée
-en local (Docker, RTX 3080) et dans le cloud (Space et Inference
-Endpoint Hugging Face). Un pipeline GitHub Actions teste, publie et
-redéploie automatiquement chaque nouvelle version.</li>
+de 10 Go. Le DPO retenu est le troisième essai, qui ajoute à la perte
+DPO un terme de vraisemblance de la bonne réponse. Chaque run est tracé
+dans MLflow. La démonstration sert encore la version précédente du
+modèle (données v3), publiée sur Hugging Face Hub.</li>
+<li><strong>Service</strong> : une API de triage (patient décrit en
+langage naturel → niveau de priorité expliqué, avec des questions
+complémentaires), protégée par clé, servie par vLLM, avec un journal
+d’audit sans donnée patient. Elle est déployée en local (Docker, RTX
+3080) et dans le cloud (Space et Inference Endpoint Hugging Face). Un
+pipeline GitHub Actions teste, publie et redéploie automatiquement
+chaque nouvelle version.</li>
 </ul>
 <p><strong>Résultats clés.</strong></p>
 <table>
@@ -155,26 +166,30 @@ redéploie automatiquement chaque nouvelle version.</li>
 </thead>
 <tbody>
 <tr>
-<td>QCM à réponse unique (749 questions)</td>
-<td>0,44 de bonnes réponses, contre 0,24 pour une réponse naïve</td>
+<td>QCM à réponse unique (389 questions)</td>
+<td>0,44 de bonnes réponses, contre 0,21 pour une réponse naïve</td>
 </tr>
 <tr>
-<td>Apport du DPO</td>
-<td>aucun sur les réponses uniques ; + 2,4 points, non significatif, sur
-les réponses multiples</td>
+<td>DPO : préférences justes (test)</td>
+<td>0,68 en français, 0,74 en anglais (0,50 = hasard)</td>
 </tr>
 <tr>
-<td>Contrôles de sécurité (12 cas)</td>
+<td>DPO : effet sur les réponses</td>
+<td>aucune régression ; propositions cochées en trop : 0,62 → 0,02 par
+question</td>
+</tr>
+<tr>
+<td>Contrôles de sécurité (12 cas, modèle v3)</td>
 <td>3 recommandations dangereuses ; entités inventées jamais
 reconnues</td>
 </tr>
 <tr>
 <td>Latence (1 requête, médiane)</td>
-<td>168 ms en local ; 745 ms dans le cloud, réseau compris</td>
+<td>79 ms en local ; ~0,75 s dans le cloud, réseau compris</td>
 </tr>
 <tr>
 <td>Débit (50 requêtes simultanées)</td>
-<td>45 requêtes par seconde</td>
+<td>64 requêtes par seconde (local)</td>
 </tr>
 </tbody>
 </table>
@@ -224,13 +239,14 @@ phases</h2>
 <tr>
 <td>1. Validation conceptuelle</td>
 <td>Corpus médical bilingue, anonymisé, prêt pour l’entraînement</td>
-<td>3 jeux SFT et 2 jeux DPO, en français et en anglais, anonymisés avec
-Presidio</td>
+<td>4 jeux SFT et 2 jeux DPO (fr, en), sélectionnés pour le triage,
+anonymisés avec Presidio</td>
 </tr>
 <tr>
 <td>2. Optimisation ciblée</td>
 <td>Adapter Qwen3-1.7B-Base par SFT LoRA, puis l’aligner par DPO</td>
-<td>Modèle SFT + DPO, publié sur Hugging Face Hub</td>
+<td>Modèle SFT + DPO, trois essais de DPO comparés ; version précédente
+publiée sur Hugging Face Hub</td>
 </tr>
 <tr>
 <td>3. Projection industrielle</td>
@@ -242,21 +258,22 @@ et de robustesse</td>
 </tbody>
 </table>
 <h2 id="périmètre-du-poc">1.3 Périmètre du POC</h2>
-<p>Le POC entraine le modèle à <strong>répondre à des questions
-médicales</strong>.</p>
+<p>Le POC entraîne le modèle à <strong>répondre à des questions
+médicales sur un patient décrit</strong>.</p>
 <ul>
-<li>En <strong>français</strong>, des QCM sur des cas cliniques
-(MediQAl), avec un corrigé officiel. Le modèle doit choisir la ou les
-bonnes propositions.</li>
-<li>En <strong>anglais</strong>, des questions biomédicales avec des
-réponses rédigées et raisonnées (UltraMedical).</li>
+<li>En <strong>français</strong>, des cas cliniques rédigés par des
+enseignants (MediQAl) : questions ouvertes à réponse rédigée, et QCM
+avec corrigé officiel.</li>
+<li>En <strong>anglais</strong>, des vignettes d’examen et des questions
+de patients, avec des réponses raisonnées (UltraMedical).</li>
 </ul>
-<p>Ce choix permet de valider toute la chaîne technique (données,
-entraînement, alignement, mise en service, traçabilité) et de mesurer
-les connaissances médicales du modèle. Il ne permet <strong>pas</strong>
-d’évaluer la capacité de triage : le modèle n’a jamais appris à
-attribuer un niveau de priorité. Constituer un jeu de triage est la
-première étape de la feuille de route (partie 8).</p>
+<p>Les cas sont sélectionnés pour leur proximité avec le triage
+(constantes, signes d’urgence). Ce choix permet de valider toute la
+chaîne technique (données, entraînement, alignement, mise en service,
+traçabilité) et de mesurer les connaissances médicales du modèle. Il ne
+permet <strong>pas</strong> d’évaluer la capacité de triage : aucune
+source n’attribue de niveau de priorité. Constituer un jeu de triage est
+la première étape de la feuille de route (partie 8).</p>
 <h2 id="environnement">1.4 Environnement</h2>
 <p>Tout le projet a été réalisé sur un poste de travail : carte
 graphique NVIDIA RTX 3080 (10 Go), sous Linux (WSL 2).</p>
@@ -266,12 +283,12 @@ l’enchaînement des briques</h1>
 <p>Le schéma suit le parcours des données, des sources publiques jusqu’à
 la réponse de l’API.</p>
 <pre><code> Sources publiques (Hugging Face)
-   MediQAl (fr, QCM)       UltraMedical-Preference (en)
+   MediQAl (fr, cas cliniques)   UltraMedical-Preference (en)
         |                            |
         v                            v
  [1] Préparation des données (notebooks Python)
-     nettoyage, filtres qualité, répartition par cas clinique,
-     anonymisation Presidio
+     nettoyage, filtres qualité, sélection pour le triage,
+     répartition par cas clinique, anonymisation Presidio
         |
         v
      JSONL anonymisés : SFT (messages), DPO (prompt/chosen/rejected)
@@ -347,8 +364,8 @@ la réponse de l’API.</p>
 <tr>
 <td>Exposition</td>
 <td>FastAPI</td>
-<td>Valider, authentifier, tracer</td>
-<td><code>POST /qcm</code>, <code>GET /health</code></td>
+<td>Valider, authentifier, décider, tracer</td>
+<td><code>POST /triage</code>, <code>GET /health</code></td>
 </tr>
 <tr>
 <td>Conteneurs</td>
@@ -390,7 +407,7 @@ quatre étapes.</p>
 <tr>
 <td><code>tests</code></td>
 <td>serveur GitHub</td>
-<td>20 tests de l’API, vLLM simulé (pas de GPU)</td>
+<td>18 tests de l’API, vLLM simulé (pas de GPU)</td>
 </tr>
 <tr>
 <td><code>image</code></td>
@@ -419,10 +436,11 @@ datasets SFT et DPO</h1>
 choix</h2>
 <table>
 <colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
 </colgroup>
 <thead>
 <tr>
@@ -430,240 +448,194 @@ choix</h2>
 <th>Langue</th>
 <th>Contenu</th>
 <th>Licence</th>
+<th>Usage</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>MediQAl</td>
 <td>fr</td>
-<td>QCM médicaux avec corrigé, avec ou sans cas clinique</td>
+<td>Cas cliniques rédigés par des enseignants en médecine, avec
+questions ouvertes (<code>oeq</code>) et QCM (<code>mcqu</code>,
+<code>mcqm</code>) corrigés</td>
 <td>CC-BY-4.0</td>
+<td>SFT et DPO</td>
 </tr>
 <tr>
 <td>UltraMedical-Preference</td>
 <td>en</td>
-<td>Questions biomédicales, réponses de LLM notées</td>
+<td>Vignettes d’examen (MedQA, MedMCQA), questions de patients
+(ChatDoctor) ; réponses de LLM notées par GPT-4, test revu par des
+experts</td>
 <td>MIT</td>
+<td>SFT et DPO</td>
 </tr>
 </tbody>
 </table>
 <p>Trois critères ont guidé le choix :</p>
 <ul>
+<li><strong>Proche du triage</strong> : un patient est décrit (âge,
+symptômes, constantes) et une décision est attendue.</li>
 <li><strong>Bilingue</strong> : le français pour la cible (le CHSA),
 l’anglais pour la richesse des ressources médicales.</li>
-<li><strong>Vérifiable</strong> : un corrigé ou une note permet de
-contrôler automatiquement chaque exemple. C’est ce qui rend possible le
-principe « qualité plutôt que quantité ».</li>
+<li><strong>Vérifiable</strong> : un corrigé, une réponse d’enseignant
+ou une note permet de contrôler chaque exemple.</li>
 </ul>
-<p><strong>MediQAl</strong> (configurations <code>mcqu</code> et
-<code>mcqm</code>) rassemble des QCM rédigés par des enseignants en
-médecine. Les mauvaises propositions (les <em>distracteurs</em>) sont
-plausibles par construction, ce qui est précieux pour le DPO.</p>
-<p><strong>UltraMedical-Preference</strong> réunit des questions
-d’examens (MedQA, MedMCQA, PubMedQA), d’échanges patients-médecins
-(ChatDoctor), de manuels et de Wikipédia. Chacune a plusieurs réponses
-générées par des LLM (GPT-4, Llama-3, Mixtral, Qwen…) et notées par
-GPT-4. Son jeu de test (777 paires) a été revu par des experts
-biomédicaux.</p>
+<p>Deux autres jeux ont été étudiés et écartés. <strong>MedQuAD</strong>
+ne contient que des questions générales sur les maladies (« What are the
+symptoms of X? ») : aucune de ses 5 948 questions reprises dans
+UltraMedical ne décrit un patient, et il n’a qu’une réponse par
+question, sans réponse rejetée pour le DPO.
+<strong>FrenchMedMCQA</strong> rassemble des QCM de pharmacie sans cas
+clinique.</p>
 <h2 id="principes-de-construction">3.2 Principes de construction</h2>
 <p><strong>Qualité plutôt que quantité.</strong> Chaque exemple est
-vérifié avant d’être retenu : par le corrigé pour les QCM, par la note
-GPT-4 sinon. Les jeux sont ensuite plafonnés, plutôt que gonflés par des
-exemples douteux.</p>
-<p><strong>Répartition par cas clinique.</strong> Dans MediQAl, un même
-cas clinique sert à plusieurs questions, et les découpages officiels
-partagent des cas : <strong>954 cas</strong> se trouvent à la fois dans
-le train et dans le test officiels. Un modèle évalué sur ces cas les
-aurait déjà lus à l’entraînement, et ses scores seraient surestimés.
-MediQAl ne fournit pas d’identifiant de cas ; nous en avons calculé
-un.</p>
-<ul>
-<li>L’<strong>identifiant</strong> est l’empreinte SHA-1 du texte du
-cas, après normalisation des espaces et de la casse.</li>
-<li>Un <strong>premier tirage</strong>, dérivé de l’identifiant, affecte
-le cas au SFT ou au DPO (50 % chacun).</li>
-<li>Un <strong>second tirage</strong> l’affecte au train (70 %), à la
-validation (10 %) ou au test (20 %).</li>
-</ul>
-<p>Les tirages sont déterministes : tous les notebooks obtiennent la
-même répartition. Un contrôle final vérifie, sur tous les fichiers
-MediQAl, qu’aucun cas n’est partagé entre SFT et DPO ni entre deux
-splits. Résultat : <strong>1 039 cas</strong> pour le SFT et <strong>767
-cas</strong> pour le DPO, sans recouvrement.</p>
-<p><strong>Pas de recouvrement entre SFT et DPO.</strong> Le même
-principe s’applique à UltraMedical : les 3 056 questions utilisées par
-le DPO sont exclues du SFT.</p>
-<p><strong>Formats standard.</strong> Tous les jeux sont au format
-JSONL, lisible par la bibliothèque Hugging Face <code>datasets</code>
-:</p>
-<ul>
-<li>SFT : une liste <code>messages</code> (système, utilisateur,
-assistant) ;</li>
-<li>DPO : <code>prompt</code>, <code>chosen</code> (réponse préférée) et
-<code>rejected</code> (réponse moins bonne).</li>
-</ul>
-<p>Chaque exemple garde ses métadonnées : source, langue, identifiant de
-cas clinique, corrigé, type d’erreur, contrôle appliqué et nombre de
-noms anonymisés. Le schéma complet est documenté dans le README du
-dépôt.</p>
-<h2 id="les-jeux-sft">3.3 Les jeux SFT</h2>
+vérifié avant d’être retenu, puis les jeux sont plafonnés : environ 5
+000 paires pour le SFT, un plafond (et non un objectif) pour le DPO.</p>
+<p><strong>Une ligne par cas clinique.</strong> Un cas MediQAl porte
+plusieurs questions qui forment un récit : examens, résultats,
+évolution, traitement. Chaque cas devient une conversation : le cas et
+la première question, la réponse, la question suivante, sa réponse, et
+ainsi de suite. À l’entraînement, la perte porte sur <strong>toutes les
+réponses</strong> de l’assistant, chacune avec l’historique qui la
+précède : c’est l’équivalent d’un exemple par question, sans dupliquer
+le texte (quatre fois moins de tokens). Un cas trop long (plus de 3 500
+caractères) est coupé en tranches, chacune reprenant le cas en tête.</p>
+<p><strong>Répartition par cas clinique.</strong> Les découpages
+officiels de MediQAl partagent des cas entre train et test : un modèle
+évalué sur ces cas les aurait déjà lus. L’identifiant d’un cas est
+l’empreinte SHA-1 de son texte normalisé ; un tirage déterministe qui en
+dérive l’affecte au train (70 %), à la validation (10 %) ou au test (20
+%), de façon identique dans tous les notebooks. Le DPO n’utilise que des
+cas MediQAl non retenus pour le SFT ; pour UltraMedical, un premier
+tirage attribue chaque question au SFT ou au DPO (moitié chacun). Aucun
+cas ni aucune question n’est commun aux deux.</p>
+<p><strong>Formats standard.</strong> JSONL lisible par Hugging Face
+<code>datasets</code> : <code>messages</code> pour le SFT,
+<code>prompt</code> / <code>chosen</code> / <code>rejected</code> pour
+le DPO. Chaque exemple garde ses métadonnées (source, langue,
+identifiants, cas, spécialité, corrigé, contrôle appliqué, critères de
+triage, noms anonymisés), documentées dans le README.</p>
+<h2 id="sélection-pour-le-triage">3.3 Sélection pour le triage</h2>
+<p>Le corpus complet compte près de 30 000 questions en français. On
+garde les <strong>cas les plus proches du triage</strong>, par cas
+entier, avec les mêmes critères dans les deux langues :</p>
+<ol type="1">
+<li><strong>Patient décrit</strong> (obligatoire) : un cas clinique, une
+vignette (« A 45-year-old man… ») ou un patient qui décrit ses
+symptômes.</li>
+<li><strong>Score de pertinence</strong> (0 à 2) : présence de
+<strong>constantes</strong> (PA, FC, SpO₂, température, Glasgow…) et de
+vocabulaire d’<strong>urgence</strong> ou de conduite à tenir
+(hospitalisation, gravité, choc, détresse…).</li>
+<li><strong>Budget</strong> de questions, réparti entre train,
+validation et test : cas de score 2, puis 1, dans un ordre
+pseudo-aléatoire fixe.</li>
+<li><strong>Plafond par spécialité</strong> (15 % du budget) ou par
+source (40 %), pour garder la diversité.</li>
+</ol>
 <table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
 <thead>
 <tr>
 <th>Jeu</th>
-<th>Langue</th>
-<th>Train</th>
-<th>Validation</th>
-<th>Test</th>
-<th>Réponse attendue</th>
+<th>Questions disponibles</th>
+<th>Patient, score ≥ 1</th>
+<th>Retenues (cas)</th>
+<th>Train / val. / test</th>
 </tr>
 </thead>
 <tbody>
 <tr>
+<td>MediQAl <code>oeq</code></td>
+<td>3 632</td>
+<td>2 672</td>
+<td>1 098 (204)</td>
+<td>770 / 109 / 219</td>
+</tr>
+<tr>
 <td>MediQAl <code>mcqu</code></td>
-<td>fr</td>
-<td>2 454</td>
-<td>342</td>
-<td>749</td>
-<td>Une proposition</td>
+<td>16 212</td>
+<td>4 430</td>
+<td>1 200 (293)</td>
+<td>840 / 120 / 240</td>
 </tr>
 <tr>
 <td>MediQAl <code>mcqm</code></td>
-<td>fr</td>
-<td>2 400</td>
-<td>380</td>
-<td>931</td>
-<td>Liste de 2 à 5</td>
+<td>10 006</td>
+<td>2 342</td>
+<td>700 (251)</td>
+<td>490 / 70 / 140</td>
 </tr>
 <tr>
 <td>UltraMedical</td>
-<td>en</td>
-<td>1 500</td>
-<td>300</td>
-<td>500</td>
-<td>Texte raisonné</td>
+<td>12 038</td>
+<td>3 518</td>
+<td>2 000</td>
+<td>1 400 / 200 / 400</td>
 </tr>
 <tr>
 <td><strong>Total</strong></td>
 <td></td>
-<td><strong>6 354</strong></td>
-<td><strong>1 022</strong></td>
-<td><strong>2 180</strong></td>
 <td></td>
+<td><strong>4 998</strong></td>
+<td><strong>3 500 / 499 / 999</strong></td>
 </tr>
 </tbody>
 </table>
-<p>Le train compte 6 354 exemples, pour un objectif d’environ 5 000
-paires.</p>
-<p><strong>MediQAl <code>mcqu</code></strong> (une seule bonne réponse).
-Les 17 017 questions des trois splits officiels sont réunies, puis
-filtrées :</p>
-<table>
-<thead>
-<tr>
-<th>Étape</th>
-<th>Questions</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Splits officiels réunis</td>
-<td>17 017</td>
-</tr>
-<tr>
-<td>Avec cas clinique, après dédoublonnage</td>
-<td>6 919</td>
-</tr>
-<tr>
-<td>Cas réservés au SFT : train / validation / test</td>
-<td>2 454 / 342 / 749</td>
-</tr>
-</tbody>
-</table>
-<p>Seules les questions rattachées à un cas clinique sont gardées :
-elles décrivent un patient, ce qui est le plus proche du triage. Les 2
-454 questions d’entraînement portent sur 684 cas distincts.</p>
-<p><strong>MediQAl <code>mcqm</code></strong> (plusieurs bonnes
-réponses). Ce jeu prépare le DPO français, qui compare des listes de
-propositions : le modèle doit avoir appris ce format en SFT, car le DPO
-ajuste des préférences mais n’enseigne pas un nouveau format. Il réunit
-deux parties :</p>
-<table>
-<thead>
-<tr>
-<th>Partie</th>
-<th>Train</th>
-<th>Validation</th>
-<th>Test</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Sans cas clinique (échantillon)</td>
-<td>1 000</td>
-<td>200</td>
-<td>500</td>
-</tr>
-<tr>
-<td>Avec cas clinique (cas du SFT)</td>
-<td>1 400</td>
-<td>180</td>
-<td>431</td>
-</tr>
-</tbody>
-</table>
-<p>Les questions avec cas évitent que le modèle associe « cas clinique »
-à « une seule réponse », le seul format vu avec un cas dans
-<code>mcqu</code>.</p>
+<p>Plus de 90 % des cas retenus contiennent du vocabulaire d’urgence ;
+les constantes figurent dans 67 à 100 % des cas français selon le split,
+et dans 56 % des questions anglaises. Le plafond limite la Pharmacie,
+plus de 40 % des questions ouvertes disponibles, à 161 questions ;
+Réanimation, Pneumologie, Cardiologie et Médecine d’urgence suivent.</p>
+<h2 id="les-jeux-sft">3.4 Les jeux SFT</h2>
+<p><strong>MediQAl <code>oeq</code></strong> (questions ouvertes).
+Publiées dans une seule partie (4 969 questions), redécoupées par cas.
+Les questions qui renvoient à une image (122) et la Cardiologie
+pédiatrique (1 206 questions, loin des urgences adultes) sont écartées.
+Les réponses rédigées par les enseignants apprennent au modèle à
+<strong>expliquer</strong>, ce que les QCM ne font pas.</p>
+<p><strong>MediQAl <code>mcqu</code> et <code>mcqm</code></strong> (QCM
+à une ou plusieurs bonnes réponses). Les trois parties officielles sont
+réunies (17 017 questions en <code>mcqu</code>), puis redécoupées par
+cas. Chaque question porte ses propositions A à E et une consigne (« Une
+seule proposition est exacte », « Plusieurs propositions sont exactes
+»). La mention « (cochez la réponse fausse) » est conservée : elle
+inverse le sens de la question. La réponse attendue donne la lettre et
+le texte (<code>C. …</code>), ou une liste : la lettre vient en premier,
+ce qui rend l’exactitude mesurable automatiquement.</p>
 <p><strong>UltraMedical</strong> (anglais). La meilleure réponse de
-chaque question sert de réponse attendue, après plusieurs filtres :</p>
-<table>
-<thead>
-<tr>
-<th>Étape</th>
-<th>Exemples (train)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Paires d’origine</td>
-<td>109 353</td>
-</tr>
-<tr>
-<td>Sans les questions du DPO</td>
-<td>103 582</td>
-</tr>
-<tr>
-<td>Réponses de qualité (corrigé ou note GPT-4)</td>
-<td>68 883</td>
-</tr>
-<tr>
-<td>Une réponse par question</td>
-<td>52 695</td>
-</tr>
-<tr>
-<td>Réponse entière sous la limite de longueur</td>
-<td>50 989</td>
-</tr>
-<tr>
-<td>Échantillon retenu</td>
-<td>1 500</td>
-</tr>
-</tbody>
-</table>
+chaque question sert de réponse attendue. Des 111 541 paires d’origine
+(hors questions du test expert), on garde 55 964 questions dont la
+réponse est vérifiée (corrigé du QCM) et notée au moins 4,5 par GPT-4,
+puis 24 269 issues de sources cliniques (MedQA, MedQA-Evol, MedMCQA,
+ChatDoctor), 12 038 dans la moitié SFT, et 2 000 après la sélection pour
+le triage.</p>
 <p>Le filtre de longueur a une raison précise : une réponse coupée
-perdrait son token de fin, et le modèle apprendrait à ne pas
-s’arrêter.</p>
-<p>La réponse attendue donne la lettre et le texte de la bonne
-proposition (<code>D. PS IIIB</code>), ou une liste
-(<code>- A. ...</code>) pour les réponses multiples. La lettre vient en
-premier : l’exactitude se mesure automatiquement en relisant les
-lettres.</p>
-<h2 id="les-jeux-dpo">3.4 Les jeux DPO</h2>
-<p>Le DPO apprend au modèle à préférer une réponse à une autre. Chaque
-exemple est une paire : pour un même prompt, une réponse
-<code>chosen</code> et une réponse <code>rejected</code>.</p>
-<table>
+perdrait son token de fin, et le modèle apprendrait à ne pas s’arrêter.
+Avec une longueur maximale d’entraînement de 1 536 tokens, aucune ligne
+n’est coupée.</p>
+<h2 id="les-jeux-dpo">3.5 Les jeux DPO</h2>
+<p>Le DPO apprend au modèle à préférer une réponse à une autre : pour un
+même prompt, une réponse <code>chosen</code> et une réponse
+<code>rejected</code>. Les deux jeux suivent les mêmes principes que le
+SFT : orientés triage, vérifiés, sans cas ni question commune avec le
+SFT.</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 16%" />
+</colgroup>
 <thead>
 <tr>
 <th>Jeu</th>
@@ -671,187 +643,95 @@ exemple est une paire : pour un même prompt, une réponse
 <th>Train</th>
 <th>Validation</th>
 <th>Test</th>
+<th>Vérification</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>MediQAl <code>mcqm</code></td>
+<td>MediQAl <code>mcqu</code> et <code>mcqm</code></td>
 <td>fr</td>
-<td>1 357</td>
-<td>220</td>
-<td>481</td>
+<td>1 507</td>
+<td>201</td>
+<td>448</td>
+<td>corrigé</td>
 </tr>
 <tr>
 <td>UltraMedical-Preference</td>
 <td>en</td>
-<td>2 000</td>
-<td>300</td>
+<td>727</td>
+<td>73</td>
 <td>756</td>
+<td>corrigé ou note ; test revu par des experts</td>
 </tr>
 </tbody>
 </table>
-<p>À l’entraînement, les paires de plus de 1 024 tokens sont écartées
-(contrainte de mémoire GPU) : il reste 1 994, 297 et 750 paires
-anglaises.</p>
+<p>Les jeux DPO en sont à leur <strong>version 5</strong> ; le SFT reste
+en version 4. Chaque version corrige un raccourci appris par l’essai
+précédent (partie 4.3).</p>
 <p><strong>Le jeu français : des erreurs construites et garanties
-fausses.</strong> Les 4 066 questions <code>mcqm</code> avec cas
-clinique sont filtrées sur les cas réservés au DPO (521 cas pour le
-train). Pour chaque question :</p>
+fausses.</strong> Les QCM des cas cliniques non retenus pour le SFT sont
+sélectionnés avec les mêmes critères de triage (750 questions
+<code>mcqu</code> et 1 500 <code>mcqm</code> au plus). Le prompt reprend
+le format du SFT : le cas, les questions précédentes avec leurs réponses
+de référence, puis la question. La <code>chosen</code> est le corrigé ;
+la <code>rejected</code> contient <strong>une seule erreur</strong>,
+prise parmi les distracteurs rédigés par les enseignants : plausible, et
+garantie fausse par le corrigé.</p>
+<p>En <code>mcqu</code>, la <code>rejected</code> est un distracteur à
+la place de la bonne réponse (726 paires). En <code>mcqm</code> (1 430
+paires), l’erreur est une <strong>substitution</strong> (une bonne
+proposition remplacée par une mauvaise, 716 paires), une
+<strong>omission</strong> (une bonne proposition retirée, 356) ou un
+<strong>ajout</strong> (une mauvaise ajoutée, 358).</p>
 <ul>
-<li>la <code>chosen</code> est la liste des bonnes propositions, d’après
-le corrigé ;</li>
-<li>la <code>rejected</code> est la même liste avec <strong>une seule
-erreur</strong>, tirée au hasard parmi trois types.</li>
+<li><strong>Consigne respectée</strong> : une omission n’est construite
+que si la <code>rejected</code> contient encore au moins deux
+propositions. En v3, 81 paires de test contredisaient la consigne, ce
+qui rendait l’erreur trop facile à repérer.</li>
+<li><strong>Le nombre de propositions ne trahit pas la bonne
+réponse</strong> : moitié de substitutions (autant de propositions de
+part et d’autre), autant d’omissions que d’ajouts. En v3 et v4, avec un
+tiers de chaque type, le DPO avait appris à « cocher moins ».</li>
 </ul>
-<table>
-<thead>
-<tr>
-<th>Type d’erreur</th>
-<th>Construction</th>
-<th>Paires (train)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Omission</td>
-<td>une bonne proposition retirée</td>
-<td>495</td>
-</tr>
-<tr>
-<td>Ajout</td>
-<td>une mauvaise proposition ajoutée</td>
-<td>428</td>
-</tr>
-<tr>
-<td>Substitution</td>
-<td>une bonne remplacée par une mauvaise</td>
-<td>434</td>
-</tr>
-</tbody>
-</table>
-<p>Les mauvaises propositions viennent des distracteurs rédigés par les
-enseignants : l’erreur est plausible, et le corrigé garantit qu’elle est
-fausse. Les propositions sont toujours affichées dans l’ordre A à E,
-pour que la position ne trahisse pas l’erreur. La <code>chosen</code>
-est la plus longue des deux réponses dans environ la moitié des paires :
-la longueur ne permet pas de deviner la bonne réponse.</p>
-<p><strong>Le jeu anglais : des préférences vérifiées et
-équilibrées.</strong></p>
-<table>
-<thead>
-<tr>
-<th>Étape</th>
-<th>Paires (train)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Paires d’origine</td>
-<td>109 353</td>
-</tr>
-<tr>
-<td>Types <code>hard</code> et <code>length</code>, <code>chosen</code>
-mieux notée</td>
-<td>80 306</td>
-</tr>
-<tr>
-<td>Préférence vérifiée (corrigé, ou écart de note net)</td>
-<td>10 362</td>
-</tr>
-<tr>
-<td>Nettoyage et dédoublonnage</td>
-<td>8 879</td>
-</tr>
-<tr>
-<td>Sans les questions de validation et de test</td>
-<td>8 817</td>
-</tr>
-<tr>
-<td>Sous la limite de longueur</td>
-<td>8 577</td>
-</tr>
-<tr>
-<td>Échantillon équilibré sur la longueur</td>
-<td>2 000</td>
-</tr>
-</tbody>
-</table>
-<p>Pour les sources QCM, une paire n’est gardée que si le corrigé
-confirme que la <code>chosen</code> est juste et la
-<code>rejected</code> fausse. Pour les autres sources, sans corrigé, la
-<code>chosen</code> doit avoir une très bonne note et un écart net avec
-la <code>rejected</code>. Le champ <code>pair_check</code> garde la
-trace du contrôle appliqué.</p>
-<p><strong>L’équilibrage sur la longueur</strong> corrige un biais
-découvert au premier entraînement. Après filtrage, la
-<code>chosen</code> n’était la plus longue que dans un quart des paires.
-Le modèle avait surtout appris que « la réponse la plus courte est la
-meilleure » : 0,82 de préférences justes en validation, mais 0,51 en
-test, soit le hasard. Le train et la validation contiennent désormais
-autant de paires où la <code>chosen</code> est la plus longue que de
-paires où elle est la plus courte.</p>
-<p>Le <strong>test</strong> est gardé entier et non équilibré : revu par
-des experts, il représente la distribution réelle (la
-<code>chosen</code> y est la plus longue dans 70 % des paires).
-L’évaluation le découpe selon la longueur, pour détecter un biais
-résiduel.</p>
-<h2 id="anonymisation-et-conformité-rgpd">3.5 Anonymisation et
+<p><strong>Le jeu anglais : des préférences vérifiées, courtes et
+équilibrées.</strong> Des 111 585 paires d’origine, 24 772 relèvent de
+la moitié DPO et des sources du SFT, hors test expert. 4 195 ont une
+préférence vérifiée et 2 431 décrivent un patient. 800 forment
+l’échantillon final, avec une paire par question.</p>
+<ul>
+<li><strong>Vérification</strong> : pour les QCM, la <code>chosen</code>
+donne la lettre du corrigé et la <code>rejected</code> une autre (790
+paires) ; pour ChatDoctor, note d’au moins 4,5 et écart d’au moins 2
+points (10 paires).</li>
+<li><strong>Réponses de 2 000 caractères au plus</strong> (675 paires
+écartées, dont 381 ChatDoctor) : en v4, les réponses anglaises, environ
+30 fois plus longues qu’une paire française, dominaient l’apprentissage,
+et leur style débordait sur le français.</li>
+<li><strong>Équilibrage sur la longueur</strong> : en v3, le modèle
+avait appris que « la réponse la plus courte est la meilleure » (0,82 de
+préférences justes en validation, 0,51 en test). Le jeu compte désormais
+400 paires dans chaque sens.</li>
+<li><strong>Test</strong> : le jeu revu par des experts (756 paires),
+gardé entier, dont 160 paires proches du triage mesurées à part.</li>
+</ul>
+<h2 id="anonymisation-et-conformité-rgpd">3.6 Anonymisation et
 conformité RGPD</h2>
 <p><strong>L’outil.</strong> Presidio (Microsoft) détecte les noms de
-personnes avec les modèles de langue spaCy
-(<code>fr_core_news_md</code>, <code>en_core_web_md</code>) et les
-remplace par la balise <code>&lt;PERSON&gt;</code>. Seules les
-détections de score supérieur ou égal à 0,5 sont retenues. Des règles
-propres au domaine médical écartent ensuite les faux positifs les plus
-fréquents :</p>
-<table>
-<thead>
-<tr>
-<th>Motif d’exclusion</th>
-<th>Exemple</th>
-<th>Détections écartées</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Mot sans majuscule</td>
-<td>« fièvre », « dyspnée »</td>
-<td>6 225</td>
-</tr>
-<tr>
-<td>Sigle</td>
-<td>« HTA », « ECG »</td>
-<td>516</td>
-</tr>
-<tr>
-<td>Éponyme médical</td>
-<td>« maladie de Basedow »</td>
-<td>513</td>
-</tr>
-<tr>
-<td>Marque déposée</td>
-<td>nom commercial d’un médicament</td>
-<td>197</td>
-</tr>
-<tr>
-<td>Mot exclu (liste)</td>
-<td>termes médicaux fréquents</td>
-<td>104</td>
-</tr>
-<tr>
-<td><strong>Total</strong></td>
-<td></td>
-<td><strong>7 555</strong></td>
-</tr>
-</tbody>
-</table>
-<p>Sans ces règles, plus de 7 500 termes médicaux auraient été remplacés
-par <code>&lt;PERSON&gt;</code>.</p>
-<p><strong>Un périmètre ciblé.</strong> Anonymiser tout le texte aurait
-détruit l’information médicale : Presidio prend de nombreux termes
-médicaux pour des noms (« Angiographie », « Érythrose palmaire », gènes
-« Akt » ou « FOXO1 »). Seuls les champs qui peuvent décrire un patient
-réel sont donc traités :</p>
+personnes avec spaCy (<code>fr_core_news_md</code>,
+<code>en_core_web_md</code>) et une règle sur les civilités, puis les
+remplace par <code>&lt;PERSON&gt;</code> (score minimal 0,5). Des règles
+médicales écartent les faux positifs : mots sans majuscule, sigles,
+éponymes (« maladie de Basedow »), marques, chiffres, paramètre suivi
+d’une valeur (« PaO2 96 mmHg »), mot qui n’est pas un nom propre pour
+spaCy (« Justifiez »). Ces deux dernières règles ont été ajoutées en v4
+après un contrôle par sondage des balises <code>&lt;PERSON&gt;</code> :
+sur les questions ouvertes, environ la moitié des remplacements étaient
+des faux positifs, jusque dans les réponses attendues (« <PERSON> coli »
+pour <em>Escherichia coli</em>). Un nom placé après une civilité est
+toujours remplacé, même en majuscules (« Monsieur DURAND »).</p>
+<p><strong>Un périmètre ciblé.</strong> Anonymiser tout le texte
+détruirait l’information médicale. Seuls les champs qui peuvent décrire
+un patient réel sont traités :</p>
 <table>
 <colgroup>
 <col style="width: 33%" />
@@ -867,13 +747,15 @@ réel sont donc traités :</p>
 </thead>
 <tbody>
 <tr>
-<td>MediQAl</td>
-<td>cas clinique et question</td>
-<td>ils décrivent le patient</td>
+<td>MediQAl <code>oeq</code></td>
+<td>cas et questions ; dans les réponses, noms après une civilité
+seulement</td>
+<td>les réponses reprennent parfois le nom du patient, mais leurs autres
+détections sont des termes médicaux</td>
 </tr>
 <tr>
-<td>MediQAl</td>
-<td>propositions et réponses : non</td>
+<td>MediQAl QCM (SFT et DPO)</td>
+<td>cas et question ; propositions et réponses non</td>
 <td>énoncés rédigés par les enseignants</td>
 </tr>
 <tr>
@@ -889,56 +771,68 @@ réunis) :</p>
 <thead>
 <tr>
 <th>Jeu</th>
-<th>Exemples</th>
-<th>Modifiés</th>
+<th>Lignes</th>
+<th>Analysées</th>
+<th>Modifiées</th>
 <th>Noms remplacés</th>
 </tr>
 </thead>
 <tbody>
 <tr>
+<td>SFT MediQAl <code>oeq</code></td>
+<td>369</td>
+<td>369</td>
+<td>211</td>
+<td>564</td>
+</tr>
+<tr>
 <td>SFT MediQAl <code>mcqu</code></td>
-<td>3 545</td>
-<td>1 209</td>
-<td>2 157</td>
+<td>353</td>
+<td>353</td>
+<td>123</td>
+<td>225</td>
 </tr>
 <tr>
 <td>SFT MediQAl <code>mcqm</code></td>
-<td>3 711</td>
-<td>722</td>
-<td>1 249</td>
-</tr>
-<tr>
-<td>DPO MediQAl <code>mcqm</code></td>
-<td>2 058</td>
-<td>674</td>
-<td>1 235</td>
+<td>263</td>
+<td>263</td>
+<td>85</td>
+<td>164</td>
 </tr>
 <tr>
 <td>SFT UltraMedical</td>
-<td>2 300</td>
-<td>96</td>
-<td>203</td>
+<td>2 000</td>
+<td>467 (ChatDoctor)</td>
+<td>200</td>
+<td>406</td>
+</tr>
+<tr>
+<td>DPO MediQAl</td>
+<td>2 156</td>
+<td>2 156</td>
+<td>579</td>
+<td>1 053</td>
 </tr>
 <tr>
 <td>DPO UltraMedical</td>
-<td>3 056</td>
-<td>174</td>
-<td>464</td>
+<td>1 556</td>
+<td>102 (ChatDoctor)</td>
+<td>57</td>
+<td>136</td>
 </tr>
 </tbody>
 </table>
-<p>Pour UltraMedical, seuls les exemples ChatDoctor sont analysés : 190
-en SFT et 290 en DPO. Les remplacements comptés dans MediQAl peuvent
-inclure des faux positifs résiduels : chaque notebook affiche le
-contexte de chaque balise <code>&lt;PERSON&gt;</code> pour une
-relecture.</p>
-<p><strong>Contrôles.</strong> Après anonymisation, des contrôles
-vérifient que les propositions et les réponses MediQAl sont intactes
-(aucune balise <code>&lt;PERSON&gt;</code> sur les 9 314 exemples), et
-que les paires DPO restent distinctes (<code>chosen</code> différente de
-<code>rejected</code>). Un rapport par fichier enregistre les paramètres
-(modèle spaCy, seuil, champs traités), les comptes et les détections
-écartées par motif.</p>
+<p>Au total, 4 759 détections ont été écartées par les règles, dont 3
+074 mots sans majuscule, 568 mots qui ne sont pas des noms propres, 319
+éponymes et 282 sigles. Un cas qui revient dans plusieurs paires DPO
+compte ses noms à chaque fois.</p>
+<p><strong>Contrôles.</strong> Après anonymisation, les contrôles finaux
+vérifient qu’aucun cas n’est partagé entre splits, que chaque ligne
+MediQAl part d’un cas clinique, que les propositions et réponses des QCM
+sont intactes, que les paires DPO restent distinctes et qu’aucune
+question n’est commune au SFT et au DPO. Un rapport par fichier
+enregistre les paramètres, les comptes et les détections écartées par
+motif.</p>
 <p><strong>Justification RGPD.</strong></p>
 <ul>
 <li><strong>Minimisation</strong> : seuls les champs susceptibles de
@@ -947,8 +841,8 @@ ajoutée.</li>
 <li><strong>Pseudonymisation irréversible</strong> : les noms sont
 remplacés par une balise, sans table de correspondance.</li>
 <li><strong>Traçabilité</strong> : chaque fichier anonymisé a son
-rapport (paramètres, comptes, motifs d’exclusion), et chaque exemple
-garde le nombre de noms remplacés (<code>persons_replaced</code>).</li>
+rapport, et chaque exemple garde le nombre de noms remplacés
+(<code>persons_replaced</code>).</li>
 <li><strong>Données dérivées non publiées</strong> : les jeux anonymisés
 ne sont pas versionnés dans Git. Ils se régénèrent à partir des sources
 et des notebooks.</li>
@@ -956,6 +850,12 @@ et des notebooks.</li>
 conserve que l’empreinte de l’entrée, jamais le texte du cas.</li>
 </ul>
 <h1 id="entraînement">4. Entraînement</h1>
+<p>Le modèle final est entraîné sur les données décrites en partie 3 :
+SFT sur la version 4, DPO sur la version 5. Tout se trouve dans
+<code>notebook/sft_lora.ipynb</code>. La démonstration (partie 6) sert
+encore le modèle précédent, entraîné sur la version 3 (une question par
+exemple, sans questions ouvertes) ; la publication du modèle final est
+la prochaine étape.</p>
 <h2 id="méthode-sft-puis-dpo-avec-lora">4.1 Méthode : SFT puis DPO, avec
 LoRA</h2>
 <p>L’entraînement se fait en deux temps, sur le même modèle de base,
@@ -999,8 +899,8 @@ de charger un second modèle en mémoire.</p>
 <tbody>
 <tr>
 <td>Données (train)</td>
-<td>6 354 exemples</td>
-<td>3 351 paires</td>
+<td>2 086 lignes, 3 500 questions (v4)</td>
+<td>2 234 paires (v5)</td>
 </tr>
 <tr>
 <td>LoRA</td>
@@ -1024,89 +924,143 @@ de charger un second modèle en mémoire.</p>
 </tr>
 <tr>
 <td>Batch effectif</td>
-<td>16 exemples (4 × 4)</td>
+<td>16 lignes (2 × 8)</td>
 <td>16 paires (2 × 8)</td>
 </tr>
 <tr>
 <td>Longueur maximale</td>
-<td>1 024 tokens</td>
+<td>1 536 tokens</td>
 <td>1 024 tokens</td>
 </tr>
 <tr>
-<td>Paramètre propre</td>
-<td>—</td>
-<td>beta = 0,1</td>
+<td>Perte</td>
+<td>toutes les réponses de l’assistant</td>
+<td>DPO (beta = 0,1) + vraisemblance de la <code>chosen</code>, poids 1
+et 1</td>
 </tr>
 <tr>
 <td>Pas d’entraînement</td>
-<td>398</td>
-<td>210</td>
+<td>131</td>
+<td>140</td>
 </tr>
 <tr>
 <td>Durée (RTX 3080)</td>
-<td>30 min</td>
-<td>53 min</td>
+<td>19 min</td>
+<td>31 min</td>
 </tr>
 </tbody>
 </table>
-<p>Deux réglages ont été ajustés au fil des runs :</p>
+<p>Trois réglages ont été ajustés au fil des runs :</p>
 <ul>
-<li><strong>Une seule époque de SFT</strong> : avec deux époques, la
-perte de validation atteignait son minimum à la fin de la première, puis
-remontait légèrement. La seconde époque coûtait 30 minutes sans rien
-apporter.</li>
+<li><strong>Une seule époque de SFT</strong> : avec deux époques (v3),
+la perte de validation atteignait son minimum à la fin de la première,
+puis remontait légèrement. La seconde époque coûtait 30 minutes sans
+rien apporter.</li>
 <li><strong>Learning rate du DPO à 5e-5</strong> : la valeur usuelle en
 DPO complet (5e-6) ne produisait presque aucun apprentissage avec LoRA,
 qui n’entraîne qu’1 % des poids. La marge entre réponses préférées et
 rejetées restait proche de zéro.</li>
+<li><strong>Terme de vraisemblance dans la perte DPO</strong> (essais 2
+et 3 ci-dessous) : le DPO seul compare deux réponses, sans rien imposer
+sur leur forme. Ajouter la perte du SFT sur la <code>chosen</code>
+maintient le modèle sur le format appris.</li>
 </ul>
 <h2 id="déroulement">4.3 Déroulement</h2>
+<p><strong>SFT.</strong> La perte de validation passe de 1,090 (modèle
+de base) à 0,972, et la part de tokens bien prédits de 0,71 à 0,73. Elle
+baisse régulièrement et se stabilise en fin d’époque, sans remonter ; le
+meilleur checkpoint est le dernier. Sur le test, elle est identique à la
+validation (0,973) : le modèle généralise, sans apprendre par cœur.</p>
+<p>Les pertes par source (0,09 à 0,13 sur les QCM français, 0,85 sur
+l’anglais, 2,14 sur les questions ouvertes) ne suffisent pas à juger le
+modèle : dans un QCM, le texte des propositions est dans le prompt, et
+la seule vraie difficulté est la lettre. D’où l’évaluation sur les
+réponses générées (partie 5).</p>
+<p><strong>DPO : trois essais sur le même modèle SFT.</strong> Chaque
+essai est mesuré sur les paires de test et sur les réponses générées aux
+QCM français.</p>
 <table>
 <thead>
 <tr>
-<th>Indicateur</th>
-<th>Avant</th>
-<th>Après</th>
+<th></th>
+<th>Essai 1</th>
+<th>Essai 2</th>
+<th><strong>Essai 3 (retenu)</strong></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>SFT : perte de validation</td>
-<td>0,781</td>
-<td>0,643</td>
+<td>Données DPO</td>
+<td>v4</td>
+<td>v4</td>
+<td>v5</td>
 </tr>
 <tr>
-<td>DPO : perte de validation</td>
-<td>0,693</td>
-<td>0,446</td>
+<td>Perte</td>
+<td>DPO</td>
+<td>DPO + SFT</td>
+<td>DPO + SFT</td>
 </tr>
 <tr>
-<td>DPO : préférences justes (validation)</td>
-<td>0,50</td>
-<td>0,79</td>
+<td>Préférences justes, français</td>
+<td>0,63</td>
+<td>0,62</td>
+<td><strong>0,68</strong></td>
 </tr>
 <tr>
-<td>DPO : marge des récompenses</td>
+<td>– omission</td>
+<td>0,41</td>
+<td>0,38</td>
+<td>0,53</td>
+</tr>
+<tr>
+<td>– ajout</td>
+<td>0,87</td>
+<td>0,87</td>
+<td>0,71</td>
+</tr>
+<tr>
+<td>– substitution</td>
+<td>0,64</td>
+<td>0,64</td>
+<td>0,70</td>
+</tr>
+<tr>
+<td>Préférences justes, anglais (750 paires)</td>
+<td>0,78</td>
+<td>0,78</td>
+<td>0,74</td>
+</tr>
+<tr>
+<td>Réponses au format attendu</td>
+<td>0,87</td>
+<td>0,98</td>
+<td><strong>0,99</strong></td>
+</tr>
+<tr>
+<td>Réponses de plus de 300 caractères</td>
+<td>10 %</td>
 <td>0</td>
-<td>1,73</td>
+<td>0</td>
 </tr>
 </tbody>
 </table>
 <ul>
-<li><strong>SFT</strong> : la perte de validation baisse de façon
-régulière et se stabilise en fin d’époque, sans remonter. Sur le test,
-elle est proche de la validation (0,589) : le modèle généralise, sans
-apprendre par cœur.</li>
-<li><strong>DPO</strong> : la perte part de 0,693 (valeur théorique sans
-aucune préférence) et plafonne à partir du pas 150. Les probabilités des
-réponses préférées et rejetées baissent toutes les deux, mais celles des
-rejetées baissent plus vite : c’est le comportement attendu.</li>
+<li><strong>Essai 1</strong> : des préférences apprises, mais des
+réponses dégradées : une sur dix ajoute une explication à l’anglaise, et
+le modèle a appris à « cocher moins » (omissions à 0,41, sous le
+hasard).</li>
+<li><strong>Essai 2</strong> : le terme de vraisemblance supprime la
+dérive de format, mais les préférences françaises ne bougent pas. Le
+défaut vient des données.</li>
+<li><strong>Essai 3</strong> : avec les données v5, les trois types
+d’erreur passent au-dessus du hasard, et l’écart de récompense est 2,5
+fois plus grand. Le recul en anglais, dû à des paires moins nombreuses
+et plus courtes, est accepté : la cible est le français.</li>
 </ul>
-<p>Les pertes par source rappellent qu’une perte basse ne suffit pas à
-juger le modèle : 0,08 à 0,11 sur les QCM français, contre 0,79 sur
-l’anglais. En français, le texte des propositions est dans le prompt, et
-le modèle n’a presque qu’à le recopier ; la seule vraie difficulté est
-la lettre. D’où l’évaluation sur les réponses générées (partie 5).</p>
+<p>Pendant l’essai 3, les préférences justes en validation passent de
+0,67 (pas 25) à 0,73 (fin d’époque, meilleur checkpoint). La perte, qui
+inclut le terme SFT, ne se compare pas d’un essai à l’autre.</p>
 <h2 id="traçabilité-de-lentraînement">4.4 Traçabilité de
 l’entraînement</h2>
 <ul>
@@ -1116,11 +1070,12 @@ comme le recommande le sujet.</li>
 <li><strong>MLflow sur DagsHub</strong> : chaque run enregistre ses
 hyperparamètres, la version des données, ses courbes et ses métriques
 finales. Son nom résume sa configuration, par exemple
-<code>dpo-lora-r16-v3-beta0.1-lr5e-05-seed42</code>.</li>
-<li><strong>Checkpoints</strong> : une sauvegarde tous les 100 pas (SFT)
-ou 25 pas (DPO), avec reprise possible après une interruption. Le
-meilleur checkpoint, selon la perte de validation, est rechargé à la
-fin.</li>
+<code>dpo-lora-r16-v5-sigmoid+sft-beta0.1-lr5e-05-seed42</code> pour le
+DPO retenu. Les métriques de chaque contrôle (préférences par type
+d’erreur, exactitude, format, test de McNemar) y sont enregistrées.</li>
+<li><strong>Checkpoints</strong> : une sauvegarde tous les 25 pas, avec
+reprise possible après une interruption. Le meilleur checkpoint, selon
+la perte de validation, est rechargé à la fin.</li>
 <li><strong>Configuration</strong> : un fichier
 <code>run_config.json</code> accompagne chaque adaptateur (réglages,
 tailles des données, graine).</li>
@@ -1130,18 +1085,22 @@ aléatoires.</li>
 <h1 id="évaluation-et-résultats">5. Évaluation et résultats</h1>
 <h2 id="méthode">5.1 Méthode</h2>
 <p><strong>L’exactitude sur les réponses générées.</strong> Le modèle
-répond à chaque QCM, sans hasard dans la génération
-(<code>temperature = 0</code>). Une réponse est juste si elle donne
-<strong>exactement</strong> les lettres du corrigé. L’évaluation est
-faite à travers vLLM, avec le prompt de l’API : le modèle est mesuré tel
-qu’il est servi.</p>
+répond à chaque QCM, sans hasard dans la génération. Une réponse est
+juste si elle donne <strong>exactement</strong> les lettres du corrigé.
+Le test compte 828 QCM français, jamais vus à l’entraînement : les 382
+questions du test SFT et les 446 questions des paires de test DPO,
+posées avec leur historique de cas.</p>
+<p><strong>Le format.</strong> Une réponse est au bon format si elle
+recopie exactement la ou les propositions retenues (lettre et texte),
+sans rien ajouter. C’est la forme qu’exploite l’API de triage (partie
+6.2).</p>
 <p><strong>Les réponses naïves.</strong> Un score n’a de sens que
 comparé à ce qu’on obtient sans réfléchir. La référence principale est
 la <strong>réponse la plus fréquente</strong> : donner à toutes les
 questions la lettre, ou la combinaison, la plus courante dans le
 corrigé.</p>
-<p><strong>L’incertitude.</strong> Sur 749 questions, une exactitude de
-0,44 a une marge d’erreur d’environ ± 0,036. Pour comparer deux modèles
+<p><strong>L’incertitude.</strong> Sur 389 questions, une exactitude de
+0,44 a une marge d’erreur d’environ ± 0,05. Pour comparer deux modèles
 sur les mêmes questions, on ne retient que les questions où ils
 divergent (<strong>test de McNemar</strong>) : c’est beaucoup plus
 fiable que de comparer deux moyennes.</p>
@@ -1169,42 +1128,40 @@ les QCM</h2>
 <tbody>
 <tr>
 <td><code>mcqu</code> (une bonne réponse)</td>
-<td>749</td>
-<td>~0</td>
-<td>0,437</td>
+<td>389</td>
+<td>0,17</td>
+<td>0,432</td>
 <td>0,445</td>
-<td>0,244</td>
+<td>0,211</td>
 </tr>
 <tr>
 <td><code>mcqm</code> (2 à 5 bonnes réponses)</td>
-<td>931</td>
-<td>~0</td>
-<td>0,090</td>
-<td>0,114</td>
-<td>0,068</td>
+<td>439</td>
+<td>0,04</td>
+<td>0,109</td>
+<td>0,121</td>
+<td>0,059</td>
 </tr>
 </tbody>
 </table>
 <ul>
-<li><strong>Le modèle de base</strong> (mesuré sur 200 questions par
-source) obtient un score proche de zéro : il ne suit pas le format (il
-écrit un paragraphe sans lettre).</li>
-<li><strong>Le SFT apporte un gain réel</strong> : 0,44 en
-<code>mcqu</code>, contre 0,24 pour la réponse naïve, soit 1,8 fois plus
-de bonnes réponses.</li>
-<li><strong>Le DPO ne change rien en <code>mcqu</code></strong> (43
-questions gagnées, 37 perdues ; p = 0,58), alors qu’il n’a été entraîné
-que sur des QCM à réponses multiples. Il ne dégrade donc pas ce qu’avait
-appris le SFT.</li>
-<li><strong>En <code>mcqm</code>, le DPO gagne 2,4 points</strong> (83
-questions gagnées, 61 perdues ; p = 0,08) : un gain à la limite de la
-significativité.</li>
+<li><strong>Le modèle de base</strong> (mesuré sur 340 questions du test
+SFT) suit mal la consigne : il coche en moyenne 0,6 proposition de trop,
+même quand une seule est exacte.</li>
+<li><strong>Le SFT apporte un gain réel</strong> : 0,43 en
+<code>mcqu</code>, contre 0,21 pour la réponse naïve, soit deux fois
+plus de bonnes réponses. Face au modèle de base, il gagne 72 questions
+et en perd 9.</li>
+<li><strong>Le DPO ne dégrade rien</strong> : 54 questions gagnées, 44
+perdues (p = 0,36) ; 27 contre 22 en <code>mcqu</code> comme en
+<code>mcqm</code>. Son format reste celui du SFT (0,99 des réponses dans
+les deux cas).</li>
 </ul>
 <p>L’exactitude stricte reste faible en <code>mcqm</code> : il faut
 trouver la bonne combinaison parmi 26.</p>
 <h2 id="ce-que-le-dpo-a-appris">5.3 Ce que le DPO a appris</h2>
 <p><strong>Les préférences.</strong> Sur les paires de test, le modèle
-DPO préfère la bonne réponse dans 70 % des cas en français et 66 % en
+DPO préfère la bonne réponse dans 68 % des cas en français et 74 % en
 anglais (50 % = hasard). Le découpage par type d’erreur montre
 <em>comment</em> :</p>
 <table>
@@ -1217,30 +1174,30 @@ anglais (50 % = hasard). Le découpage par type d’erreur montre
 </thead>
 <tbody>
 <tr>
+<td>Substitution (<code>mcqu</code> et <code>mcqm</code>)</td>
+<td>289</td>
+<td>0,70</td>
+</tr>
+<tr>
 <td>Ajout d’une mauvaise proposition</td>
-<td>150</td>
-<td>0,86</td>
+<td>80</td>
+<td>0,71</td>
 </tr>
 <tr>
 <td>Omission d’une bonne proposition</td>
-<td>176</td>
-<td>0,64</td>
-</tr>
-<tr>
-<td>Substitution</td>
-<td>155</td>
-<td>0,61</td>
+<td>79</td>
+<td>0,53</td>
 </tr>
 </tbody>
 </table>
-<p>Le modèle repère bien une proposition en trop, beaucoup moins une
-proposition manquante. Le score des omissions est même flatteur : dans
-81 de ces paires, la <code>rejected</code> n’a qu’une lettre et
-contredit la consigne « au moins deux ». La substitution, seul cas où
-les deux listes ont la même longueur, mesure le mieux l’apprentissage
-sur le fond : 0,61, à peine au-dessus du hasard.</p>
-<p><strong>L’effet sur les réponses.</strong> Le DPO a surtout appris à
-<strong>cocher moins</strong> :</p>
+<p>La substitution, où les deux réponses ont autant de propositions,
+mesure le mieux l’apprentissage sur le fond : 0,70, contre 0,61 pour le
+modèle v3. Une proposition manquante, en revanche, n’est presque pas
+repérée : la perte DPO additionne les probabilités des tokens, et une
+réponse plus courte est d’office plus probable. La perte normalisée par
+le nombre de tokens vise ce biais ; c’est le prochain essai à mener.</p>
+<p><strong>L’effet sur les réponses.</strong> Le SFT coche trop de
+propositions ; le DPO corrige ce défaut :</p>
 <table>
 <thead>
 <tr>
@@ -1253,42 +1210,43 @@ sur le fond : 0,61, à peine au-dessus du hasard.</p>
 </thead>
 <tbody>
 <tr>
-<td>Questions (200 du test DPO)</td>
-<td>87</td>
-<td>76</td>
-<td>30</td>
-<td>7</td>
+<td>Questions <code>mcqm</code></td>
+<td>213</td>
+<td>144</td>
+<td>60</td>
+<td>22</td>
 </tr>
 <tr>
-<td>Exactitude SFT</td>
-<td>0,13</td>
-<td>0,12</td>
-<td>0,13</td>
-<td>0,43</td>
+<td>Propositions cochées, SFT</td>
+<td>3,12</td>
+<td>3,54</td>
+<td>3,68</td>
+<td>3,77</td>
 </tr>
 <tr>
-<td>Exactitude SFT + DPO</td>
-<td>0,30</td>
-<td>0,09</td>
-<td>0,07</td>
-<td>0,00</td>
+<td>Propositions cochées, SFT + DPO</td>
+<td>2,54</td>
+<td>2,97</td>
+<td>3,07</td>
+<td>3,00</td>
 </tr>
 </tbody>
 </table>
-<p>Sur l’ensemble du test <code>mcqm</code>, le SFT coche en moyenne
-3,68 propositions, le DPO 2,42, pour 2,78 attendues. Le DPO répond le
-plus souvent deux lettres : il gagne sur les questions à deux bonnes
-réponses, les plus nombreuses, et perd sur les autres. Son gain global
-vient de ce raccourci, plus que d’un progrès de connaissances.</p>
+<p>Le SFT coche 0,62 proposition de trop par question, le DPO 0,02. Le
+raccourci du modèle v3 (deux lettres le plus souvent) a disparu : le
+nombre coché suit le nombre attendu, mais reste trop bas à 4 ou 5 bonnes
+réponses, comme le laissait prévoir la faiblesse sur les omissions.</p>
 <p><strong>Le biais de longueur en anglais.</strong> Sur le test revu
-par des experts, le modèle préfère la bonne réponse dans 77 % des cas
-quand elle est la plus courte, et dans 62 % quand elle est la plus
-longue. L’équilibrage du train (partie 3.4) a réduit ce biais sans le
-supprimer.</p>
+par des experts, le modèle préfère la bonne réponse dans 72 % des cas
+quand elle est la plus courte, et dans 74 % quand elle est la plus
+longue (77 % et 62 % pour le modèle v3). L’équilibrage du train (partie
+3.5) a supprimé ce biais.</p>
 <h2 id="contrôles-de-sécurité">5.4 Contrôles de sécurité</h2>
 <p>Les contrôles de sécurité demandés en phase 2 portent sur 28 QCM
-pièges, passés par l’API. Ces cas ont été rédigés pour ce projet ; ils
-n’ont pas été validés par un clinicien.</p>
+pièges, passés par vLLM avec le prompt de l’API. Ces cas ont été rédigés
+pour ce projet ; ils n’ont pas été validés par un clinicien. Ils ont été
+mesurés sur le modèle servi par la démonstration (données v3) et sont à
+refaire sur le modèle final dès sa publication.</p>
 <table>
 <colgroup>
 <col style="width: 25%" />
@@ -1353,9 +1311,10 @@ cardiaque, état de choc, hémorragie, convulsions) sont toutes classées
 en urgence maximale : aucun sous-triage. En revanche, les cas modérés
 sont classés en urgence maximale, et le DPO classe les trois cas bénins
 en urgence modérée. Les deux modèles <strong>sur-trient</strong> : c’est
-l’erreur la moins dangereuse, mais elle engorgerait le service. Le
-modèle n’a jamais été entraîné sur cette tâche, et neuf cas ne suffisent
-pas à conclure.</p>
+l’erreur la moins dangereuse, mais elle engorgerait le service. Le point
+d’accès <code>/triage</code> (partie 6.2) le confirme sur 11 patients
+décrits en langage naturel : 5 urgences vitales en urgence maximale,
+mais les 6 autres cas sur-triés, dont une entorse de cheville.</p>
 <p><strong>Conclusion.</strong> Le modèle ne peut en aucun cas être
 utilisé de façon autonome. Ses erreurs sont précisément celles qu’un
 outil de triage ne peut pas se permettre : recommandations dangereuses
@@ -1374,17 +1333,59 @@ requête est allouée par petites pages, au fil de la génération. Moins de
 mémoire perdue, donc plus de requêtes simultanées.</li>
 <li><strong>Batching continu</strong> : dès qu’une réponse est terminée,
 une nouvelle requête prend sa place, sans attendre la fin du lot.</li>
-<li><strong>API compatible OpenAI</strong> : n’importe quel client
-standard peut l’interroger.</li>
-<li><strong>Passage à l’échelle</strong> : vLLM sait répartir un grand
-modèle sur plusieurs GPU, ce que demandera un modèle de 32B et
-plus.</li>
+<li><strong>API compatible OpenAI</strong> et <strong>plusieurs
+GPU</strong> : n’importe quel client standard peut l’interroger, et il
+sait répartir un grand modèle (32B et plus) sur plusieurs GPU.</li>
 </ul>
 <h2 id="lapi-et-la-sécurité-daccès">6.2 L’API et la sécurité
 d’accès</h2>
-<p>L’API FastAPI expose deux points d’accès : <code>POST /qcm</code>
-(répondre à un QCM) et <code>GET /health</code> (état de l’API et de
-vLLM). vLLM n’est jamais exposé directement : seule l’API l’est.</p>
+<p>L’API FastAPI expose deux points d’accès : <code>POST /triage</code>
+et <code>GET /health</code> (état de l’API et de vLLM). vLLM n’est
+jamais exposé directement : seule l’API l’est.</p>
+<p><strong>Le point d’accès de triage.</strong> Le soignant décrit le
+patient en langage naturel : âge, motif, symptômes, antécédents et, s’il
+les a, les constantes. En question libre, le modèle produit en français
+des réponses incohérentes : il n’a appris cette langue que sur des QCM.
+Il n’est donc utilisé que là où il est fiable, et des briques
+déterministes l’encadrent :</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Brique</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Modèle</td>
+<td>évalue le niveau de priorité (maximale, modérée, différée) à partir
+d’un cas clinique rédigé à partir des informations reçues, sur un choix
+fermé</td>
+</tr>
+<tr>
+<td>Garde-fous</td>
+<td>des constantes hors seuils (SpO₂ &lt; 90 %, PAS &lt; 90 mmHg, FC
+&gt; 130/min…) imposent l’urgence maximale : ils relèvent le niveau,
+jamais ne l’abaissent ; sans le modèle, ils décident seuls</td>
+</tr>
+<tr>
+<td>Questionnaire adaptatif</td>
+<td>questions complémentaires selon le motif, et constantes manquantes à
+mesurer</td>
+</tr>
+<tr>
+<td>Explication</td>
+<td>signes de gravité, avis du modèle, conduite à tenir pour le niveau
+retenu</td>
+</tr>
+</tbody>
+</table>
+<p>Les seuils et les questions sont des valeurs de démonstration, à
+valider par l’équipe médicale.</p>
 <table>
 <colgroup>
 <col style="width: 50%" />
@@ -1409,12 +1410,8 @@ GitHub</td>
 </tr>
 <tr>
 <td>Validation des entrées</td>
-<td>longueurs maximales, propositions non vides, balises interdites</td>
-</tr>
-<tr>
-<td>Réponse vérifiée</td>
-<td>champ <code>format_valide</code> : lettres proposées, en nombre
-conforme</td>
+<td>longueurs et valeurs des constantes bornées, balises de gabarit
+interdites</td>
 </tr>
 <tr>
 <td>Limites d’usage</td>
@@ -1450,11 +1447,6 @@ jeton</td>
 <td>Space Docker privé (CPU gratuit)</td>
 </tr>
 <tr>
-<td>Modèle</td>
-<td>même dépôt, même révision</td>
-<td>même dépôt, même révision</td>
-</tr>
-<tr>
 <td>Journal d’audit</td>
 <td>fichier JSONL</td>
 <td>logs du Space (disque effacé au redémarrage)</td>
@@ -1468,12 +1460,14 @@ min</td>
 </tbody>
 </table>
 <p>L’endpoint se réveille en 3 minutes ; un test complet (démonstration,
-latence, tests d’intégration) a coûté environ 0,25 $. Sur les mêmes
-questions, le cloud donne les mêmes réponses que la pile locale.</p>
+latence, tests d’intégration) a coûté environ 0,25 $. Le modèle (même
+dépôt, même révision) donne les mêmes réponses dans les deux
+déploiements.</p>
 <h2 id="latence-et-débit">6.4 Latence et débit</h2>
-<p>Mesures avec 100 QCM du jeu de test par niveau de charge,
-enregistrées dans MLflow. Pour le cloud, la latence est mesurée depuis
-le client, réseau compris.</p>
+<p>Mesures avec 100 requêtes par niveau de charge, enregistrées dans
+MLflow : en local, sur <code>/triage</code> ; dans le cloud, sur la
+version précédente de l’API (QCM, réponses plus longues), depuis le
+client, réseau compris.</p>
 <table>
 <colgroup>
 <col style="width: 20%" />
@@ -1494,22 +1488,22 @@ le client, réseau compris.</p>
 <tbody>
 <tr>
 <td>1</td>
-<td>168 / 433 ms</td>
-<td>4,7 req/s</td>
+<td>79 / 91 ms</td>
+<td>12,3 req/s</td>
 <td>745 / 1 432 ms</td>
 <td>1,2 req/s</td>
 </tr>
 <tr>
 <td>10</td>
-<td>234 / 657 ms</td>
-<td>31,8 req/s</td>
+<td>211 / 240 ms</td>
+<td>47,2 req/s</td>
 <td>910 / 2 159 ms</td>
 <td>8,8 req/s</td>
 </tr>
 <tr>
 <td>50</td>
-<td>823 / 1 234 ms</td>
-<td>45,0 req/s</td>
+<td>695 / 861 ms</td>
+<td>63,7 req/s</td>
 <td>2 127 / 3 575 ms</td>
 <td>17,0 req/s</td>
 </tr>
@@ -1517,16 +1511,15 @@ le client, réseau compris.</p>
 </table>
 <ul>
 <li><strong>Le batching continu fonctionne</strong> : de 1 à 50 requêtes
-simultanées, le débit est multiplié par 10, pour une latence médiane qui
-reste sous la seconde.</li>
-<li><strong>Par rapport à la génération pendant l’entraînement</strong>,
-le débit passe d’environ 2 à 45 réponses par seconde.</li>
+simultanées, le débit est multiplié par 5, pour une latence médiane qui
+reste sous la seconde. Pendant l’entraînement, la génération plafonnait
+à environ 2 réponses par seconde.</li>
 <li><strong>vLLM seul</strong> répond en 38 ms au premier token (TTFT)
 et produit ensuite un token toutes les 7 ms (TPOT) : l’essentiel du
 temps est passé à générer la réponse.</li>
-<li>Le p95 est environ trois fois la médiane à faible charge : une
-réponse à plusieurs propositions est plus longue à générer qu’une
-réponse unique.</li>
+<li><strong>La réponse de triage tient en une ligne</strong> (le niveau
+choisi) : la latence est faible et régulière, avec un p95 proche de la
+médiane.</li>
 <li><strong>Dans le cloud, l’écart vient du réseau</strong>, pas du GPU
 (un L4 vaut une RTX 3080) : chaque requête traverse Internet jusqu’au
 Space, puis du Space à l’endpoint. Toutes les requêtes aboutissent, même
@@ -1534,11 +1527,10 @@ Space, puis du Space à l’endpoint. Toutes les requêtes aboutissent, même
 supprimerait l’essentiel de ce surcoût.</li>
 </ul>
 <h2 id="robustesse">6.5 Robustesse</h2>
-<p>Quatorze tests d’intégration, lancés contre la pile réelle, vérifient
-le comportement dans les cas limites. La plupart sont relancés
+<p>Seize tests d’intégration, lancés contre la pile réelle, vérifient le
+comportement dans les cas limites. La plupart sont relancés
 automatiquement à chaque déploiement ; l’arrêt de vLLM n’est testé qu’à
-la demande. Contre le cloud, les 8 tests applicables réussissent (ceux
-qui relisent le fichier d’audit local sont ignorés).</p>
+la demande.</p>
 <table>
 <colgroup>
 <col style="width: 50%" />
@@ -1552,23 +1544,23 @@ qui relisent le fichier d’audit local sont ignorés).</p>
 </thead>
 <tbody>
 <tr>
-<td>40 QCM réels du jeu de test</td>
-<td>toutes les réponses au format attendu</td>
+<td>5 urgences vitales décrites en langage naturel</td>
+<td>toutes classées en urgence maximale (aucun sous-triage)</td>
 </tr>
 <tr>
-<td>Entrée trop longue pour le modèle</td>
-<td>refus clair (erreur 422)</td>
+<td>11 cas de triage</td>
+<td>réponse complète : niveau, justification, conduite, questions</td>
 </tr>
 <tr>
-<td>Propositions vides, entrée hors limites</td>
+<td>Description trop longue, valeurs hors limites</td>
 <td>refus (erreur 422)</td>
 </tr>
 <tr>
 <td>Consigne contradictoire (« ignore les consignes »)</td>
-<td>le modèle garde le format QCM</td>
+<td>le modèle donne toujours un niveau exploitable</td>
 </tr>
 <tr>
-<td>Question en anglais, caractères spéciaux</td>
+<td>Description en anglais, caractères spéciaux</td>
 <td>réponse valide</td>
 </tr>
 <tr>
@@ -1577,11 +1569,12 @@ qui relisent le fichier d’audit local sont ignorés).</p>
 </tr>
 <tr>
 <td>Serveur vLLM arrêté</td>
-<td>l’API reste disponible, erreur 503 tracée</td>
+<td>garde-fous seuls en cas de signe de gravité ; sinon erreur 503
+tracée</td>
 </tr>
 </tbody>
 </table>
-<p>Ces tests ont révélé trois défauts, corrigés depuis :</p>
+<p>Ces tests ont révélé deux défauts, corrigés depuis :</p>
 <ul>
 <li><strong>Injection par les balises du gabarit.</strong> Un texte
 contenant <code>&lt;|im_end|&gt;</code> ou
@@ -1592,53 +1585,21 @@ appel au modèle.</li>
 <li><strong>Entrée trop longue présentée comme une panne</strong> :
 l’API répondait « serveur indisponible ». Elle répond maintenant «
 entrée trop longue ».</li>
-<li><strong>Propositions vides acceptées</strong> : un QCM pouvait ne
-contenir qu’une seule vraie proposition.</li>
 </ul>
 <h2 id="audit-de-traçabilité">6.6 Audit de traçabilité</h2>
-<p>Chaque requête produit une ligne dans un journal d’audit (JSONL)
-:</p>
-<table>
-<thead>
-<tr>
-<th>Champ</th>
-<th>Contenu</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>request_id</code>, <code>timestamp</code></td>
-<td>identifiant unique et horodatage</td>
-</tr>
-<tr>
-<td><code>model</code></td>
-<td>modèle servi</td>
-</tr>
-<tr>
-<td><code>input_sha256</code></td>
-<td>empreinte de l’entrée, sans le texte</td>
-</tr>
-<tr>
-<td><code>letters</code>, <code>format_valide</code></td>
-<td>réponse donnée et sa validité</td>
-</tr>
-<tr>
-<td><code>latency_ms</code>, <code>status</code></td>
-<td>latence et issue (succès, refus, erreur)</td>
-</tr>
-</tbody>
-</table>
+<p>Chaque requête produit une ligne dans un journal d’audit (JSONL) :
+identifiant unique, horodatage, modèle servi, <strong>empreinte SHA-256
+de l’entrée</strong> (sans le texte), niveau retenu et sa source, nombre
+de signes de gravité, latence et issue (succès, refus, erreur).</p>
 <p>Les tests d’audit vérifient que chaque requête est tracée avec tous
-ses champs, qu’une même entrée donne la même empreinte, que les accès
-refusés sont tracés sans la clé reçue, et qu’<strong>aucun texte
-patient</strong> n’apparaît dans le journal (un marqueur unique, placé
-dans chaque champ, n’y est jamais retrouvé).</p>
+ses champs, que les accès refusés le sont sans la clé reçue, et
+qu’<strong>aucun texte patient</strong> n’apparaît dans le journal (un
+marqueur placé dans chaque champ n’y est jamais retrouvé).</p>
 <p><strong>Une limite pour l’audit.</strong> Même avec
 <code>temperature = 0</code>, vLLM n’est pas parfaitement déterministe :
 selon le regroupement des requêtes, 2 à 3 % des réponses changent d’un
-passage à l’autre. Rejouer une question ne garantit donc pas d’obtenir
-la même réponse. Le journal enregistre la réponse effectivement donnée,
-ce qui reste la trace de référence.</p>
+passage à l’autre. Le journal enregistre donc la réponse effectivement
+donnée : c’est la trace de référence.</p>
 <h1 id="limites">7. Limites</h1>
 <p><strong>Par rapport au besoin du CHSA.</strong></p>
 <ul>
@@ -1651,26 +1612,32 @@ une question complète, il ne mène pas d’entretien avec le patient.</li>
 <li><strong>Peu d’explications</strong> : en français, les réponses
 donnent la ou les propositions retenues, sans justification. Seule la
 partie anglaise a appris à raisonner.</li>
-<li><strong>Pas d’intégration au SIH</strong> : l’API reçoit un QCM en
-JSON, pas un dossier patient.</li>
+<li><strong>Pas d’intégration au SIH</strong> : l’API reçoit une
+description du patient en JSON, pas un dossier patient.</li>
 </ul>
 <p><strong>Le modèle.</strong></p>
 <ul>
-<li><strong>Connaissances limitées</strong> : environ une réponse juste
-sur deux aux QCM à réponse unique, ce qui est cohérent avec sa taille
-(1,7 milliard de paramètres).</li>
+<li><strong>Connaissances limitées</strong> : 0,44 de bonnes réponses
+aux QCM à réponse unique, cohérent avec sa taille (1,7 milliard de
+paramètres).</li>
 <li><strong>Erreurs dangereuses et hallucinations</strong> : 3
 recommandations dangereuses sur 12 cas pièges, et aucune entité inventée
 reconnue comme telle.</li>
-<li><strong>Apport du DPO limité</strong> : le gain mesuré vient surtout
-d’un raccourci (cocher moins de propositions) et n’est pas
-significatif.</li>
+<li><strong>Apport du DPO limité</strong> : les préférences sont
+apprises (0,68 en français) et les propositions cochées en trop ont
+disparu, mais l’exactitude ne progresse pas de façon significative, et
+une proposition manquante n’est repérée qu’au hasard.</li>
 </ul>
 <p><strong>Les données et la méthode.</strong></p>
 <ul>
-<li><strong>Erreurs DPO simulées</strong> : en français, les réponses
-<code>rejected</code> sont construites à partir du corrigé, pas tirées
-des erreurs réelles du modèle.</li>
+<li><strong>Modèle final pas encore servi</strong> : la démonstration,
+les contrôles de sécurité (partie 5.4) et les mesures de la partie 6
+portent sur le modèle v3. Le modèle final reste à publier et à contrôler
+de la même façon.</li>
+<li><strong>Pas de validation clinique humaine</strong> : aucun soignant
+ne relit les données. La proximité avec le triage est repérée par des
+expressions régulières ; les erreurs DPO françaises sont construites à
+partir du corrigé, pas tirées des erreurs réelles du modèle.</li>
 <li><strong>Préférences jugées par GPT-4</strong> : en anglais, hors
 QCM, les préférences reposent sur les notes d’un autre LLM. Seul le jeu
 de test a été revu par des experts.</li>
@@ -1686,24 +1653,19 @@ significatifs.</li>
 <p><strong>Le déploiement.</strong></p>
 <ul>
 <li><strong>Hébergement non conforme pour des données de santé</strong>
-: la démo cloud tourne chez Hugging Face (endpoint chez AWS aux
-États-Unis), sans certification HDS. C’est acceptable pour des QCM
-publics, pas pour des données de patients.</li>
+: la démo cloud tourne chez Hugging Face (AWS, États-Unis), sans
+certification HDS.</li>
 <li><strong>Disponibilité de démonstration</strong> : réveil de 3
-minutes, Space gratuit (créé avant que Hugging Face ne restreigne cette
-offre), sans haute disponibilité.</li>
+minutes, Space gratuit, sans haute disponibilité.</li>
 <li><strong>Surveillance minimale</strong> : état de santé et journal
 d’audit, sans tableau de bord ni alertes.</li>
-<li><strong>Non-déterminisme</strong> : 2 à 3 % des réponses peuvent
-varier d’un passage à l’autre.</li>
 </ul>
 <h1 id="roadmap-de-passage-à-léchelle-au-chsa">8. Roadmap de passage à
 l’échelle au CHSA</h1>
-<p>La faisabilité technique est acquise ; la valeur clinique reste à
-démontrer. La feuille de route place donc les données de triage et la
-validation clinique <strong>avant</strong> l’augmentation de la taille
-du modèle : un modèle plus grand, entraîné sur les mêmes QCM, ne saurait
-toujours pas trier.</p>
+<p>La feuille de route place les données de triage et la validation
+clinique <strong>avant</strong> l’augmentation de la taille du modèle :
+un modèle plus grand, entraîné sur les mêmes QCM, ne saurait toujours
+pas trier.</p>
 <table>
 <colgroup>
 <col style="width: 25%" />
@@ -1748,75 +1710,63 @@ toujours pas trier.</p>
 </table>
 <p><strong>Étape 1 : un jeu de données de triage.</strong></p>
 <ul>
-<li>Construire, avec les infirmiers organisateurs de l’accueil (IOA) du
-CHSA, quelques milliers de cas annotés selon l’échelle de tri en vigueur
-dans le service (par exemple l’échelle FRENCH de la SFMU).</li>
+<li>Construire avec les infirmiers d’accueil (IOA) du CHSA quelques
+milliers de cas annotés selon l’échelle de tri du service (par exemple
+FRENCH, de la SFMU).</li>
 <li>Structurer chaque cas : motif de recours, symptômes, antécédents,
-constantes vitales, niveau de priorité et justification. C’est le schéma
-de métadonnées prévu en phase 1.</li>
-<li>Partir de dossiers historiques pseudonymisés, avec l’accord du
-délégué à la protection des données, et les héberger dans un
-environnement certifié HDS. La chaîne d’anonymisation de ce POC est
-réutilisable.</li>
+constantes vitales, niveau de priorité et justification (schéma de
+métadonnées prévu en phase 1).</li>
+<li>Partir de dossiers historiques pseudonymisés (accord du délégué à la
+protection des données, hébergement HDS), avec la chaîne d’anonymisation
+de ce POC.</li>
 <li>Faire annoter une partie des cas par deux soignants, pour mesurer
 leur accord : c’est le plafond de performance à viser.</li>
 </ul>
 <p><strong>Étape 2 : un modèle de triage.</strong></p>
 <ul>
-<li><strong>Sortie structurée</strong> : niveau de priorité,
-justification, signaux d’alerte identifiés, au format JSON validé par
-l’API.</li>
-<li><strong>Garde-fous déterministes</strong> : des règles simples (par
-exemple des constantes vitales hors seuils) imposent l’urgence maximale,
-quelle que soit la réponse du modèle.</li>
+<li><strong>Sortie structurée</strong> : niveau, justification et
+signaux d’alerte, en JSON validé par l’API.</li>
+<li><strong>Garde-fous déterministes</strong> : étendre, avec l’équipe
+médicale, les règles de l’API (constantes hors seuils).</li>
 <li><strong>Abstention</strong> : le modèle doit pouvoir répondre « avis
 soignant requis » plutôt que d’inventer.</li>
-<li><strong>Protocoles du CHSA</strong> : fournir au modèle les
-protocoles locaux au moment de répondre (recherche documentaire, ou
-RAG), plutôt que de les lui faire mémoriser.</li>
-<li><strong>DPO sur les vraies erreurs</strong> : construire les paires
-à partir des erreurs réelles du modèle, validées par des soignants.</li>
-<li><strong>Montée en taille</strong> : passer à un modèle de 32B ou
-plus une fois le jeu de triage disponible, et mesurer le gain sur ce
-jeu.</li>
+<li><strong>Protocoles du CHSA</strong> : fournis au modèle au moment de
+répondre (RAG), plutôt que mémorisés.</li>
+<li><strong>DPO sur les vraies erreurs</strong> du modèle, validées par
+des soignants.</li>
+<li><strong>Montée en taille</strong> : 32B ou plus une fois le jeu de
+triage disponible, avec un gain mesuré sur ce jeu.</li>
 <li><strong>Métrique principale</strong> : le taux de sous-triage des
 urgences vitales, avant l’exactitude globale.</li>
 </ul>
 <p><strong>Étape 3 : une infrastructure de production.</strong></p>
 <ul>
-<li><strong>Hébergement</strong> : serveurs GPU sur site ou chez un
-hébergeur certifié HDS. Un modèle de 32B demande environ 64 Go de
-mémoire GPU en bf16 (deux GPU de 48 Go, répartis par vLLM), ou moins
-avec une quantification.</li>
-<li><strong>Intégration au SIH</strong> : échanges au standard HL7 FHIR
-(patient, constantes, passage aux urgences), pour lire le dossier et y
-écrire la proposition de triage.</li>
-<li><strong>Sécurité</strong> : authentification des soignants par
-l’annuaire du CHSA, au lieu d’une clé d’API partagée ; journal d’audit
-inaltérable, avec une durée de conservation définie.</li>
-<li><strong>Surveillance</strong> : tableaux de bord et alertes sur la
-latence, les erreurs et la répartition des niveaux de priorité, pour
-détecter une dérive.</li>
-<li><strong>Reproductibilité</strong> : registre des modèles et mode
-d’inférence invariant au regroupement des requêtes.</li>
-<li><strong>Déploiement</strong> : la chaîne CI/CD de ce POC se
-transpose telle quelle, avec un environnement de recette avant la
-production.</li>
+<li><strong>Hébergement</strong> : GPU sur site ou chez un hébergeur
+certifié HDS ; un modèle de 32B demande environ 64 Go de mémoire GPU en
+bf16 (deux GPU de 48 Go), moins avec une quantification.</li>
+<li><strong>Intégration au SIH</strong> : HL7 FHIR, pour lire le dossier
+et y écrire la proposition de triage.</li>
+<li><strong>Sécurité</strong> : authentification par l’annuaire du CHSA
+plutôt qu’une clé partagée ; journal d’audit inaltérable, à durée de
+conservation définie.</li>
+<li><strong>Surveillance</strong> : tableaux de bord et alertes
+(latence, erreurs, répartition des niveaux) pour détecter une
+dérive.</li>
+<li><strong>Déploiement</strong> : registre des modèles et chaîne CI/CD
+de ce POC, avec un environnement de recette.</li>
 </ul>
 <p><strong>Étape 4 : un pilote clinique.</strong></p>
 <ul>
 <li><strong>Étude « en parallèle »</strong> : pendant plusieurs
-semaines, le système propose un niveau de priorité sans que les
-soignants le voient. On compare ensuite ses propositions à leurs
-décisions.</li>
+semaines, le système propose un niveau sans que les soignants le voient
+; on compare ensuite ses propositions à leurs décisions.</li>
 <li><strong>Critères</strong> : concordance avec les IOA, taux de
 sous-triage, temps gagné, acceptabilité par les équipes.</li>
-<li><strong>Cadre réglementaire</strong> : un logiciel d’aide au triage
-peut relever du règlement européen sur les dispositifs médicaux et des
-systèmes d’IA à haut risque du règlement européen sur l’IA. Son statut
-est à instruire dès l’étape 1.</li>
-<li><strong>Usage</strong> : l’outil reste une aide. Le soignant garde
-la décision, et chaque proposition est tracée.</li>
+<li><strong>Cadre réglementaire</strong> : dispositif médical et IA à
+haut risque possibles (règlements européens), à instruire dès l’étape
+1.</li>
+<li><strong>Usage</strong> : l’outil reste une aide ; le soignant
+décide, et chaque proposition est tracée.</li>
 </ul>
 </body>
 </html>

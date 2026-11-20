@@ -1,11 +1,14 @@
 /* Mise en page PDF du rapport (pandoc -> HTML -> WeasyPrint) */
 
 @page { size: A4; margin: 2.2cm; @bottom-center { content: counter(page); font-size: 9pt; } }
-body { font-family: "DejaVu Serif"; font-size: 10.5pt; line-height: 1.4; }
+body { font-family: "DejaVu Serif"; font-size: 10.5pt; line-height: 1.35; }
 h1, h2, h3 { font-family: "DejaVu Sans"; } h1 { font-size: 17pt; margin-top: 1.4em; }
 h1, h2, h3 { break-after: avoid; }  /* pas de titre seul en bas de page */ h2 { font-size: 13pt; }
-table { border-collapse: collapse; width: 100%; font-size: 9pt; margin: 0.6em 0; page-break-inside: avoid; }
+table { border-collapse: collapse; width: 100%; font-size: 9pt; margin: 0.6em 0; }
+tr { break-inside: avoid; }  /* un tableau peut continuer sur la page suivante, jamais une ligne coupée */
+thead { display: table-header-group; }  /* en-tête répété sur la page suivante */
 th, td { border: 1px solid #999; padding: 3px 5px; vertical-align: top; } th { background: #eee; }
 pre { font-family: "DejaVu Sans Mono"; font-size: 7.8pt; background: #f6f6f6; padding: 6px; page-break-inside: avoid; white-space: pre; }
 code { font-family: "DejaVu Sans Mono"; font-size: 8.5pt; }
-nav#TOC { page-break-after: always; }
+nav#TOC { columns: 2; column-gap: 1.5em; font-size: 9pt; line-height: 1.25; margin-bottom: 1.5em; }  /* table des matières sur deux colonnes, suivie du résumé */
+nav#TOC ul { margin: 0; padding-left: 1.2em; }
