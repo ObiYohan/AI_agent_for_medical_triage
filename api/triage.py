@@ -4,6 +4,10 @@ Le modèle n'a appris le français que sur des questions à choix multiples : en
 réponses incohérentes. Il est donc utilisé là où il est fiable, sur un choix fermé (maximale / modérée / différée),
 à partir d'un cas clinique rédigé à partir des informations reçues. Le reste est déterministe :
 
+- calibration (expérimentale, désactivée par défaut) : le modèle surestime l'urgence ; ses probabilités peuvent
+  être corrigées par celles d'un cas vide. Sur 60 cas externes (scripts/evaluate_triage.py), elle réduit le
+  sur-triage mais sous-trie plus de la moitié des urgences vitales : le modèle distingue mal une urgence vitale
+  d'une urgence modérée ;
 - garde-fous : des constantes vitales hors seuils imposent l'urgence maximale. Ils peuvent seulement relever le
   niveau proposé par le modèle, jamais l'abaisser ;
 - questionnaire adaptatif : questions complémentaires selon le motif, et constantes manquantes à mesurer ;
@@ -13,6 +17,7 @@ Les seuils et les questions sont des valeurs de démonstration, inspirées des c
 à définir et à valider par l'équipe médicale avant tout usage clinique.
 """
 
+import math
 import re
 from typing import Annotated, Literal
 
@@ -21,6 +26,12 @@ from pydantic import AfterValidator, BaseModel, Field
 LEVELS = {"A": "urgence maximale", "B": "urgence modérée", "C": "urgence différée"}
 SEVERITY = {"urgence maximale": 0, "urgence modérée": 1, "urgence différée": 2}  # 0 = le plus grave
 QUESTION = "Quel niveau de priorité attribuez-vous à ce patient aux urgences ?"
+
+# Calibration (expérimentale, TRIAGE_CALIBRATION=1) : le modèle n'a jamais appris le triage, et il a un a priori fort
+# pour l'urgence maximale (0,74 pour un patient sans aucune information). Ses probabilités sont divisées par celles de
+# ce cas vide (calibration contextuelle). Désactivée par défaut : elle sous-trie des urgences vitales.
+NEUTRAL_CASE = "Un patient consulte aux urgences."
+MIN_LETTER_MASS = 0.5  # probabilité minimale des lettres A, B, C au premier token : en dessous, réponse inexploitable
 
 CONDUITE = {
     "urgence maximale": "Installation immédiate en salle d'urgence vitale et appel du médecin.",
@@ -111,6 +122,7 @@ class TriageResponse(BaseModel):
     niveau: str
     source: str
     niveau_modele: str | None
+    niveau_modele_brut: str | None = None  # avant calibration
     signes_de_gravite: list[str]
     justification: str
     conduite: str
@@ -153,12 +165,40 @@ def clinical_case(request: TriageRequest) -> str:
     return " ".join(parts)
 
 
-def prompt_row(request: TriageRequest) -> dict:
-    # Format des données d'entraînement (cas, question, propositions) : le niveau est un choix fermé à trois options
-    row = {"clinical_case": clinical_case(request), "question": QUESTION}
+def prompt_row(request: TriageRequest | None) -> dict:
+    # Format des données d'entraînement (cas, question, propositions) : le niveau est un choix fermé à trois options.
+    # Sans patient : le cas vide de la calibration
+    row = {"clinical_case": clinical_case(request) if request else NEUTRAL_CASE, "question": QUESTION}
     for letter in "ABCDE":
         row[f"answer_{letter.lower()}"] = LEVELS[letter].capitalize() if letter in LEVELS else ""
     return row
+
+
+def level_probabilities(top_logprobs: list[dict]) -> dict[str, float] | None:
+    # Probabilités des trois niveaux d'après le premier token généré (lettre A, B ou C), normalisées ; None si le
+    # modèle ne répond pas par une lettre
+    mass = dict.fromkeys(LEVELS, 0.0)
+    for candidate in top_logprobs:
+        if candidate["token"] in mass:
+            mass[candidate["token"]] += math.exp(candidate["logprob"])
+    total = sum(mass.values())
+    if total < MIN_LETTER_MASS:
+        return None
+    return {LEVELS[letter]: p / total for letter, p in mass.items()}
+
+
+def model_levels(probabilities: dict[str, float], prior: dict[str, float] | None) -> tuple[str, str]:
+    """Niveau brut (le plus probable) et niveau calibré (le plus probable une fois l'a priori retiré).
+
+    La calibration abaisse le niveau d'un cran au plus : une urgence maximale brute ne devient jamais différée.
+    """
+    raw = max(probabilities, key=probabilities.get)
+    if not prior:
+        return raw, raw
+    calibrated = max(probabilities, key=lambda level: probabilities[level] / max(prior[level], 1e-6))
+    if SEVERITY[calibrated] > SEVERITY[raw] + 1:
+        calibrated = next(level for level, rank in SEVERITY.items() if rank == SEVERITY[raw] + 1)
+    return raw, calibrated
 
 
 def follow_up_questions(request: TriageRequest) -> list[str]:
@@ -183,11 +223,15 @@ def decide(model_level: str | None, flags: list[str]) -> tuple[str, str]:
     return model_level, "modèle"
 
 
-def justification(level: str, source: str, model_level: str | None, flags: list[str]) -> str:
+def justification(level: str, source: str, model_level: str | None, flags: list[str],
+                  raw_level: str | None = None) -> str:
     parts = []
     if flags:
         parts.append("Signes de gravité : " + " ; ".join(flags) + ".")
-    if model_level:
+    if model_level and raw_level and raw_level != model_level:
+        parts.append(f"Évaluation du modèle : {model_level} (avant calibration : {raw_level} ; le modèle surestime "
+                     "l'urgence, son a priori est corrigé).")
+    elif model_level:
         parts.append(f"Évaluation du modèle : {model_level}.")
     else:
         parts.append("Évaluation du modèle : indisponible ou inexploitable.")

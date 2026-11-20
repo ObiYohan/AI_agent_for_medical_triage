@@ -100,7 +100,9 @@ def render(body: dict) -> str:
         f"<div style='background:{color};color:white;padding:12px 16px;border-radius:8px;font-size:1.4em;"
         f"font-weight:bold'>{body['niveau'].capitalize()}</div>",
         "",
-        f"**Décidé par** : {body['source']} · **avis du modèle** : {body['niveau_modele'] or '—'} · "
+        f"**Décidé par** : {body['source']} · **avis du modèle** : {body['niveau_modele'] or '—'}"
+        + (f" (avant calibration : {body['niveau_modele_brut']})"
+           if body.get("niveau_modele_brut") not in (None, body["niveau_modele"]) else "") + " · "
         f"**latence** : {body['latence_ms']} ms",
         "",
         "**Signes de gravité** : " + ("; ".join(body["signes_de_gravite"]) or "aucun"),

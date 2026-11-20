@@ -11,6 +11,8 @@ Variables d'environnement :
     VLLM_API_KEY  jeton envoyé à vLLM (Authorization: Bearer), pour un serveur distant protégé (défaut : aucun)
     VLLM_TIMEOUT  délai maximal d'une génération, en secondes (défaut : 60 ; 300 pour couvrir un réveil)
     MODEL_NAME    nom du modèle servi par vLLM (défaut : qwen3-medical)
+    TRIAGE_CALIBRATION  0 (défaut) : niveau brut du modèle ; 1 : niveau corrigé de son a priori (voir triage.py).
+                  Expérimental : sur 60 cas externes, elle sous-trie plus de la moitié des urgences vitales
     AUDIT_LOG     chemin du journal d'audit (défaut : logs/audit.jsonl), aussi écrit sur la sortie standard
 """
 
@@ -28,7 +30,7 @@ from fastapi import Depends, FastAPI, HTTPException, Security
 from fastapi.security import APIKeyHeader
 
 import triage as tri
-from projet_14.mediqal import SYSTEM_PROMPT, answer_letters, user_content
+from projet_14.mediqal import SYSTEM_PROMPT, user_content
 
 WARNING = "Démonstration technique : ne remplace pas un avis médical."
 
@@ -43,6 +45,7 @@ def settings() -> dict:
         "vllm_api_key": os.environ.get("VLLM_API_KEY", ""),
         "vllm_timeout": float(os.environ.get("VLLM_TIMEOUT", "60")),
         "model": os.environ.get("MODEL_NAME", "qwen3-medical"),
+        "calibration": os.environ.get("TRIAGE_CALIBRATION", "0") == "1",
         "audit_log": Path(os.environ.get("AUDIT_LOG", "logs/audit.jsonl")),
     }
 
@@ -60,16 +63,40 @@ def check_api_key(key: str | None = Security(APIKeyHeader(name="X-API-Key", auto
         raise HTTPException(status_code=401, detail="Clé d'API absente ou invalide")
 
 
-async def call_vllm(messages: list[dict], max_tokens: int) -> str:
+async def call_vllm(messages: list[dict]) -> list[dict]:
+    # Un seul token (la lettre du niveau) et ses 20 alternatives les plus probables, avec leurs log-probabilités
     config = settings()
-    payload = {"model": config["model"], "messages": messages, "temperature": 0, "max_tokens": max_tokens}
+    payload = {"model": config["model"], "messages": messages, "temperature": 0, "max_tokens": 1,
+               "logprobs": True, "top_logprobs": 20}
     # X-Scale-Up-Timeout : un Inference Endpoint en veille fait patienter la requête pendant son réveil, au lieu de
     # répondre 503 (en-tête ignoré par un vLLM local)
     headers = vllm_headers(config) | {"X-Scale-Up-Timeout": str(int(config["vllm_timeout"]))}
     async with httpx.AsyncClient(timeout=config["vllm_timeout"]) as client:
         response = await client.post(f"{config['vllm_url']}/v1/chat/completions", json=payload, headers=headers)
         response.raise_for_status()
-    return response.json()["choices"][0]["message"]["content"].strip()
+    return response.json()["choices"][0]["logprobs"]["content"][0]["top_logprobs"]
+
+
+def level_messages(request: tri.TriageRequest | None) -> list[dict]:
+    # Prompt du triage ; sans patient, celui du cas vide de la calibration
+    return [{"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": user_content(tri.prompt_row(request), multiple_answers=False)}]
+
+
+PRIORS: dict[tuple[str, str], dict[str, float]] = {}  # a priori du modèle, par serveur et modèle (calculé une fois)
+
+
+async def model_prior() -> dict[str, float] | None:
+    config = settings()
+    if not config["calibration"]:
+        return None
+    key = (config["vllm_url"], config["model"])
+    if key not in PRIORS:
+        probabilities = tri.level_probabilities(await call_vllm(level_messages(None)))
+        if probabilities is None:
+            return None
+        PRIORS[key] = probabilities
+    return PRIORS[key]
 
 
 def write_audit(record: dict) -> None:
@@ -121,15 +148,11 @@ async def triage(request: tri.TriageRequest) -> tri.TriageResponse:
         "input_sha256": hashlib.sha256(request.model_dump_json().encode("utf-8")).hexdigest(),
         "red_flags": len(flags),
     }
-    messages = [
-        {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user", "content": user_content(tri.prompt_row(request), multiple_answers=False)},
-    ]
-    model_level = None
+    model_level = raw_level = None
     try:
-        letters = sorted(answer_letters(await call_vllm(messages, max_tokens=32)))
-        if len(letters) == 1 and letters[0] in tri.LEVELS:
-            model_level = tri.LEVELS[letters[0]]
+        probabilities = tri.level_probabilities(await call_vllm(level_messages(request)))
+        if probabilities is not None:
+            raw_level, model_level = tri.model_levels(probabilities, await model_prior())
     except httpx.HTTPStatusError as error:
         if error.response.status_code == 400:
             # vLLM refuse la requête : le texte dépasse la longueur maximale du modèle (--max-model-len)
@@ -142,10 +165,11 @@ async def triage(request: tri.TriageRequest) -> tri.TriageResponse:
     level, source = tri.decide(model_level, flags)
     latency_ms = elapsed_ms(start)
     write_audit(audit | {"status": "ok", "niveau": level, "source": source, "niveau_modele": model_level,
-                         "latency_ms": latency_ms})
+                         "niveau_modele_brut": raw_level, "latency_ms": latency_ms})
     return tri.TriageResponse(
-        request_id=request_id, niveau=level, source=source, niveau_modele=model_level, signes_de_gravite=flags,
-        justification=tri.justification(level, source, model_level, flags), conduite=tri.CONDUITE[level],
+        request_id=request_id, niveau=level, source=source, niveau_modele=model_level, niveau_modele_brut=raw_level,
+        signes_de_gravite=flags, justification=tri.justification(level, source, model_level, flags, raw_level),
+        conduite=tri.CONDUITE[level],
         questions_complementaires=tri.follow_up_questions(request), modele=model, latence_ms=latency_ms,
         avertissement=WARNING,
     )
