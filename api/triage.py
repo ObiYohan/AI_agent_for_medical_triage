@@ -102,7 +102,22 @@ QUESTIONS_PAR_MOTIF = [
     (("fièvre", "fievre"), ["Depuis combien de jours dure la fièvre ?",
                             "Y a-t-il des taches sur la peau qui ne s'effacent pas à la pression ?",
                             "Le patient est-il immunodéprimé ?"]),
+    (("rhume", "enrhum", "rhinopharyng", "nez", "gorge", "angine", "toux", "tousse"),
+     ["Y a-t-il une gêne pour respirer ou pour avaler ?",
+      "Y a-t-il de la fièvre ?"]),
 ]
+# Questions déjà résolues par la description : (question, motif du texte qui y répond). Le texte brut est lu, négations
+# comprises : « sans fièvre » répond à « Y a-t-il de la fièvre ? »
+DUREE = r"\bdepuis\b|\bil y a\b|\bce matin\b|\bhier\b|\b\d+\s*(?:minutes?|heures?|h|jours?|semaines?|mois)\b"
+DEJA_RENSEIGNE = {
+    "Depuis quand la douleur a-t-elle commencé ?": DUREE,
+    "Depuis quand les symptômes ont-ils commencé ?": DUREE,
+    "Depuis combien de jours dure la fièvre ?": DUREE,
+    "Y a-t-il de la fièvre ?": r"fi[èe]vre|fébrile",
+    "Y a-t-il un essoufflement ou des sueurs ?": r"essouffl|sueur",
+    "Le patient prend-il un anticoagulant ?": r"anticoag",
+    "Le patient est-il immunodéprimé ?": r"immunod",
+}
 QUESTIONS_GENERALES = ["Depuis quand les symptômes ont-ils commencé ?",
                        "Le patient a-t-il des antécédents ou des traitements en cours ?"]
 CONSTANTES_A_MESURER = {
@@ -259,13 +274,29 @@ def benign_motif(request: TriageRequest) -> str | None:
     return motif
 
 
+def already_answered(question: str, request: TriageRequest, text: str) -> bool:
+    # La description répond déjà à la question, ou elle ne concerne pas ce patient
+    if question == "Une grossesse est-elle possible ?":
+        return request.sexe == "M"
+    if question == "Le patient a-t-il des antécédents ou des traitements en cours ?":
+        return bool(request.antecedents)
+    if question == "Y a-t-il de la fièvre ?" and request.constantes.temperature is not None:
+        return True
+    pattern = DEJA_RENSEIGNE.get(question)
+    return bool(pattern and re.search(pattern, text))
+
+
 def follow_up_questions(request: TriageRequest) -> list[str]:
-    text = f"{request.motif} {request.symptomes}".lower()
+    # Thèmes choisis sur le texte sans ses passages niés (« sans fièvre » n'appelle pas les questions sur la fièvre)
+    text = ". ".join(filter(None, (request.motif, request.symptomes, request.antecedents))).lower()
+    themes = NEGATION.sub(" ", f"{request.motif}. {request.symptomes}".lower())
     questions = []
     for keywords, motif_questions in QUESTIONS_PAR_MOTIF:
-        if any(k in text for k in keywords):
+        if any(k in themes for k in keywords):
             questions += [q for q in motif_questions if q not in questions]
     questions = questions or list(QUESTIONS_GENERALES)
+    questions = [q for q in questions if not already_answered(q, request, text)]
+    questions = questions or ["Les symptômes se sont-ils aggravés depuis leur début ?"]  # tout est déjà renseigné
     c = request.constantes
     questions += [q for field, q in CONSTANTES_A_MESURER.items() if getattr(c, field) is None]
     return questions

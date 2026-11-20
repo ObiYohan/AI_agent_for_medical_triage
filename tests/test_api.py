@@ -193,6 +193,22 @@ def test_questions_adaptatives(client, fake_vllm):
     assert "Mesurer la saturation en oxygène." in questions
 
 
+def test_questions_coherentes_avec_la_description(client, fake_vllm):
+    # « sans fièvre » n'appelle pas de question sur la fièvre ; la durée et les antécédents donnés ne sont pas redemandés
+    fake_vllm("B")
+    questions = post(client, RHUME | {"symptomes": "nez qui coule depuis 3 jours, sans fièvre",
+                                      "antecedents": "aucun"}).json()["questions_complementaires"]
+    assert questions == ["Y a-t-il une gêne pour respirer ou pour avaler ?"]
+
+
+def test_pas_de_question_de_grossesse_pour_un_homme(client, fake_vllm):
+    fake_vllm("B")
+    patient = {"age": 40, "sexe": "M", "motif": "douleur abdominale", "symptomes": "douleur du ventre"}
+    assert "Une grossesse est-elle possible ?" not in post(client, patient).json()["questions_complementaires"]
+    patient["sexe"] = "F"
+    assert "Une grossesse est-elle possible ?" in post(client, patient).json()["questions_complementaires"]
+
+
 def test_reponse_inexploitable(client, fake_vllm):
     fake_vllm({"Le": 0.9, "A": 0.05})  # le modèle ne répond pas par une lettre
     body = post(client).json()
