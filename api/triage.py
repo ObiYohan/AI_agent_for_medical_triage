@@ -168,7 +168,7 @@ class TriageResponse(BaseModel):
     source: str
     niveau_modele: str | None
     niveau_modele_brut: str | None = None  # avant calibration
-    signes_de_gravite: list[str]
+    signes_de_gravite: list[str] = Field(description="constantes hors seuils (garde-fous) ; le texte n'est pas analysé ici")
     justification: str
     conduite: str
     questions_complementaires: list[str]
@@ -246,8 +246,13 @@ def model_levels(probabilities: dict[str, float], prior: dict[str, float] | None
     return raw, calibrated
 
 
-def benign_motif(request: TriageRequest) -> str | None:
-    """Motif bénin reconnu si toutes les conditions sont réunies, sinon None.
+VITAL_LABELS = {"fc": ("fréquence cardiaque", "/min"), "pas": ("pression artérielle systolique", " mmHg"),
+                "spo2": ("saturation", " %"), "temperature": ("température", " °C"),
+                "fr": ("fréquence respiratoire", "/min"), "eva": ("douleur", "/10")}
+
+
+def benign_assessment(request: TriageRequest) -> tuple[str | None, str | None]:
+    """Motif bénin reconnu, ou la raison pour laquelle la règle ne s'applique pas : (motif, None) ou (None, raison).
 
     Conditions : un motif de la liste ; un adulte ; aucun signe d'alerte dans le texte, une fois les passages niés
     retirés ; fréquence cardiaque, pression artérielle, saturation et température toutes mesurées et normales ;
@@ -256,22 +261,28 @@ def benign_motif(request: TriageRequest) -> str | None:
     # Champs séparés par un point : une négation d'un champ (« sans fièvre ») ne doit pas couvrir le suivant
     text = ". ".join(filter(None, (request.motif, request.symptomes, request.antecedents))).lower()
     motif = next((label for label, keywords in BENIGN_MOTIFS if any(k in text for k in keywords)), None)
-    if motif is None or not BENIGN_AGE[0] <= request.age < BENIGN_AGE[1]:
-        return None
-    if any(word in NEGATION.sub(" ", text) for word in ALARM_WORDS):
-        return None
+    if motif is None:
+        return None, "motif non reconnu comme bénin"
+    if not BENIGN_AGE[0] <= request.age < BENIGN_AGE[1]:
+        return None, f"motif bénin ({motif}), mais la règle est réservée aux adultes de {BENIGN_AGE[0]} à {BENIGN_AGE[1] - 1} ans"
+    affirmed = NEGATION.sub(" ", text)
+    alarm = next((word for word in ALARM_WORDS if word in affirmed), None)
+    if alarm:
+        found = re.search(rf"\w*{re.escape(alarm)}\w*", affirmed).group(0)
+        return None, f"motif bénin ({motif}), mais signe d'alerte dans la description (« {found} »)"
     c = request.constantes
-    for field, (low, high) in BENIGN_VITALS.items():
-        value = getattr(c, field)
-        if value is None or not low <= value <= high:
-            return None
-    for field, (low, high) in BENIGN_OPTIONAL.items():
+    missing = [VITAL_LABELS[field][0] for field in BENIGN_VITALS if getattr(c, field) is None]
+    if missing:
+        names = " et ".join([", ".join(missing[:-1]), missing[-1]] if len(missing) > 1 else missing)
+        return None, f"motif bénin ({motif}), mais constantes incomplètes : {names} non mesurée{'s' if len(missing) > 1 else ''}"
+    for field, (low, high) in [*BENIGN_VITALS.items(), *BENIGN_OPTIONAL.items()]:
         value = getattr(c, field)
         if value is not None and not low <= value <= high:
-            return None
+            label, unit = VITAL_LABELS[field]
+            return None, f"motif bénin ({motif}), mais {label} à {value}{unit}, hors des bornes normales ({low} à {high})"
     if c.conscience == "alteree":
-        return None
-    return motif
+        return None, f"motif bénin ({motif}), mais conscience altérée"
+    return motif, None
 
 
 def already_answered(question: str, request: TriageRequest, text: str) -> bool:
@@ -316,13 +327,15 @@ def decide(model_level: str | None, flags: list[str], benign: str | None = None)
 
 
 def justification(level: str, source: str, model_level: str | None, flags: list[str],
-                  raw_level: str | None = None, benign: str | None = None) -> str:
+                  raw_level: str | None = None, benign: str | None = None, benign_reason: str | None = None) -> str:
     parts = []
     if source == "motif bénin":
         parts.append(f"Motif bénin ({benign}) chez un adulte, constantes complètes et normales, aucun signe d'alerte : "
                      "urgence différée, quelle que soit l'évaluation du modèle.")
     if flags:
-        parts.append("Signes de gravité : " + " ; ".join(flags) + ".")
+        parts.append("Signes de gravité (constantes hors seuils) : " + " ; ".join(flags) + ".")
+    else:
+        parts.append("Aucune constante hors seuils.")
     if model_level and raw_level and raw_level != model_level:
         parts.append(f"Évaluation du modèle : {model_level} (avant calibration : {raw_level} ; le modèle surestime "
                      "l'urgence, son a priori est corrigé).")
@@ -334,4 +347,6 @@ def justification(level: str, source: str, model_level: str | None, flags: list[
         parts.append("Un signe de gravité impose l'urgence maximale, quelle que soit l'évaluation du modèle.")
     elif source.startswith("défaut"):
         parts.append("Par prudence, urgence modérée : un soignant doit évaluer le patient.")
+    if not flags and benign_reason and level != "urgence différée":
+        parts.append(f"Pas de réorientation vers la médecine de ville : {benign_reason}.")
     return " ".join(parts)

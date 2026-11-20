@@ -105,7 +105,7 @@ def render(body: dict) -> str:
            if body.get("niveau_modele_brut") not in (None, body["niveau_modele"]) else "") + " · "
         f"**latence** : {body['latence_ms']} ms",
         "",
-        "**Signes de gravité** : " + ("; ".join(body["signes_de_gravite"]) or "aucun"),
+        "**Signes de gravité (constantes hors seuils)** : " + ("; ".join(body["signes_de_gravite"]) or "aucun"),
         "",
         f"**Justification** : {body['justification']}",
         "",

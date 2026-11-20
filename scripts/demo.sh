@@ -93,7 +93,7 @@ if code == "200":
     print(f"  Niveau          : \033[1m{body['niveau'].upper()}\033[0m   {mark}")
     print(f"  Source          : {body['source']} (avis du modèle : {body['niveau_modele']})")
     if body["signes_de_gravite"]:
-        print(f"  Signes de gravité : {' ; '.join(body['signes_de_gravite'])}")
+        print(f"  Signes de gravité (constantes hors seuils) : {' ; '.join(body['signes_de_gravite'])}")
     print(f"  Justification   : {body['justification']}")
     print(f"  Conduite        : {body['conduite']}")
     print("  Questions complémentaires :")

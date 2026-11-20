@@ -177,6 +177,24 @@ def test_motif_benin_conditions_strictes(client, fake_vllm, change):
     assert body["niveau"] == "urgence maximale"
 
 
+@pytest.mark.parametrize("change, reason", [
+    ({"motif": "douleur de l'épaule", "symptomes": "douleur en levant le bras"}, "motif non reconnu comme bénin"),
+    ({"constantes": {"fc": 72, "pas": 120}}, "constantes incomplètes : saturation et température non mesurées"),
+    ({"symptomes": "nez qui coule avec un essoufflement"}, "signe d'alerte dans la description (« essoufflement »)"),
+    ({"constantes": {"fc": 105, "pas": 120, "spo2": 99, "temperature": 37.0}},
+     "fréquence cardiaque à 105/min, hors des bornes normales (50 à 100)"),
+    ({"age": 4}, "réservée aux adultes de 15 à 74 ans"),
+])
+def test_justification_explique_l_absence_de_reorientation(client, fake_vllm, change, reason):
+    # Sans constante hors seuils, l'urgence modérée du modèle est expliquée : pourquoi le patient n'est pas réorienté
+    fake_vllm("B")
+    body = post(client, RHUME | change).json()
+    assert (body["niveau"], body["source"], body["signes_de_gravite"]) == ("urgence modérée", "modèle", [])
+    assert "Aucune constante hors seuils." in body["justification"]
+    assert "Pas de réorientation vers la médecine de ville" in body["justification"]
+    assert reason in body["justification"]
+
+
 def test_motif_benin_negation(client, fake_vllm):
     # « ne saigne plus », « sans fièvre » : passages niés, pas des signes d'alerte
     fake_vllm("B")
