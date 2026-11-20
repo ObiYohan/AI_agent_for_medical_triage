@@ -425,7 +425,7 @@ L'API FastAPI expose deux points d'accès : `POST /triage` et `GET /health` (ét
 | Garde-fous | des constantes hors seuils (SpO₂ < 90 %, PAS < 90 mmHg, FC > 130/min…) imposent l'urgence maximale : ils relèvent le niveau, jamais ne l'abaissent ; sans le modèle, ils décident seuls |
 | Motifs bénins | liste fermée (rhume, mal de gorge, petite plaie…), adulte aux constantes complètes et normales, sans signe d'alerte : urgence différée, réorientation vers la médecine de ville |
 | Questionnaire adaptatif | questions complémentaires selon le motif, et constantes manquantes à mesurer |
-| Explication | signes de gravité, avis du modèle, conduite à tenir pour le niveau retenu |
+| Explication | constantes hors seuils, avis du modèle, raison d'une absence de réorientation, conduite à tenir |
 
 Les seuils et les questions sont des valeurs de démonstration, à valider par l'équipe médicale.
 
