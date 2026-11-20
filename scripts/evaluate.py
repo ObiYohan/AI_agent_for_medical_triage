@@ -2,8 +2,13 @@
 
 Mesure les connaissances médicales du modèle, au format de son entraînement (`projet_14.mediqal`), en interrogeant
 vLLM directement. Les requêtes partent une par une, pour limiter l'effet du regroupement des requêtes sur les réponses.
+Chaque QCM du test (données v4, une ligne par cas) est posé avec l'historique du cas : le cas, les questions
+précédentes et leurs réponses de référence, comme à l'entraînement.
 
-    uv run python scripts/evaluate.py --vllm-url http://localhost:8001 --label sft
+    uv run python scripts/evaluate.py --vllm-url http://<vLLM>:8000 --label dpo
+    uv run python scripts/evaluate.py --vllm-url https://<endpoint>.endpoints.huggingface.cloud --label dpo-cloud
+
+Hors réseau local, le jeton Hugging Face de la connexion locale (`hf auth login`) est envoyé (Inference Endpoint).
 
 Sorties : `reports/evaluation/<label>_answers.csv` (une ligne par question) et `<label>_summary.json`.
 """
@@ -20,7 +25,7 @@ from projet_14.mediqal import LETTERS, SYSTEM_PROMPT, answer_letters, parse_user
 
 ROOT = Path(__file__).resolve().parents[1]
 
-DATA = ROOT / "data" / "anonymized"
+DATA = ROOT / "data" / "v4" / "anonymized"
 OUT = ROOT / "reports" / "evaluation"
 
 
@@ -39,15 +44,19 @@ def valid_format(letters: list[str], question: dict) -> bool:
 
 
 def test_questions() -> list[dict]:
-    # QCM du jeu de test MediQAl (mcqu et mcqm), avec leur corrigé
+    # QCM du jeu de test MediQAl (mcqu et mcqm), avec leur corrigé : une question par réponse de l'assistant, posée
+    # avec tout ce qui la précède dans la conversation du cas
     questions = []
     for stem in ("sft_mediqal_mcqu", "sft_mediqal_mcqm"):
         with (DATA / f"{stem}_test.anonymized.jsonl").open(encoding="utf-8") as f:
             for line in f:
                 record = json.loads(line)
-                questions.append(parse_user_content(record["messages"][1]["content"]) | {
-                    "id": record["id"], "jeu": stem.removeprefix("sft_mediqal_"),
-                    "attendu": sorted(answer_letters(record["messages"][2]["content"])), "dangereuses": []})
+                messages = record["messages"]
+                turns = [k for k, message in enumerate(messages) if message["role"] == "assistant"]
+                for question_id, k in zip(record["ids"], turns):
+                    questions.append(parse_user_content(messages[k - 1]["content"]) | {
+                        "id": question_id, "jeu": stem.removeprefix("sft_mediqal_"), "messages": messages[:k],
+                        "attendu": sorted(answer_letters(messages[k]["content"])), "dangereuses": []})
     return questions
 
 
@@ -57,7 +66,7 @@ def safety_questions() -> list[dict]:
 
 
 async def answer(client: httpx.AsyncClient, question: dict) -> dict:
-    payload = {"model": "qwen3-medical", "messages": build_messages(question), "temperature": 0,
+    payload = {"model": "qwen3-medical", "messages": question.get("messages") or build_messages(question), "temperature": 0,
                "max_tokens": 192 if question["reponses_multiples"] else 64}
     response = await client.post("/v1/chat/completions", json=payload)
     response.raise_for_status()
@@ -72,14 +81,19 @@ async def answer(client: httpx.AsyncClient, question: dict) -> dict:
 
 
 async def run(url: str, questions: list[dict]) -> pd.DataFrame:
-    async with httpx.AsyncClient(base_url=url, timeout=120) as client:
+    headers = {}
+    if not any(host in url for host in ("localhost", "127.0.0.1", "://172.", "://10.", "://192.168.")):
+        from huggingface_hub import get_token  # Inference Endpoint privé : jeton de la connexion locale
+
+        headers["Authorization"] = f"Bearer {get_token()}"
+    async with httpx.AsyncClient(base_url=url, headers=headers, timeout=300) as client:
         rows = [await answer(client, q) for q in questions]  # une requête à la fois
     return pd.DataFrame(rows)
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--vllm-url", default="http://localhost:8001")
+    parser.add_argument("--vllm-url", required=True, help="serveur vLLM (API compatible OpenAI)")
     parser.add_argument("--label", required=True, help="nom du modèle évalué (sft, dpo…)")
     args = parser.parse_args()
 

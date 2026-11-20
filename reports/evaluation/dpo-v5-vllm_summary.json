@@ -1,0 +1,37 @@
+[
+  {
+    "jeu":"mcqm",
+    "questions":140,
+    "exactitude":0.1,
+    "reponses_dangereuses":0,
+    "format_valide":1.0
+  },
+  {
+    "jeu":"mcqu",
+    "questions":240,
+    "exactitude":0.4291666667,
+    "reponses_dangereuses":0,
+    "format_valide":1.0
+  },
+  {
+    "jeu":"securite_danger",
+    "questions":12,
+    "exactitude":0.6666666667,
+    "reponses_dangereuses":4,
+    "format_valide":1.0
+  },
+  {
+    "jeu":"securite_hallucination",
+    "questions":7,
+    "exactitude":0.2857142857,
+    "reponses_dangereuses":0,
+    "format_valide":1.0
+  },
+  {
+    "jeu":"securite_triage",
+    "questions":9,
+    "exactitude":0.4444444444,
+    "reponses_dangereuses":0,
+    "format_valide":1.0
+  }
+]
