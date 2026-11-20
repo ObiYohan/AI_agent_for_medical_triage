@@ -139,10 +139,49 @@ def test_garde_fou_releve_le_niveau(client, fake_vllm):
 def test_garde_fou_n_abaisse_jamais(client, fake_vllm):
     # Sans signe de gravité, le niveau du modèle est conservé, même bas
     fake_vllm("C")
-    patient = {"age": 35, "sexe": "F", "motif": "rhume", "symptomes": "nez qui coule depuis 3 jours, sans fièvre",
+    patient = {"age": 51, "sexe": "M", "motif": "douleur de l'épaule", "symptomes": "douleur en levant le bras depuis un mois",
                "constantes": {"fc": 72, "pas": 120, "spo2": 99, "temperature": 37.0}}
     body = post(client, patient).json()
     assert (body["niveau"], body["source"]) == ("urgence différée", "modèle")
+
+
+# --- Motifs bénins ----------------------------------------------------------------------------------------------
+
+RHUME = {"age": 35, "sexe": "F", "motif": "rhume", "symptomes": "nez qui coule et toux légère depuis 3 jours, sans fièvre",
+         "constantes": {"fc": 72, "pas": 120, "spo2": 99, "temperature": 37.0}}
+
+
+def test_motif_benin_urgence_differee(client, fake_vllm):
+    # Rhume d'un adulte, constantes complètes et normales : urgence différée, même si le modèle sur-trie
+    fake_vllm("A")
+    body = post(client, RHUME).json()
+    assert (body["niveau"], body["source"], body["niveau_modele"]) == ("urgence différée", "motif bénin", "urgence maximale")
+    assert "rhume ou rhinopharyngite" in body["justification"]
+    assert "médecin traitant" in body["conduite"]
+
+
+@pytest.mark.parametrize("change", [
+    {"constantes": {"fc": 72, "pas": 120, "spo2": 99}},                       # température non mesurée
+    {"constantes": {"fc": 72, "pas": 120, "spo2": 99, "temperature": 38.9}},  # fièvre
+    {"constantes": {"fc": 112, "pas": 120, "spo2": 99, "temperature": 37.0}},  # tachycardie modérée
+    {"age": 4},                                                               # enfant
+    {"age": 80},                                                              # personne âgée
+    {"symptomes": "nez qui coule depuis 3 jours, avec un essoufflement"},     # signe d'alerte
+    {"symptomes": "nez qui coule, pas de fièvre mais douleur thoracique"},    # la négation ne couvre pas « mais … »
+    {"antecedents": "sous anticoagulant"},                                    # terrain à risque
+])
+def test_motif_benin_conditions_strictes(client, fake_vllm, change):
+    fake_vllm("A")
+    body = post(client, RHUME | change).json()
+    assert body["source"] != "motif bénin"
+    assert body["niveau"] == "urgence maximale"
+
+
+def test_motif_benin_negation(client, fake_vllm):
+    # « ne saigne plus », « sans fièvre » : passages niés, pas des signes d'alerte
+    fake_vllm("B")
+    patient = RHUME | {"motif": "plaie du doigt", "symptomes": "petite plaie superficielle du doigt, qui ne saigne plus"}
+    assert post(client, patient).json()["source"] == "motif bénin"
 
 
 def test_questions_adaptatives(client, fake_vllm):

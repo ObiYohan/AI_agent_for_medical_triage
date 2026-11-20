@@ -10,6 +10,9 @@ réponses incohérentes. Il est donc utilisé là où il est fiable, sur un choi
   d'une urgence modérée ;
 - garde-fous : des constantes vitales hors seuils imposent l'urgence maximale. Ils peuvent seulement relever le
   niveau proposé par le modèle, jamais l'abaisser ;
+- motifs bénins : à l'inverse, une liste fermée de motifs (rhume, mal de gorge, petite plaie superficielle…) chez
+  un adulte, avec des constantes complètes et normales et sans aucun signe d'alerte dans le texte, donne une urgence
+  différée (réorientation vers la médecine de ville), comme le ferait un protocole d'accueil par motif ;
 - questionnaire adaptatif : questions complémentaires selon le motif, et constantes manquantes à mesurer ;
 - conduite à tenir : texte fixe pour chaque niveau.
 
@@ -36,7 +39,8 @@ MIN_LETTER_MASS = 0.5  # probabilité minimale des lettres A, B, C au premier to
 CONDUITE = {
     "urgence maximale": "Installation immédiate en salle d'urgence vitale et appel du médecin.",
     "urgence modérée": "Évaluation médicale rapide, dans l'heure ; surveillance des constantes en attendant.",
-    "urgence différée": "Prise en charge non urgente ; réévaluation immédiate en cas d'aggravation.",
+    "urgence différée": "Prise en charge non urgente : réorientation possible vers le médecin traitant ou une maison "
+                        "médicale de garde ; réévaluation immédiate en cas d'aggravation.",
 }
 
 # Garde-fous : (constante, condition, signe de gravité affiché)
@@ -51,6 +55,32 @@ RED_FLAGS = [
     ("temperature", lambda v: v < 35, "température à {v} °C (< 35)"),
     ("conscience", lambda v: v == "alteree", "conscience altérée"),
 ]
+
+# Motifs bénins (protocole d'accueil) : (motif affiché, mots-clés du motif ou des symptômes)
+BENIGN_MOTIFS = [
+    ("rhume ou rhinopharyngite", ("rhume", "enrhum", "rhinopharyng", "nez qui coule", "nez bouché", "éternu")),
+    ("mal de gorge", ("mal de gorge", "maux de gorge", "gorge irritée", "angine", "pharyngite")),
+    ("petite plaie superficielle", ("petite plaie", "plaie superficielle", "égratignure", "écorchure", "éraflure")),
+    ("piqûre de moustique", ("piqûre de moustique", "piqué par un moustique", "piquée par un moustique")),
+    ("renouvellement d'ordonnance", ("renouvellement", "renouveler", "ordonnance")),
+]
+# Signes d'alerte : un seul suffit à écarter la règle. Recherchés dans tout le texte (motif, symptômes, antécédents),
+# après retrait des passages niés (« pas de fièvre », « sans essoufflement », « ne saigne plus »)
+ALARM_WORDS = (
+    "essouffl", "dyspn", "respir", "étouff", "thorac", "poitrine", "malaise", "connaissance", "inconscien", "confus",
+    "somnol", "convuls", "raideur", "nuque", "purpura", "tache", "saign", "sang", "gonfl", "œdème", "oedème",
+    "avaler", "voix", "paralys", "faiblesse", "parler", "mots", "vomi", "intense", "violent", "brutal", "pire",
+    "fièvre élevée", "frisson", "suicid", "en finir", "mourir", "grossesse", "enceinte", "anticoag",
+    "immunodépr", "chimio", "greff", "cancer", "diabét", "insuffisan", "profond", "morsure", "rouille",
+)
+# Portée d'une négation : jusqu'à la ponctuation ou à une conjonction (« pas de fièvre mais douleur thoracique » :
+# la douleur thoracique reste un signe d'alerte)
+_SPAN = r"(?:(?!\b(?:mais|avec|et|puis|or|cependant|pourtant|sauf)\b)[^,.;:!?])*"
+NEGATION = re.compile(rf"\b(?:pas\s+d['’e]|sans|ni)\s*{_SPAN}|\bne\s+\w+\s+(?:pas|plus|jamais)\b", re.IGNORECASE)
+BENIGN_AGE = (15, 75)  # adultes seulement : enfants et personnes âgées relèvent d'autres seuils
+# Constantes exigées, et leurs bornes normales (valeurs de démonstration, à valider par l'équipe médicale)
+BENIGN_VITALS = {"fc": (50, 100), "pas": (100, 160), "spo2": (95, 100), "temperature": (36.0, 38.4)}
+BENIGN_OPTIONAL = {"fr": (10, 22), "eva": (0, 3)}  # bornes vérifiées si la valeur est donnée
 
 # Questionnaire adaptatif : questions selon le motif (mots-clés), puis constantes manquantes
 QUESTIONS_PAR_MOTIF = [
@@ -201,6 +231,34 @@ def model_levels(probabilities: dict[str, float], prior: dict[str, float] | None
     return raw, calibrated
 
 
+def benign_motif(request: TriageRequest) -> str | None:
+    """Motif bénin reconnu si toutes les conditions sont réunies, sinon None.
+
+    Conditions : un motif de la liste ; un adulte ; aucun signe d'alerte dans le texte, une fois les passages niés
+    retirés ; fréquence cardiaque, pression artérielle, saturation et température toutes mesurées et normales ;
+    conscience non altérée. Sans constantes complètes, la règle ne s'applique pas : le patient n'est pas réorienté.
+    """
+    # Champs séparés par un point : une négation d'un champ (« sans fièvre ») ne doit pas couvrir le suivant
+    text = ". ".join(filter(None, (request.motif, request.symptomes, request.antecedents))).lower()
+    motif = next((label for label, keywords in BENIGN_MOTIFS if any(k in text for k in keywords)), None)
+    if motif is None or not BENIGN_AGE[0] <= request.age < BENIGN_AGE[1]:
+        return None
+    if any(word in NEGATION.sub(" ", text) for word in ALARM_WORDS):
+        return None
+    c = request.constantes
+    for field, (low, high) in BENIGN_VITALS.items():
+        value = getattr(c, field)
+        if value is None or not low <= value <= high:
+            return None
+    for field, (low, high) in BENIGN_OPTIONAL.items():
+        value = getattr(c, field)
+        if value is not None and not low <= value <= high:
+            return None
+    if c.conscience == "alteree":
+        return None
+    return motif
+
+
 def follow_up_questions(request: TriageRequest) -> list[str]:
     text = f"{request.motif} {request.symptomes}".lower()
     questions = []
@@ -213,10 +271,13 @@ def follow_up_questions(request: TriageRequest) -> list[str]:
     return questions
 
 
-def decide(model_level: str | None, flags: list[str]) -> tuple[str, str]:
-    # Niveau final et sa source. Les garde-fous ne peuvent que relever le niveau du modèle.
+def decide(model_level: str | None, flags: list[str], benign: str | None = None) -> tuple[str, str]:
+    # Niveau final et sa source. Les garde-fous ne peuvent que relever le niveau du modèle ; un motif bénin (qui
+    # suppose l'absence de tout signe de gravité) donne l'urgence différée
     if flags and (model_level is None or SEVERITY[model_level] > 0):
         return "urgence maximale", "règle de sécurité"
+    if benign and not flags:
+        return "urgence différée", "motif bénin"
     if model_level is None:
         # Réponse du modèle inexploitable, sans signe de gravité : niveau intermédiaire, avis soignant requis
         return "urgence modérée", "défaut (réponse du modèle inexploitable)"
@@ -224,8 +285,11 @@ def decide(model_level: str | None, flags: list[str]) -> tuple[str, str]:
 
 
 def justification(level: str, source: str, model_level: str | None, flags: list[str],
-                  raw_level: str | None = None) -> str:
+                  raw_level: str | None = None, benign: str | None = None) -> str:
     parts = []
+    if source == "motif bénin":
+        parts.append(f"Motif bénin ({benign}) chez un adulte, constantes complètes et normales, aucun signe d'alerte : "
+                     "urgence différée, quelle que soit l'évaluation du modèle.")
     if flags:
         parts.append("Signes de gravité : " + " ; ".join(flags) + ".")
     if model_level and raw_level and raw_level != model_level:

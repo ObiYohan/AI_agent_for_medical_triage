@@ -162,13 +162,14 @@ async def triage(request: tri.TriageRequest) -> tri.TriageResponse:
     except httpx.HTTPError as error:
         unavailable(audit, start, error, flags)
 
-    level, source = tri.decide(model_level, flags)
+    benign = tri.benign_motif(request)
+    level, source = tri.decide(model_level, flags, benign)
     latency_ms = elapsed_ms(start)
     write_audit(audit | {"status": "ok", "niveau": level, "source": source, "niveau_modele": model_level,
                          "niveau_modele_brut": raw_level, "latency_ms": latency_ms})
     return tri.TriageResponse(
         request_id=request_id, niveau=level, source=source, niveau_modele=model_level, niveau_modele_brut=raw_level,
-        signes_de_gravite=flags, justification=tri.justification(level, source, model_level, flags, raw_level),
+        signes_de_gravite=flags, justification=tri.justification(level, source, model_level, flags, raw_level, benign),
         conduite=tri.CONDUITE[level],
         questions_complementaires=tri.follow_up_questions(request), modele=model, latence_ms=latency_ms,
         avertissement=WARNING,
