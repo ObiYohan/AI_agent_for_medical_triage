@@ -42,7 +42,8 @@ sans cas clinique). Ni l'un ni l'autre ne ressemble à l'entrée d'un triage.
   (`data/` est ignoré) et se régénèrent avec les notebooks.
 - **Obligations** : CC-BY-4.0 et MIT imposent de citer la source et sa licence, ce que fait ce tableau et la fiche du modèle publié.
 - **Modèle publié** : [`0biyohan/qwen3-1.7b-medical-qcm-fr`](https://huggingface.co/0biyohan/qwen3-1.7b-medical-qcm-fr) (dépôt privé, Apache 2.0),
-  entraîné sur la version 3 des données ; c'est lui que sert la démonstration. Le modèle final (ci-dessous) reste à publier.
+  modèle final (SFT v4 + DPO v5, ci-dessous) à la révision `4af91a7`, servi en local et dans le cloud. Version
+  précédente (données v3) : révision `476fed3`.
 
 ## Entraînement (phase 2)
 
@@ -55,7 +56,9 @@ sans cas clinique). Ni l'un ni l'autre ne ressemble à l'entrée d'un triage.
 | `sft-lora-r16-v4-seed42` | rang 16, lr 2e-4, 1 époque, 1 536 tokens, perte sur toutes les réponses | QCM `mcqu` : 0,43 de bonnes réponses (réponse naïve : 0,21) |
 | `dpo-lora-r16-v5-sigmoid+sft-beta0.1-lr5e-05-seed42` (retenu) | perte DPO + vraisemblance de la `chosen`, beta 0,1, lr 5e-5, 1 époque | préférences justes : 0,68 (fr), 0,74 (en) ; format 0,99 ; aucune régression (McNemar p = 0,36) ; propositions en trop 0,62 → 0,02 |
 
-Modèle final fusionné : `outputs/dpo-lora-r16-v5-sigmoid+sft-beta0.1-lr5e-05-seed42/merged`. Deux essais DPO
+Modèle final fusionné : `outputs/dpo-lora-r16-v5-sigmoid+sft-beta0.1-lr5e-05-seed42/merged`, publié sur le Hub.
+Servi par vLLM (`scripts/evaluate.py`, 380 QCM du test et 28 contrôles de sécurité) : 0,43 en `mcqu`, 4
+recommandations dangereuses sur 12 cas pièges. Deux essais DPO
 antérieurs (données v4, avec et sans terme de vraisemblance) sont comparés dans le rapport (partie 4.3).
 Relancer seulement le DPO : section 1, la cellule des fonctions de génération (section 6), puis toute la section 7.
 
@@ -149,6 +152,7 @@ curl -X POST localhost:8080/triage -H "X-API-Key: $API_KEY" -H "Content-Type: ap
 |---|---|
 | `POST /triage` | patient décrit en langage naturel (âge, motif, symptômes, antécédents, constantes) → niveau de priorité (maximale, modérée, différée), signes de gravité, justification, conduite à tenir, questions complémentaires. Le modèle évalue le niveau sur un choix fermé ; des garde-fous sur les constantes (seuils de démonstration) ne peuvent que le relever. Clé obligatoire (`X-API-Key`) |
 | `GET /health` | état de l'API et de vLLM |
+| `scripts/ui.py` | interface web de test (Gradio) : formulaire patient, cas de démonstration, niveau et explication ; cible locale ou cloud au choix dans la page. `uv run --with gradio python scripts/ui.py`, puis http://127.0.0.1:7860 (écoute sur la machine seulement : la clé d'API reste côté serveur) |
 | `logs/audit.jsonl` | une ligne par requête : identifiant, horodatage, modèle, niveau retenu et sa source, latence, empreinte SHA-256 de l'entrée (le texte du patient n'est pas conservé) |
 | `tests/test_api.py` | tests de l'API sans GPU (vLLM simulé), lancés aussi par la CI : `uv run --with-requirements api/requirements.txt --with pytest pytest tests` |
 | `tests/integration/` | robustesse et audit de traçabilité contre la pile démarrée : `INTEGRATION_API_URL=http://localhost:8080 API_KEY=<clé> uv run --with-requirements api/requirements.txt --with pytest pytest tests/integration` (arrêt / redémarrage de vLLM avec `ROBUSTESSE_ARRET_VLLM=1`) |
@@ -167,7 +171,7 @@ Le port de vLLM n'est pas publié : seule l'API est accessible. Démonstration t
 | Brique | Où | Coût |
 |---|---|---|
 | API FastAPI | Space Docker privé [`0biyohan/triage-api`](https://huggingface.co/spaces/0biyohan/triage-api) (CPU) | gratuit |
-| Inférence vLLM | Inference Endpoint Hugging Face (GPU L4), mis en pause hors démonstration | ~0,80 $/h, seulement allumé |
+| Inférence vLLM | Inference Endpoint Hugging Face (GPU T4, AWS Irlande), mis en pause hors démonstration | 0,50 $/h, seulement allumé |
 | Journal d'audit | logs du conteneur du Space (lignes `AUDIT {…}`, sans texte patient) | gratuit |
 
 - **Déploiement de l'API** : `scripts/deploy_space.py` envoie au Space le code de l'API et le module du prompt
@@ -177,5 +181,6 @@ Le port de vLLM n'est pas publié : seule l'API est accessible. Démonstration t
   `VLLM_API_KEY` (jeton Hugging Face en lecture) ; variables `MODEL_NAME=qwen3-medical`, `VLLM_TIMEOUT=300`.
 - **Allumer et éteindre** : `uv run python scripts/cloud.py start` (relance l'endpoint et le Space, attend qu'ils soient
   prêts), `stop` (met l'endpoint en pause : plus de facturation GPU), `status`. Nom de l'endpoint : `HF_ENDPOINT_NAME`.
-- **Démonstration** : `API_URL=https://0biyohan-triage-api.hf.space ./scripts/demo.sh`. Le Space étant privé, le
+- **Démonstration** : `API_URL=https://0biyohan-triage-api.hf.space ./scripts/demo.sh`, ou l'interface `scripts/ui.py`
+  (cible « Cloud »). Le Space étant privé, le
   script ajoute le jeton Hugging Face de la connexion locale ; la clé de l'API reste exigée.

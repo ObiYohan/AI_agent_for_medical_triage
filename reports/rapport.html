@@ -142,8 +142,8 @@ anonymisé avec Presidio.</li>
 puis un alignement par préférences (DPO), sur une seule carte graphique
 de 10 Go. Le DPO retenu est le troisième essai, qui ajoute à la perte
 DPO un terme de vraisemblance de la bonne réponse. Chaque run est tracé
-dans MLflow. La démonstration sert encore la version précédente du
-modèle (données v3), publiée sur Hugging Face Hub.</li>
+dans MLflow. Le modèle final est publié sur Hugging Face Hub et servi
+par la démonstration.</li>
 <li><strong>Service</strong> : une API de triage (patient décrit en
 langage naturel → niveau de priorité expliqué, avec des questions
 complémentaires), protégée par clé, servie par vLLM, avec un journal
@@ -179,13 +179,13 @@ chaque nouvelle version.</li>
 question</td>
 </tr>
 <tr>
-<td>Contrôles de sécurité (12 cas, modèle v3)</td>
-<td>3 recommandations dangereuses ; entités inventées jamais
-reconnues</td>
+<td>Contrôles de sécurité (12 cas)</td>
+<td>4 recommandations dangereuses (3 pour le modèle précédent) ; entités
+inventées jamais reconnues</td>
 </tr>
 <tr>
 <td>Latence (1 requête, médiane)</td>
-<td>79 ms en local ; ~0,75 s dans le cloud, réseau compris</td>
+<td>82 ms en local ; 0,55 s dans le cloud, réseau compris</td>
 </tr>
 <tr>
 <td>Débit (50 requêtes simultanées)</td>
@@ -245,8 +245,8 @@ anonymisés avec Presidio</td>
 <tr>
 <td>2. Optimisation ciblée</td>
 <td>Adapter Qwen3-1.7B-Base par SFT LoRA, puis l’aligner par DPO</td>
-<td>Modèle SFT + DPO, trois essais de DPO comparés ; version précédente
-publiée sur Hugging Face Hub</td>
+<td>Modèle SFT + DPO, trois essais de DPO comparés, publié sur Hugging
+Face Hub</td>
 </tr>
 <tr>
 <td>3. Projection industrielle</td>
@@ -302,7 +302,7 @@ la réponse de l’API.</p>
         |
         v
  [4] Service : local (Docker Compose, RTX 3080)
-               ou cloud (Inference Endpoint L4 + Space Hugging Face)
+               ou cloud (Inference Endpoint T4 + Space Hugging Face)
      vLLM (inférence)  &lt;---  API FastAPI (clé d&#39;API, audit)  &lt;--- client
         ^
         |
@@ -377,7 +377,7 @@ la réponse de l’API.</p>
 <td>Démo cloud</td>
 <td>HF Inference Endpoints, Spaces</td>
 <td>Servir le modèle et l’API en ligne</td>
-<td>Endpoint L4, Space privé</td>
+<td>Endpoint T4, Space privé</td>
 </tr>
 <tr>
 <td>CI/CD</td>
@@ -853,10 +853,9 @@ conserve que l’empreinte de l’entrée, jamais le texte du cas.</li>
 <h1 id="entraînement">4. Entraînement</h1>
 <p>Le modèle final est entraîné sur les données décrites en partie 3 :
 SFT sur la version 4, DPO sur la version 5. Tout se trouve dans
-<code>notebook/sft_lora.ipynb</code>. La démonstration (partie 6) sert
-encore le modèle précédent, entraîné sur la version 3 (une question par
-exemple, sans questions ouvertes) ; la publication du modèle final est
-la prochaine étape.</p>
+<code>notebook/sft_lora.ipynb</code>. Le modèle précédent, entraîné sur
+la version 3 (une question par exemple, sans questions ouvertes), sert
+de point de comparaison pour le modèle servi (parties 5.4 et 6).</p>
 <h2 id="méthode-sft-puis-dpo-avec-lora">4.1 Méthode : SFT puis DPO, avec
 LoRA</h2>
 <p>L’entraînement se fait en deux temps, sur le même modèle de base,
@@ -1157,6 +1156,12 @@ et en perd 9.</li>
 perdues (p = 0,36) ; 27 contre 22 en <code>mcqu</code> comme en
 <code>mcqm</code>. Son format reste celui du SFT (0,99 des réponses dans
 les deux cas).</li>
+<li><strong>Servi par vLLM</strong> (380 questions du test SFT, posées
+avec leur historique de cas) : 0,43 en <code>mcqu</code>, comme le
+modèle précédent (12 questions gagnées, 13 perdues), et 0,10 en
+<code>mcqm</code>, contre 0,15. Le raccourci du modèle précédent, qui
+cochait deux propositions, paie sur les questions à deux bonnes réponses
+; l’écart n’est pas significatif (5 contre 12, p = 0,14).</li>
 </ul>
 <p>L’exactitude stricte reste faible en <code>mcqm</code> : il faut
 trouver la bonne combinaison parmi 26.</p>
@@ -1244,10 +1249,10 @@ longue (77 % et 62 % pour le modèle v3). L’équilibrage du train (partie
 3.5) a supprimé ce biais.</p>
 <h2 id="contrôles-de-sécurité">5.4 Contrôles de sécurité</h2>
 <p>Les contrôles de sécurité demandés en phase 2 portent sur 28 QCM
-pièges, passés par vLLM avec le prompt de l’API. Ces cas ont été rédigés
-pour ce projet ; ils n’ont pas été validés par un clinicien. Ils ont été
-mesurés sur le modèle servi par la démonstration (données v3) et sont à
-refaire sur le modèle final dès sa publication.</p>
+pièges, posés au modèle servi par vLLM, en local puis dans le cloud
+(mêmes réponses). Ces cas ont été rédigés pour ce projet ; ils n’ont pas
+été validés par un clinicien. Le modèle précédent (données v3) sert de
+comparaison.</p>
 <table>
 <colgroup>
 <col style="width: 25%" />
@@ -1259,16 +1264,16 @@ refaire sur le modèle final dès sa publication.</p>
 <tr>
 <th>Catégorie</th>
 <th>Questions</th>
-<th>SFT</th>
-<th>SFT + DPO</th>
+<th>Modèle précédent (v3)</th>
+<th>Modèle final</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Recommandation dangereuse parmi les choix</td>
 <td>12</td>
-<td>4 dangereuses</td>
 <td>3 dangereuses</td>
+<td>4 dangereuses</td>
 </tr>
 <tr>
 <td>Entité médicale inventée</td>
@@ -1285,7 +1290,7 @@ refaire sur le modèle final dès sa publication.</p>
 <tr>
 <td>Niveau de priorité (triage)</td>
 <td>9</td>
-<td>6 justes</td>
+<td>4 justes</td>
 <td>4 justes</td>
 </tr>
 </tbody>
@@ -1300,8 +1305,12 @@ purpura fébrile extensif, au lieu d’une antibiothérapie immédiate ;</li>
 <li>un <strong>antalgique et un retour à domicile</strong> face à une
 intoxication au monoxyde de carbone.</li>
 </ul>
-<p>Le SFT seul indique en plus une dose maximale de paracétamol de
-<strong>10 g par jour</strong> ; le DPO corrige cette erreur (4 g).</p>
+<p>Le modèle final en ajoute une quatrième : <strong>antalgiques et
+réévaluation dans une semaine</strong> face à une douleur testiculaire
+brutale chez un adolescent, évocatrice d’une torsion, qui impose une
+exploration chirurgicale en urgence. Sur 12 cas, l’écart n’est pas
+significatif, mais c’est le type d’erreur qu’un outil de triage ne peut
+pas se permettre.</p>
 <p><strong>Hallucinations.</strong> Face à une maladie, un médicament ou
 un muscle inventés, les deux modèles choisissent toujours une réponse
 médicale plausible, alors que la proposition « n’existe pas » est
@@ -1310,12 +1319,13 @@ connaissances.</p>
 <p><strong>Triage.</strong> Les quatre urgences vitales (arrêt
 cardiaque, état de choc, hémorragie, convulsions) sont toutes classées
 en urgence maximale : aucun sous-triage. En revanche, les cas modérés
-sont classés en urgence maximale, et le DPO classe les trois cas bénins
-en urgence modérée. Les deux modèles <strong>sur-trient</strong> : c’est
-l’erreur la moins dangereuse, mais elle engorgerait le service. Le point
-d’accès <code>/triage</code> (partie 6.2) le confirme sur 11 patients
-décrits en langage naturel : 5 urgences vitales en urgence maximale,
-mais les 6 autres cas sur-triés, dont une entorse de cheville.</p>
+sont classés en urgence maximale, et les trois cas bénins en urgence
+modérée. Les deux modèles <strong>sur-trient</strong> : c’est l’erreur
+la moins dangereuse, mais elle engorgerait le service. Le point d’accès
+<code>/triage</code> (partie 6.2) le confirme sur 11 patients décrits en
+langage naturel, avec les deux modèles : 5 urgences vitales en urgence
+maximale, mais les 6 autres cas sur-triés, dont une entorse de
+cheville.</p>
 <p><strong>Conclusion.</strong> Le modèle ne peut en aucun cas être
 utilisé de façon autonome. Ses erreurs sont précisément celles qu’un
 outil de triage ne peut pas se permettre : recommandations dangereuses
@@ -1439,8 +1449,8 @@ et cloud</h2>
 <tr>
 <td>Inférence</td>
 <td>vLLM 0.32 sur la RTX 3080</td>
-<td>Inference Endpoint Hugging Face : vLLM 0.32, GPU L4, accès par
-jeton</td>
+<td>Inference Endpoint Hugging Face (AWS, Irlande) : vLLM 0.32, GPU T4,
+accès par jeton</td>
 </tr>
 <tr>
 <td>API</td>
@@ -1455,20 +1465,20 @@ jeton</td>
 <tr>
 <td>Coût</td>
 <td>—</td>
-<td>~0,80 $/h, seulement allumé ; pause manuelle, veille après 15
+<td>0,50 $/h, seulement allumé ; pause manuelle, veille après 15
 min</td>
 </tr>
 </tbody>
 </table>
 <p>L’endpoint se réveille en 3 minutes ; un test complet (démonstration,
-latence, tests d’intégration) a coûté environ 0,25 $. Le modèle (même
-dépôt, même révision) donne les mêmes réponses dans les deux
-déploiements.</p>
+latence, tests d’intégration) coûte quelques dizaines de centimes. Le T4
+ne gère pas le format bf16 des poids : vLLM y sert le modèle en float16.
+Sur les 408 QCM d’évaluation, local et cloud donnent les mêmes scores, à
+une ou deux réponses près.</p>
 <h2 id="latence-et-débit">6.4 Latence et débit</h2>
-<p>Mesures avec 100 requêtes par niveau de charge, enregistrées dans
-MLflow : en local, sur <code>/triage</code> ; dans le cloud, sur la
-version précédente de l’API (QCM, réponses plus longues), depuis le
-client, réseau compris.</p>
+<p>Mesures du modèle final sur <code>/triage</code>, avec 100 requêtes
+par niveau de charge, depuis le client, réseau compris ; enregistrées
+dans MLflow.</p>
 <table>
 <colgroup>
 <col style="width: 20%" />
@@ -1489,24 +1499,24 @@ client, réseau compris.</p>
 <tbody>
 <tr>
 <td>1</td>
-<td>79 / 91 ms</td>
-<td>12,3 req/s</td>
-<td>745 / 1 432 ms</td>
-<td>1,2 req/s</td>
+<td>82 / 94 ms</td>
+<td>12,0 req/s</td>
+<td>546 / 614 ms</td>
+<td>1,8 req/s</td>
 </tr>
 <tr>
 <td>10</td>
-<td>211 / 240 ms</td>
-<td>47,2 req/s</td>
-<td>910 / 2 159 ms</td>
-<td>8,8 req/s</td>
+<td>216 / 252 ms</td>
+<td>46,3 req/s</td>
+<td>587 / 1 309 ms</td>
+<td>14,6 req/s</td>
 </tr>
 <tr>
 <td>50</td>
-<td>695 / 861 ms</td>
-<td>63,7 req/s</td>
-<td>2 127 / 3 575 ms</td>
-<td>17,0 req/s</td>
+<td>754 / 805 ms</td>
+<td>63,8 req/s</td>
+<td>1 320 / 1 811 ms</td>
+<td>31,3 req/s</td>
 </tr>
 </tbody>
 </table>
@@ -1521,10 +1531,10 @@ temps est passé à générer la réponse.</li>
 <li><strong>La réponse de triage tient en une ligne</strong> (le niveau
 choisi) : la latence est faible et régulière, avec un p95 proche de la
 médiane.</li>
-<li><strong>Dans le cloud, l’écart vient du réseau</strong>, pas du GPU
-(un L4 vaut une RTX 3080) : chaque requête traverse Internet jusqu’au
-Space, puis du Space à l’endpoint. Toutes les requêtes aboutissent, même
-à 50 simultanées. En production, placer l’API et le GPU au même endroit
+<li><strong>Dans le cloud, le réseau s’ajoute</strong> : chaque requête
+traverse Internet jusqu’au Space, puis du Space à l’endpoint, sur un T4
+moins rapide que la RTX 3080. Toutes les requêtes aboutissent, même à 50
+simultanées. En production, placer l’API et le GPU au même endroit
 supprimerait l’essentiel de ce surcoût.</li>
 </ul>
 <h2 id="robustesse">6.5 Robustesse</h2>
@@ -1621,9 +1631,9 @@ description du patient en JSON, pas un dossier patient.</li>
 <li><strong>Connaissances limitées</strong> : 0,44 de bonnes réponses
 aux QCM à réponse unique, cohérent avec sa taille (1,7 milliard de
 paramètres).</li>
-<li><strong>Erreurs dangereuses et hallucinations</strong> : 3
-recommandations dangereuses sur 12 cas pièges, et aucune entité inventée
-reconnue comme telle.</li>
+<li><strong>Erreurs dangereuses et hallucinations</strong> : 4
+recommandations dangereuses sur 12 cas pièges (3 pour le modèle
+précédent), et aucune entité inventée reconnue comme telle.</li>
 <li><strong>Apport du DPO limité</strong> : les préférences sont
 apprises (0,68 en français) et les propositions cochées en trop ont
 disparu, mais l’exactitude ne progresse pas de façon significative, et
@@ -1631,10 +1641,6 @@ une proposition manquante n’est repérée qu’au hasard.</li>
 </ul>
 <p><strong>Les données et la méthode.</strong></p>
 <ul>
-<li><strong>Modèle final pas encore servi</strong> : la démonstration,
-les contrôles de sécurité (partie 5.4) et les mesures de la partie 6
-portent sur le modèle v3. Le modèle final reste à publier et à contrôler
-de la même façon.</li>
 <li><strong>Pas de validation clinique humaine</strong> : aucun soignant
 ne relit les données. La proximité avec le triage est repérée par des
 expressions régulières ; les erreurs DPO françaises sont construites à
@@ -1654,8 +1660,8 @@ significatifs.</li>
 <p><strong>Le déploiement.</strong></p>
 <ul>
 <li><strong>Hébergement non conforme pour des données de santé</strong>
-: la démo cloud tourne chez Hugging Face (AWS, États-Unis), sans
-certification HDS.</li>
+: la démo cloud tourne chez Hugging Face (AWS en Irlande pour le GPU),
+sans certification HDS.</li>
 <li><strong>Disponibilité de démonstration</strong> : réveil de 3
 minutes, Space gratuit, sans haute disponibilité.</li>
 <li><strong>Surveillance minimale</strong> : état de santé et journal
