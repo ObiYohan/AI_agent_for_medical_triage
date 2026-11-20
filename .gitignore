@@ -17,6 +17,7 @@ reports/rgpd/
 
 # perso 
 Notes.md
+notebook/old
 
 # outputs
 outputs/
@@ -30,3 +31,6 @@ logs/
 # Suivi MLflow local (résultats d'exécution : runs et artefacts)
 mlflow.db
 mlruns/
+
+# Notes pour la soutenance (non versionnées)
+Questions_jury.md
