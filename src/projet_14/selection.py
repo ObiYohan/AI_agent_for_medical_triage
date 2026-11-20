@@ -11,8 +11,8 @@ triage, par **cas entier** (toutes ses questions), pour garder le récit cohére
    décroissant, puis dans un ordre pseudo-aléatoire fixe tiré de l'identifiant du cas.
 4. **Plafond par groupe** (spécialité ou source) : une part maximale du budget, pour garder la diversité.
 
-Critères volontairement simples et lisibles (expressions régulières) : chaque choix s'explique, et un échantillon
-des cas retenus est exporté pour relecture (`review_sample`).
+Critères volontairement simples et lisibles (expressions régulières) : chaque choix s'explique. Aucune relecture
+clinique humaine n'est prévue dans le POC : la pertinence des cas retenus n'est pas validée par un soignant.
 """
 
 import re
@@ -99,16 +99,3 @@ def select_cases(cases: pd.DataFrame, budget: int, max_share: float, group: str,
                 break
     return cases[cases["case_id"].isin(keep)]
 
-
-def review_sample(examples: pd.DataFrame, n: int, seed: int = 42) -> pd.DataFrame:
-    """Échantillon de cas retenus à relire : extrait du cas et de la 1re réponse, colonnes à remplir par le relecteur."""
-    first = examples.drop_duplicates("case_id")
-    sample = first.sample(min(n, len(first)), random_state=seed)
-    return pd.DataFrame({
-        "case_id": sample["case_id"],
-        "split": sample["split"],
-        "extrait": sample["messages"].map(lambda m: m[1]["content"][:800]),
-        "reponse": sample["messages"].map(lambda m: m[2]["content"][:300]),
-        "pertinent_triage": "",  # oui / non, rempli par le relecteur
-        "commentaire": "",
-    })
