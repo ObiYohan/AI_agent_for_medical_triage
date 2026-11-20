@@ -322,8 +322,7 @@ Pendant l'essai 3, les préférences justes en validation passent de 0,67 (pas 2
 - **Petits runs d'abord** : chaque changement est validé sur quelques dizaines de pas (environ 10 minutes) avant le run complet, comme le recommande le sujet.
 - **MLflow sur DagsHub** : chaque run enregistre ses hyperparamètres, la version des données, ses courbes et ses métriques finales. Son nom résume sa configuration, par exemple `dpo-lora-r16-v5-sigmoid+sft-beta0.1-lr5e-05-seed42` pour le DPO retenu. Les métriques de chaque contrôle (préférences par type d'erreur, exactitude, format, test de McNemar) y sont enregistrées.
 - **Checkpoints** : une sauvegarde tous les 25 pas, avec reprise possible après une interruption. Le meilleur checkpoint, selon la perte de validation, est rechargé à la fin.
-- **Configuration** : un fichier `run_config.json` accompagne chaque adaptateur (réglages, tailles des données, graine).
-- **Graine fixe** (42) pour toutes les étapes aléatoires.
+- **Configuration** : un fichier `run_config.json` accompagne chaque adaptateur (réglages, tailles des données, graine) ; graine fixe (42) pour toutes les étapes aléatoires.
 
 # 5. Évaluation et résultats
 
@@ -400,7 +399,7 @@ Le modèle final en ajoute une quatrième : **antalgiques et réévaluation dans
 
 **Évaluation externe du triage.** Le jeu public `clinical-triage-bilingual` (Hugging Face, CC BY 4.0) fournit 60 cas rédigés à la main, en français et en anglais (20 par niveau, dont des cas piégeux), avec des niveaux fixés par son auteur, sans validation médicale. Le modèle seul y trouve 23 niveaux sur 60, sous-trie 1 urgence vitale sur 20 et sur-trie 36 cas.
 
-Corriger l'a priori du modèle pour l'urgence maximale (0,74 pour un patient sans information) semblait sûr sur nos 20 cas : 14 bons niveaux au lieu de 9, sans sous-triage. Sur les 60 cas externes, cette calibration gagne 5 niveaux mais sous-trie 11 à 12 urgences vitales sur 20 : la probabilité d'urgence maximale se recouvre entre urgences vitales (médiane 0,73) et modérées (0,61). Elle reste donc désactivée ; le sur-triage est l'erreur la moins dangereuse.
+Corriger l'a priori du modèle pour l'urgence maximale (0,74 pour un patient sans information) semblait sûr sur nos 20 cas : 14 bons niveaux au lieu de 9, sans sous-triage. Sur les 60 cas externes, cette calibration gagne 5 niveaux mais sous-trie 11 à 12 urgences vitales sur 20 : la probabilité d'urgence maximale se recouvre entre urgences vitales (médiane 0,73) et modérées (0,61). Elle reste donc désactivée ; le sur-triage est l'erreur la moins dangereuse. Les motifs bénins relèvent d'une règle déterministe (partie 6.2) : sur les 60 cas, même avec des constantes supposées normales, elle ne déclasse aucune urgence vitale.
 
 **Conclusion.** Le modèle ne peut en aucun cas être utilisé de façon autonome. Ses erreurs sont précisément celles qu'un outil de triage ne peut pas se permettre : recommandations dangereuses et réponses assurées sur ce qu'il ignore.
 
@@ -424,6 +423,7 @@ L'API FastAPI expose deux points d'accès : `POST /triage` et `GET /health` (ét
 |---|---|
 | Modèle | évalue le niveau de priorité (maximale, modérée, différée) à partir d'un cas clinique rédigé à partir des informations reçues, sur un choix fermé |
 | Garde-fous | des constantes hors seuils (SpO₂ < 90 %, PAS < 90 mmHg, FC > 130/min…) imposent l'urgence maximale : ils relèvent le niveau, jamais ne l'abaissent ; sans le modèle, ils décident seuls |
+| Motifs bénins | liste fermée (rhume, mal de gorge, petite plaie…), adulte aux constantes complètes et normales, sans signe d'alerte : urgence différée, réorientation vers la médecine de ville |
 | Questionnaire adaptatif | questions complémentaires selon le motif, et constantes manquantes à mesurer |
 | Explication | signes de gravité, avis du modèle, conduite à tenir pour le niveau retenu |
 
@@ -515,8 +515,7 @@ Les tests d'audit vérifient que chaque requête est tracée avec tous ses champ
 **Le déploiement.**
 
 - **Hébergement non conforme pour des données de santé** : la démo cloud tourne chez Hugging Face (AWS en Irlande pour le GPU), sans certification HDS.
-- **Disponibilité de démonstration** : réveil de 3 minutes, Space gratuit, sans haute disponibilité.
-- **Surveillance minimale** : état de santé et journal d'audit, sans tableau de bord ni alertes.
+- **Démonstration seulement** : réveil de 3 minutes, Space gratuit sans haute disponibilité ; surveillance limitée à l'état de santé et au journal d'audit, sans tableau de bord ni alertes.
 
 # 8. Roadmap de passage à l'échelle au CHSA
 
@@ -543,8 +542,7 @@ La feuille de route place les données de triage et la validation clinique **ava
 - **Abstention** : le modèle doit pouvoir répondre « avis soignant requis » plutôt que d'inventer.
 - **Protocoles du CHSA** : fournis au modèle au moment de répondre (RAG), plutôt que mémorisés.
 - **DPO sur les vraies erreurs** du modèle, validées par des soignants.
-- **Montée en taille** : 32B ou plus une fois le jeu de triage disponible, avec un gain mesuré sur ce jeu.
-- **Métrique principale** : le taux de sous-triage des urgences vitales, avant l'exactitude globale.
+- **Montée en taille** : 32B ou plus une fois le jeu de triage disponible, jugée d'abord sur le taux de sous-triage des urgences vitales, avant l'exactitude globale.
 
 **Étape 3 : une infrastructure de production.**
 
