@@ -6,7 +6,7 @@ colorTo: green
 sdk: docker
 app_port: 8080
 pinned: false
-short_description: API de triage médical ; inférence vLLM sur Inference Endpoint
+short_description: API de triage médical, inférence vLLM sur HF Endpoint
 ---
 
 # Agent IA de triage médical : API de démonstration
