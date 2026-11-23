@@ -7,14 +7,14 @@ services:
   vllm:
     image: vllm/vllm-openai:v0.32.0
     command:
-      # Modèle fusionné SFT (données v4) + DPO (v5), sur Hugging Face Hub (dépôt privé), à une révision fixe : reproductible
+      # Modèle fusionné SFT (données v4) + DPO (v5), sur Hugging Face Hub (dépôt public), à une révision fixe : reproductible
       - --model=${MODEL:-0biyohan/qwen3-1.7b-medical-triage-fr}
       - --revision=${MODEL_REVISION:-4af91a7aa052c092cfb64568d441b84f8f4a88e8}
       - --served-model-name=qwen3-medical
       - --max-model-len=2048
       - --gpu-memory-utilization=0.8  # ~1 Go du GPU est déjà pris par l'affichage Windows
     environment:
-      HF_TOKEN: ${HF_TOKEN:?Définir HF_TOKEN (jeton Hugging Face en lecture) dans le fichier .env}
+      HF_TOKEN: ${HF_TOKEN:-}  # facultatif : le modèle est public
     volumes:
       - hf-cache:/root/.cache/huggingface  # le modèle n'est téléchargé qu'une fois
     deploy:

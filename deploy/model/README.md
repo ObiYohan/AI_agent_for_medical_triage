@@ -61,7 +61,7 @@ Une seule proposition est exacte.
 **QCM médicaux** : même format, propositions A à E, consigne « Une seule proposition est exacte. » ou « Plusieurs
 propositions sont exactes (au moins deux). ». Réponse : `C. texte de la proposition` ou une liste `- A. …`.
 
-**Avec vLLM** (jeton Hugging Face en lecture, le dépôt étant privé) :
+**Avec vLLM** :
 
 ```bash
 vllm serve 0biyohan/qwen3-1.7b-medical-triage-fr --revision 4af91a7aa052c092cfb64568d441b84f8f4a88e8 \

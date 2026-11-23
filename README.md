@@ -46,7 +46,7 @@ sans cas clinique). Ni l'un ni l'autre ne ressemble à l'entrée d'un triage.
   anonymisés et de leurs rapports : `uv run python scripts/push_dataset.py --tag v1.0`. Fiche : `deploy/dataset/README.md` ;
   fiche du modèle : `deploy/model/README.md`.
 - **Obligations** : CC-BY-4.0 et MIT imposent de citer la source et sa licence, ce que fait ce tableau et la fiche du modèle publié.
-- **Modèle publié** : [`0biyohan/qwen3-1.7b-medical-triage-fr`](https://huggingface.co/0biyohan/qwen3-1.7b-medical-triage-fr) (dépôt privé, Apache 2.0),
+- **Modèle publié** : [`0biyohan/qwen3-1.7b-medical-triage-fr`](https://huggingface.co/0biyohan/qwen3-1.7b-medical-triage-fr) (public, Apache 2.0),
   modèle final (SFT v4 + DPO v5, ci-dessous) à la révision `4af91a7`, servi en local et dans le cloud. Version
   précédente (données v3) : révision `476fed3`.
 
@@ -131,12 +131,12 @@ uv run rgpd-anonymize data/v4/sft_mediqal_mcqu_train.jsonl --lang fr --output-di
 Le modèle fusionné (SFT + DPO, section 7.5 de `notebook/sft_lora.ipynb`) est servi par **vLLM** et exposé par une
 API **FastAPI**. Les deux services tournent dans Docker (`docker-compose.yml`).
 
-Prérequis : Docker avec accès au GPU (NVIDIA Container Toolkit) et un jeton Hugging Face en lecture. Le modèle
-est téléchargé depuis le dépôt privé [`0biyohan/qwen3-1.7b-medical-triage-fr`](https://huggingface.co/0biyohan/qwen3-1.7b-medical-triage-fr),
+Prérequis : Docker avec accès au GPU (NVIDIA Container Toolkit). Le modèle est téléchargé, sans jeton, depuis le
+dépôt public [`0biyohan/qwen3-1.7b-medical-triage-fr`](https://huggingface.co/0biyohan/qwen3-1.7b-medical-triage-fr),
 à une révision fixée dans `docker-compose.yml` (variables `MODEL` et `MODEL_REVISION` pour en changer).
 
 ```bash
-cp .env.example .env          # puis définir API_KEY et HF_TOKEN
+cp .env.example .env          # puis définir API_KEY (HF_TOKEN facultatif)
 docker compose up -d          # premier lancement : image vLLM (~10 Go) et modèle (3,4 Go), mis en cache ensuite
 curl localhost:8080/health
 ```
@@ -165,7 +165,7 @@ curl -X POST localhost:8080/triage -H "X-API-Key: $API_KEY" -H "Content-Type: ap
 | `scripts/latency.py` | latence et débit à 1, 10 et 50 requêtes simultanées (API de bout en bout sur les cas de `scripts/triage_cases.json`, puis vLLM seul : TTFT, TPOT), niveaux conformes et urgences vitales sous-triées ; résultats dans MLflow (expérience `qwen3-1.7b-serving`) : `API_KEY=<clé> uv run python scripts/latency.py [--mlflow dagshub]` |
 | `.github/workflows/ci.yml` | CI/CD : à chaque push, tests puis construction de l'image de l'API ; sur `master`, publication sur GHCR (`ghcr.io/obiyohan/triage-api:<commit>`), déploiement sur la machine GPU (runner auto-hébergé, étiquette `gpu`, dossier `~/p14-deploy`) et tests d'intégration contre la pile déployée |
 
-**Déploiement continu** : secrets `API_KEY` et `HF_TOKEN` dans GitHub (*Settings → Secrets and variables → Actions*),
+**Déploiement continu** : secret `API_KEY` (et `HF_TOKEN`, facultatif) dans GitHub (*Settings → Secrets and variables → Actions*),
 runner auto-hébergé avec l'étiquette `gpu` sur la machine qui sert la démonstration. Un nouveau commit sur `master`
 remplace le conteneur de l'API sans redémarrer vLLM. Retour à une version précédente : relancer (*Re-run all jobs*)
 le workflow d'un commit antérieur dans l'onglet *Actions*.

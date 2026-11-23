@@ -99,7 +99,7 @@ Le schéma suit le parcours des données, des sources publiques jusqu'à la rép
      SFT LoRA  ->  DPO LoRA  ->  fusion des poids
         |                  suivi des runs : MLflow (DagsHub)
         v
- [3] Hugging Face Hub : modèle fusionné, dépôt privé, révision fixée
+ [3] Hugging Face Hub : modèle fusionné, dépôt public, révision fixée
         |
         v
  [4] Service : local (Docker Compose, RTX 3080)
@@ -119,7 +119,7 @@ Le schéma suit le parcours des données, des sources publiques jusqu'à la rép
 | Anonymisation | Presidio, spaCy | Remplacer les noms de personnes | Données anonymisées |
 | Entraînement | PEFT, TRL | SFT puis DPO avec LoRA | Adaptateurs, checkpoints |
 | Suivi | MLflow, DagsHub | Hyperparamètres, métriques, runs | Historique des runs |
-| Distribution | Hugging Face Hub | Héberger les poids fusionnés | Dépôt privé versionné |
+| Distribution | Hugging Face Hub | Héberger les poids fusionnés | Dépôt public versionné |
 | Inférence | vLLM 0.32 | Générer les réponses sur GPU | Serveur interne |
 | Exposition | FastAPI | Valider, authentifier, décider, tracer | `POST /triage`, `GET /health` |
 | Conteneurs | Docker Compose | Assembler vLLM et l'API | `docker-compose.yml` |
