@@ -103,7 +103,7 @@
 - **D'où deux règles symétriques**, comme un protocole d'accueil : des constantes hors seuils relèvent le niveau ; une liste fermée de motifs bénins, chez un adulte aux constantes complètes et normales, sans aucun signe d'alerte, l'abaisse.
 - **Une correction rejetée** : corriger statistiquement l'a priori du modèle semblait marcher sur nos 20 cas. Sur 60 cas externes, elle sous-triait 11 à 12 urgences vitales sur 20 : abandonnée. Le sur-triage reste préférable au sous-triage.
 - **La faille des balises** a été trouvée par nos tests de robustesse, puis corrigée : un utilisateur pouvait injecter un faux message système.
-- **Latence** : 82 ms en médiane en local, 64 requêtes par seconde avec 50 utilisateurs simultanés, sur une seule carte graphique ; 0,55 s dans le cloud, réseau compris.
+- **Latence** : 41 ms en médiane en local, 72 requêtes par seconde avec 50 utilisateurs simultanés, sur une seule carte graphique ; 0,44 s dans le cloud, réseau compris.
 - **Phrase clé** : « Cohérent sur les cas simples, prudent sur les autres, sécurisé, et tracé sans aucune donnée de santé. »
 
 ### 11:00 – 12:30 · Livrable 4 : le pipeline CI/CD
@@ -111,7 +111,7 @@
 **À l'écran** :
 
 1. GitHub Actions : une exécution réussie, avec ses quatre jobs (`tests`, `image`, `deploy`, `deploy-cloud`).
-2. Le job `deploy`, exécuté sur le runner `p14-gpu` (la machine GPU), puis `deploy-cloud` (Space Hugging Face).
+2. Le job `deploy`, exécuté sur le runner `p14-gpu` (la machine GPU), puis `deploy-cloud` (Space Hugging Face, puis révision du modèle de l'endpoint).
 3. L'image de l'API sur GHCR, étiquetée par commit.
 
 **À dire** :

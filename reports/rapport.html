@@ -185,11 +185,11 @@ inventées jamais reconnues</td>
 </tr>
 <tr>
 <td>Latence (1 requête, médiane)</td>
-<td>82 ms en local ; 0,55 s dans le cloud, réseau compris</td>
+<td>41 ms en local ; 0,44 s dans le cloud, réseau compris</td>
 </tr>
 <tr>
 <td>Débit (50 requêtes simultanées)</td>
-<td>64 requêtes par seconde (local)</td>
+<td>72 requêtes par seconde (local)</td>
 </tr>
 </tbody>
 </table>
@@ -424,7 +424,8 @@ GHCR</td>
 <tr>
 <td><code>deploy-cloud</code></td>
 <td>serveur GitHub</td>
-<td>mise à jour de l’API sur le Space, puis test de fumée</td>
+<td>mise à jour de l’API sur le Space, test de fumée, puis modèle de
+l’endpoint aligné sur la révision locale</td>
 </tr>
 </tbody>
 </table>
@@ -1079,7 +1080,8 @@ reprise possible après une interruption. Le meilleur checkpoint, selon
 la perte de validation, est rechargé à la fin.</li>
 <li><strong>Configuration</strong> : un fichier
 <code>run_config.json</code> accompagne chaque adaptateur (réglages,
-tailles des données, graine) ; graine fixe (42) pour toutes les étapes
+tailles des données, graine), publié avec les deux adaptateurs LoRA dans
+le dépôt du modèle ; graine fixe (42) pour toutes les étapes
 aléatoires.</li>
 </ul>
 <h1 id="évaluation-et-résultats">5. Évaluation et résultats</h1>
@@ -1522,38 +1524,36 @@ dans MLflow.</p>
 <tbody>
 <tr>
 <td>1</td>
-<td>82 / 94 ms</td>
-<td>12,0 req/s</td>
-<td>546 / 614 ms</td>
-<td>1,8 req/s</td>
+<td>41 / 49 ms</td>
+<td>23,5 req/s</td>
+<td>442 / 510 ms</td>
+<td>2,2 req/s</td>
 </tr>
 <tr>
 <td>10</td>
-<td>216 / 252 ms</td>
-<td>46,3 req/s</td>
-<td>587 / 1 309 ms</td>
-<td>14,6 req/s</td>
+<td>169 / 199 ms</td>
+<td>61,2 req/s</td>
+<td>431 / 1 092 ms</td>
+<td>19,5 req/s</td>
 </tr>
 <tr>
 <td>50</td>
-<td>754 / 805 ms</td>
-<td>63,8 req/s</td>
-<td>1 320 / 1 811 ms</td>
-<td>31,3 req/s</td>
+<td>587 / 791 ms</td>
+<td>72,4 req/s</td>
+<td>1 093 / 1 627 ms</td>
+<td>36,7 req/s</td>
 </tr>
 </tbody>
 </table>
 <ul>
 <li><strong>Le batching continu fonctionne</strong> : de 1 à 50 requêtes
-simultanées, le débit est multiplié par 5, pour une latence médiane qui
-reste sous la seconde. Pendant l’entraînement, la génération plafonnait
-à environ 2 réponses par seconde.</li>
-<li><strong>vLLM seul</strong> répond en 38 ms au premier token (TTFT)
-et produit ensuite un token toutes les 7 ms (TPOT) : l’essentiel du
-temps est passé à générer la réponse.</li>
-<li><strong>La réponse de triage tient en une ligne</strong> (le niveau
-choisi) : la latence est faible et régulière, avec un p95 proche de la
-médiane.</li>
+simultanées, le débit local est multiplié par 3, pour une latence
+médiane qui reste sous la seconde. Pendant l’entraînement, la génération
+plafonnait à environ 2 réponses par seconde.</li>
+<li><strong>Un seul token généré</strong> : l’API ne demande au modèle
+que la lettre du niveau, avec ses probabilités. La latence se réduit
+presque au temps du premier token de vLLM (37 ms), et reste régulière
+(p95 proche de la médiane).</li>
 <li><strong>Dans le cloud, le réseau s’ajoute</strong> : chaque requête
 traverse Internet jusqu’au Space, puis du Space à l’endpoint, sur un T4
 moins rapide que la RTX 3080. Toutes les requêtes aboutissent, même à 50

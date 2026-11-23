@@ -34,8 +34,8 @@ colorlinks: true
 | DPO : préférences justes (test) | 0,68 en français, 0,74 en anglais (0,50 = hasard) |
 | DPO : effet sur les réponses | aucune régression ; propositions cochées en trop : 0,62 → 0,02 par question |
 | Contrôles de sécurité (12 cas) | 4 recommandations dangereuses (3 pour le modèle précédent) ; entités inventées jamais reconnues |
-| Latence (1 requête, médiane) | 82 ms en local ; 0,55 s dans le cloud, réseau compris |
-| Débit (50 requêtes simultanées) | 64 requêtes par seconde (local) |
+| Latence (1 requête, médiane) | 41 ms en local ; 0,44 s dans le cloud, réseau compris |
+| Débit (50 requêtes simultanées) | 72 requêtes par seconde (local) |
 
 **Conclusion.** La faisabilité technique est démontrée : la chaîne complète fonctionne, est reproductible et traçable, et le service répond en moins d'une seconde. La valeur clinique, en revanche, n'est pas démontrée. Le modèle n'a pas appris le triage, faute de données adaptées, et il commet encore des erreurs dangereuses. Il ne doit pas être utilisé auprès de patients.
 
@@ -135,7 +135,7 @@ Le schéma suit le parcours des données, des sources publiques jusqu'à la rép
 | `tests` | serveur GitHub | 42 tests de l'API et des métadonnées du Space, vLLM simulé (pas de GPU) |
 | `image` | serveur GitHub | construction de l'image ; sur `master`, publication sur GHCR |
 | `deploy` | machine GPU | mise à jour de la pile locale, puis tests d'intégration |
-| `deploy-cloud` | serveur GitHub | mise à jour de l'API sur le Space, puis test de fumée |
+| `deploy-cloud` | serveur GitHub | mise à jour de l'API sur le Space, test de fumée, puis modèle de l'endpoint aligné sur la révision locale |
 
 Le déploiement remplace le conteneur de l'API en quelques secondes, sans redémarrer vLLM. Le retour à une version précédente consiste à relancer le pipeline d'un commit antérieur.
 
@@ -322,7 +322,7 @@ Pendant l'essai 3, les préférences justes en validation passent de 0,67 (pas 2
 - **Petits runs d'abord** : chaque changement est validé sur quelques dizaines de pas (environ 10 minutes) avant le run complet, comme le recommande le sujet.
 - **MLflow sur DagsHub** : chaque run enregistre ses hyperparamètres, la version des données, ses courbes et ses métriques finales. Son nom résume sa configuration, par exemple `dpo-lora-r16-v5-sigmoid+sft-beta0.1-lr5e-05-seed42` pour le DPO retenu. Les métriques de chaque contrôle (préférences par type d'erreur, exactitude, format, test de McNemar) y sont enregistrées.
 - **Checkpoints** : une sauvegarde tous les 25 pas, avec reprise possible après une interruption. Le meilleur checkpoint, selon la perte de validation, est rechargé à la fin.
-- **Configuration** : un fichier `run_config.json` accompagne chaque adaptateur (réglages, tailles des données, graine) ; graine fixe (42) pour toutes les étapes aléatoires.
+- **Configuration** : un fichier `run_config.json` accompagne chaque adaptateur (réglages, tailles des données, graine), publié avec les deux adaptateurs LoRA dans le dépôt du modèle ; graine fixe (42) pour toutes les étapes aléatoires.
 
 # 5. Évaluation et résultats
 
@@ -453,13 +453,12 @@ Mesures du modèle final sur `/triage`, avec 100 requêtes par niveau de charge,
 
 | Requêtes simultanées | Local : médiane / p95 | Local : débit | Cloud : médiane / p95 | Cloud : débit |
 |---|---|---|---|---|
-| 1 | 82 / 94 ms | 12,0 req/s | 546 / 614 ms | 1,8 req/s |
-| 10 | 216 / 252 ms | 46,3 req/s | 587 / 1 309 ms | 14,6 req/s |
-| 50 | 754 / 805 ms | 63,8 req/s | 1 320 / 1 811 ms | 31,3 req/s |
+| 1 | 41 / 49 ms | 23,5 req/s | 442 / 510 ms | 2,2 req/s |
+| 10 | 169 / 199 ms | 61,2 req/s | 431 / 1 092 ms | 19,5 req/s |
+| 50 | 587 / 791 ms | 72,4 req/s | 1 093 / 1 627 ms | 36,7 req/s |
 
-- **Le batching continu fonctionne** : de 1 à 50 requêtes simultanées, le débit est multiplié par 5, pour une latence médiane qui reste sous la seconde. Pendant l'entraînement, la génération plafonnait à environ 2 réponses par seconde.
-- **vLLM seul** répond en 38 ms au premier token (TTFT) et produit ensuite un token toutes les 7 ms (TPOT) : l'essentiel du temps est passé à générer la réponse.
-- **La réponse de triage tient en une ligne** (le niveau choisi) : la latence est faible et régulière, avec un p95 proche de la médiane.
+- **Le batching continu fonctionne** : de 1 à 50 requêtes simultanées, le débit local est multiplié par 3, pour une latence médiane qui reste sous la seconde. Pendant l'entraînement, la génération plafonnait à environ 2 réponses par seconde.
+- **Un seul token généré** : l'API ne demande au modèle que la lettre du niveau, avec ses probabilités. La latence se réduit presque au temps du premier token de vLLM (37 ms), et reste régulière (p95 proche de la médiane).
 - **Dans le cloud, le réseau s'ajoute** : chaque requête traverse Internet jusqu'au Space, puis du Space à l'endpoint, sur un T4 moins rapide que la RTX 3080. Toutes les requêtes aboutissent, même à 50 simultanées. En production, placer l'API et le GPU au même endroit supprimerait l'essentiel de ce surcoût.
 
 ## 6.5 Robustesse

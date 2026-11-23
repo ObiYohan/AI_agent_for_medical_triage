@@ -84,6 +84,31 @@ DPO, ni entre entraînement et évaluation).
 Le terme de vraisemblance maintient le format : sans lui, une réponse sur dix ajoutait une explication.
 Outils : PyTorch, Transformers, PEFT, TRL, MLflow.
 
+### Adaptateurs LoRA
+
+Les poids à la racine du dépôt sont le modèle fusionné. Les deux adaptateurs LoRA qui le composent sont publiés à
+part, avec la configuration de leur run (`run_config.json` : réglages, tailles des données, graine) :
+
+| Dossier | Adaptateur | S'applique à | Taille |
+|---|---|---|---|
+| `adapters/sft` | SFT, rang 16 sur toutes les couches linéaires (17,4 M paramètres, 1 % du modèle) | `Qwen/Qwen3-1.7B-Base` | 70 Mo |
+| `adapters/dpo` | DPO, même configuration | le modèle SFT **fusionné** | 70 Mo |
+
+Le fichier `adapter_config.json` du DPO cite `Qwen/Qwen3-1.7B-Base` : c'est l'architecture d'origine, mais
+l'adaptateur doit être appliqué après la fusion du SFT. Cet enchaînement redonne exactement les poids publiés
+(écart maximal nul sur les 310 tenseurs) :
+
+```python
+import torch
+from peft import PeftModel
+from transformers import AutoModelForCausalLM
+
+repo = "0biyohan/qwen3-1.7b-medical-triage-fr"
+model = AutoModelForCausalLM.from_pretrained("Qwen/Qwen3-1.7B-Base", dtype=torch.bfloat16)
+model = PeftModel.from_pretrained(model, repo, subfolder="adapters/sft").merge_and_unload()  # modèle SFT
+model = PeftModel.from_pretrained(model, repo, subfolder="adapters/dpo").merge_and_unload()  # SFT + DPO
+```
+
 ## Résultats
 
 **Triage**, sur 60 cas publics ([clinical-triage-bilingual](https://huggingface.co/datasets/BenoitJT-GIRARD/clinical-triage-bilingual),
@@ -108,7 +133,7 @@ vitales : elle n'est pas utilisée.
   0,62 → 0,02 par question.
 - Préférences DPO sur les paires de test : 0,68 en français, 0,74 en anglais (test revu par des experts).
 
-**Latence** (vLLM, une requête de triage, médiane) : 82 ms en local, 0,55 s sur GPU T4 dans le cloud, réseau compris.
+**Latence** (vLLM, une requête de triage, médiane) : 41 ms en local, 0,44 s sur GPU T4 dans le cloud, réseau compris.
 
 ## Limites
 

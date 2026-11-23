@@ -61,7 +61,8 @@ sans cas clinique). Ni l'un ni l'autre ne ressemble à l'entrée d'un triage.
 | `sft-lora-r16-v4-seed42` | rang 16, lr 2e-4, 1 époque, 1 536 tokens, perte sur toutes les réponses | QCM `mcqu` : 0,43 de bonnes réponses (réponse naïve : 0,21) |
 | `dpo-lora-r16-v5-sigmoid+sft-beta0.1-lr5e-05-seed42` (retenu) | perte DPO + vraisemblance de la `chosen`, beta 0,1, lr 5e-5, 1 époque | préférences justes : 0,68 (fr), 0,74 (en) ; format 0,99 ; aucune régression (McNemar p = 0,36) ; propositions en trop 0,62 → 0,02 |
 
-Modèle final fusionné : `outputs/dpo-lora-r16-v5-sigmoid+sft-beta0.1-lr5e-05-seed42/merged`, publié sur le Hub.
+Modèle final fusionné : `outputs/dpo-lora-r16-v5-sigmoid+sft-beta0.1-lr5e-05-seed42/merged`, publié sur le Hub avec
+les deux adaptateurs LoRA (`adapters/sft`, `adapters/dpo`) et la recette pour les réappliquer (fiche du modèle).
 Servi par vLLM (`scripts/evaluate.py`, 380 QCM du test et 28 contrôles de sécurité) : 0,43 en `mcqu`, 4
 recommandations dangereuses sur 12 cas pièges. Deux essais DPO
 antérieurs (données v4, avec et sans terme de vraisemblance) sont comparés dans le rapport (partie 4.3).
@@ -183,6 +184,10 @@ Le port de vLLM n'est pas publié : seule l'API est accessible. Démonstration t
 - **Déploiement de l'API** : `scripts/deploy_space.py` envoie au Space le code de l'API et le module du prompt
   (`deploy/space/` : `Dockerfile`, `README.md`) ; le Space reconstruit son image. La CI le fait à chaque commit sur
   `master` (job `deploy-cloud`, secret GitHub `HF_TOKEN_SPACE` : jeton en écriture limité au Space).
+- **Modèle de l'endpoint** : `scripts/sync_endpoint.py` aligne le dépôt et la révision de l'endpoint sur ceux de
+  `docker-compose.yml` (une pause est conservée, rien n'est fait s'il est à jour). La CI le lance après le Space
+  (secret GitHub `HF_TOKEN_ENDPOINT` : jeton limité à la gestion des Inference Endpoints ; sans lui, étape ignorée).
+  Nouvelle version du modèle : changer `MODEL_REVISION` dans `docker-compose.yml`, puis pousser sur `master`.
 - **Configuration du Space** (*Settings → Variables and secrets*) : secrets `API_KEY`, `VLLM_URL` (URL de l'endpoint),
   `VLLM_API_KEY` (jeton Hugging Face en lecture) ; variables `MODEL_NAME=qwen3-medical`, `VLLM_TIMEOUT=300`.
 - **Allumer et éteindre** : `uv run python scripts/cloud.py start` (relance l'endpoint et le Space, attend qu'ils soient
