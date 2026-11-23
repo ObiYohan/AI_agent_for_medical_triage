@@ -177,7 +177,7 @@ Le port de vLLM n'est pas publié : seule l'API est accessible. Démonstration t
 
 | Brique | Où | Coût |
 |---|---|---|
-| API FastAPI | Space Docker privé [`0biyohan/triage-api`](https://huggingface.co/spaces/0biyohan/triage-api) (CPU) | gratuit |
+| API FastAPI et interface web | Space Docker [`0biyohan/triage-api`](https://huggingface.co/spaces/0biyohan/triage-api) (CPU) ; interface Gradio sous `/ui` (page d'accueil), protégée par mot de passe | gratuit |
 | Inférence vLLM | Inference Endpoint Hugging Face (GPU T4, AWS Irlande), mis en pause hors démonstration | 0,50 $/h, seulement allumé |
 | Journal d'audit | logs du conteneur du Space (lignes `AUDIT {…}`, sans texte patient) | gratuit |
 
@@ -189,7 +189,12 @@ Le port de vLLM n'est pas publié : seule l'API est accessible. Démonstration t
   (secret GitHub `HF_TOKEN_ENDPOINT` : jeton limité à la gestion des Inference Endpoints ; sans lui, étape ignorée).
   Nouvelle version du modèle : changer `MODEL_REVISION` dans `docker-compose.yml`, puis pousser sur `master`.
 - **Configuration du Space** (*Settings → Variables and secrets*) : secrets `API_KEY`, `VLLM_URL` (URL de l'endpoint),
-  `VLLM_API_KEY` (jeton Hugging Face en lecture) ; variables `MODEL_NAME=qwen3-medical`, `VLLM_TIMEOUT=300`.
+  `VLLM_API_KEY` (jeton Hugging Face en lecture), `UI_PASSWORD` (mot de passe de l'interface `/ui`) ; variables
+  `MODEL_NAME=qwen3-medical`, `VLLM_TIMEOUT=300`, `UI_USER` (identifiant, défaut `jury`).
+- **Interface web** (`api/web_ui.py`) : la page d'accueil du Space redirige vers `/ui`, derrière l'identifiant et le
+  mot de passe ; chaque évaluation passe par le même traitement que `POST /triage` et figure au journal d'audit.
+  Sans `UI_PASSWORD`, l'interface n'est pas servie. Le mot de passe protège l'endpoint payant, qu'une évaluation
+  peut réveiller : à ne communiquer qu'au jury.
 - **Allumer et éteindre** : `uv run python scripts/cloud.py start` (relance l'endpoint et le Space, attend qu'ils soient
   prêts), `stop` (met l'endpoint en pause : plus de facturation GPU), `status`. Nom de l'endpoint : `HF_ENDPOINT_NAME`.
 - **Démonstration** : `API_URL=https://0biyohan-triage-api.hf.space ./scripts/demo.sh`, ou l'interface `scripts/ui.py`

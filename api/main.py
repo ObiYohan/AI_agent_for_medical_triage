@@ -14,6 +14,9 @@ Variables d'environnement :
     TRIAGE_CALIBRATION  0 (défaut) : niveau brut du modèle ; 1 : niveau corrigé de son a priori (voir triage.py).
                   Expérimental : sur 60 cas externes, elle sous-trie plus de la moitié des urgences vitales
     AUDIT_LOG     chemin du journal d'audit (défaut : logs/audit.jsonl), aussi écrit sur la sortie standard
+    UI_PASSWORD   active l'interface web (Gradio, `web_ui.py`) sous /ui, avec ce mot de passe (démo cloud ; Gradio
+                  requis : deploy/space/requirements-ui.txt). UI_USER : identifiant (défaut : jury). TRIAGE_CASES :
+                  cas de démonstration proposés dans l'interface (défaut : triage_cases.json à côté de l'API)
 """
 
 import hashlib
@@ -193,3 +196,17 @@ def unavailable(audit: dict, start: float, error: Exception, flags: list[str]) -
         return
     write_audit(audit | {"status": "error", "error": type(error).__name__, "latency_ms": elapsed_ms(start)})
     raise HTTPException(status_code=503, detail="Serveur d'inférence indisponible") from error
+
+
+# Interface web de démonstration (Space) : seulement si un mot de passe est défini
+if os.environ.get("UI_PASSWORD"):
+    import web_ui
+
+    async def ui_health() -> dict:
+        return await health(settings()["api_key"])  # état de vLLM compris : l'utilisateur est authentifié
+
+    app = web_ui.mount(
+        app, triage, ui_health,
+        cases=web_ui.load_cases(Path(os.environ.get("TRIAGE_CASES", Path(__file__).with_name("triage_cases.json")))),
+        user=os.environ.get("UI_USER", "jury"), password=os.environ["UI_PASSWORD"],
+    )

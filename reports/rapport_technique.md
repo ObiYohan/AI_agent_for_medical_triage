@@ -441,7 +441,7 @@ Les seuils et les questions sont des valeurs de démonstration, à valider par l
 | | Local | Cloud (démonstration) |
 |---|---|---|
 | Inférence | vLLM 0.32 sur la RTX 3080 | Inference Endpoint Hugging Face (AWS, Irlande) : vLLM 0.32, GPU T4, accès par jeton |
-| API | conteneur Docker | Space Docker privé (CPU gratuit) |
+| API | conteneur Docker | Space Docker (CPU gratuit), avec une interface web protégée par mot de passe |
 | Journal d'audit | fichier JSONL | logs du Space (disque effacé au redémarrage) |
 | Coût | — | 0,50 $/h, seulement allumé ; pause manuelle, veille après 15 min |
 

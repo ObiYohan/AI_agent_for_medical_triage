@@ -7,7 +7,7 @@
 **Outils** :
 
 - `scripts/demo.sh` déroule les démonstrations du terminal, étape par étape (Entrée pour passer à la suivante). Une étape seule : `./scripts/demo.sh <numéro>`. Démo cloud : `API_URL=https://0biyohan-triage-api.hf.space ./scripts/demo.sh`.
-- `scripts/ui.py`, une interface web (Gradio), si le jury veut tester un patient de son choix : `uv run --with gradio python scripts/ui.py`, puis http://127.0.0.1:7860 (cible locale ou cloud au choix).
+- L'interface web (Gradio) : en ligne, page d'accueil du Space (https://0biyohan-triage-api.hf.space, identifiant et mot de passe), ou sur le poste avec `uv run --with gradio python scripts/ui.py` (cible locale ou cloud). Elle sert si le jury veut tester un patient de son choix, ou le faire lui-même.
 
 ## 1. Plan minuté
 
@@ -184,7 +184,7 @@ Trois phrases :
 5. La page Hugging Face du modèle
 6. GitHub Actions (dernière exécution réussie)
 7. Le PDF du rapport
-8. En réserve : l'interface `scripts/ui.py`, pour tester un patient proposé par le jury
+8. En réserve : l'interface web du Space (endpoint réveillé), pour tester un patient proposé par le jury ; le mot de passe peut lui être confié pour la durée de la soutenance
 
 ## 4. Questions probables du jury
 

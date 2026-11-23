@@ -28,6 +28,9 @@ FILES = {  # chemin dans le Space -> fichier du dépôt
     "requirements.txt": "api/requirements.txt",
     "main.py": "api/main.py",
     "triage.py": "api/triage.py",
+    "web_ui.py": "api/web_ui.py",
+    "triage_cases.json": "scripts/triage_cases.json",
+    "requirements-ui.txt": "deploy/space/requirements-ui.txt",
     "projet_14/__init__.py": "src/projet_14/__init__.py",
     "projet_14/mediqal.py": "src/projet_14/mediqal.py",
 }

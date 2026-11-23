@@ -20,6 +20,7 @@ SFT LoRA + DPO), servi par vLLM sur un Inference Endpoint Hugging Face.
 |---|---|
 | `GET /health` | état de l'API et du serveur d'inférence |
 | `POST /triage` | niveau de priorité, signes de gravité, justification, conduite à tenir et questions complémentaires (clé obligatoire dans l'en-tête `X-API-Key`) |
+| `GET /ui` (page d'accueil) | interface web de démonstration (Gradio) : formulaire patient, cas types, niveau expliqué ; identifiant et mot de passe communiqués à part |
 | `GET /docs` | documentation interactive |
 
 Chaque requête est tracée (journal d'audit sans texte patient, visible dans les logs du Space).

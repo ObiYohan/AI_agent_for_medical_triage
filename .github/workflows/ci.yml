@@ -22,7 +22,7 @@ jobs:
         with:
           python-version: "3.12"
       # Dépendances de l'API seulement : pas de torch ni de Presidio
-      - run: pip install -r api/requirements.txt pytest
+      - run: pip install -r api/requirements.txt -r deploy/space/requirements-ui.txt pytest
       - run: pytest tests -v
 
   image:
