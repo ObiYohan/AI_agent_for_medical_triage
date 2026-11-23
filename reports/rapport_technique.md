@@ -132,7 +132,7 @@ Le schéma suit le parcours des données, des sources publiques jusqu'à la rép
 
 | Étape | Où | Contenu |
 |---|---|---|
-| `tests` | serveur GitHub | 20 tests de l'API et des métadonnées du Space, vLLM simulé (pas de GPU) |
+| `tests` | serveur GitHub | 42 tests de l'API et des métadonnées du Space, vLLM simulé (pas de GPU) |
 | `image` | serveur GitHub | construction de l'image ; sur `master`, publication sur GHCR |
 | `deploy` | machine GPU | mise à jour de la pile locale, puis tests d'intégration |
 | `deploy-cloud` | serveur GitHub | mise à jour de l'API sur le Space, puis test de fumée |

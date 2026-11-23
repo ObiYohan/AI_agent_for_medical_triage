@@ -1,0 +1,9 @@
+{
+  "_titre": "Rhume d'un adulte, constantes normales : la règle d'accueil des motifs bénins",
+  "_attendu": "urgence différée",
+  "age": 35,
+  "sexe": "F",
+  "motif": "rhume",
+  "symptomes": "nez qui coule et toux légère depuis 3 jours, sans fièvre",
+  "constantes": {"fc": 72, "pas": 120, "pad": 75, "spo2": 99, "temperature": 37.0}
+}

@@ -128,8 +128,11 @@ step3() {
 }
 
 step4() {
-  title "4. Une situation bénigne : la limite du modèle"
-  say "Le modèle n'a jamais appris le triage : il sur-trie (erreur prudente, mais qui engorgerait l'accueil)."
+  title "4. Situations bénignes : la règle d'accueil, puis la limite du modèle"
+  say "Motif bénin, adulte, constantes complètes et normales, aucun signe d'alerte : urgence différée, par règle."
+  ask "$DEMO/03_rhume.json"
+  pause
+  say "Hors de la liste des motifs bénins, le modèle décide : il n'a jamais appris le triage, et il sur-trie."
   ask "$DEMO/03_entorse.json"
 }
 
@@ -194,6 +197,7 @@ step8() {
 links = {
     "Suivi des entraînements": "https://dagshub.com/obiyohan/my-ml-mlflow.mlflow",
     "Modèle (poids finaux)": "https://huggingface.co/0biyohan/qwen3-1.7b-medical-triage-fr",
+    "Dataset (SFT + DPO)": "https://huggingface.co/datasets/0biyohan/triage-medical-bilingual",
     "Pipeline CI/CD": "https://github.com/ObiYohan/AI_agent_for_medical_triage/actions",
     "Image de l'API (GHCR)": "https://github.com/ObiYohan?tab=packages",
     "Rapport technique": "reports/rapport.pdf",
