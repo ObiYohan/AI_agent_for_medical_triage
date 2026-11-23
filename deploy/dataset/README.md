@@ -43,14 +43,17 @@ Données d'entraînement du modèle [`0biyohan/qwen3-1.7b-medical-triage-fr`](ht
 POC d'agent de triage aux urgences. Cas cliniques et questions médicales sélectionnés pour le triage (patient décrit,
 constantes vitales, vocabulaire d'urgence), nettoyés et anonymisés.
 
-| Config | Format | Langue | Contenu |
-|---|---|---|---|
-| `sft_mediqal_oeq` | `messages` | fr | 1 098 questions ouvertes (204 cas) |
-| `sft_mediqal_mcqu` | `messages` | fr | 1 200 QCM à une réponse (293 cas) |
-| `sft_mediqal_mcqm` | `messages` | fr | 700 QCM à plusieurs réponses (251 cas) |
-| `sft_ultramedical` | `messages` | en | 2 000 questions |
-| `dpo_mediqal` | `prompt` / `chosen` / `rejected` | fr | 2 156 paires : corrigé contre une erreur construite |
-| `dpo_ultramedical` | `prompt` / `chosen` / `rejected` | en | 800 paires ; `test` : 756 paires revues par des experts |
+| Config | Format | Langue | Lignes (train / validation / test) | Contenu |
+|---|---|---|---|---|
+| `sft_mediqal_oeq` | `messages` | fr | 248 / 37 / 84 | 1 098 questions ouvertes |
+| `sft_mediqal_mcqu` | `messages` | fr | 253 / 37 / 63 | 1 200 QCM à une réponse |
+| `sft_mediqal_mcqm` | `messages` | fr | 185 / 27 / 51 | 700 QCM à plusieurs réponses |
+| `sft_ultramedical` | `messages` | en | 1 400 / 200 / 400 | 2 000 questions, une par ligne |
+| `dpo_mediqal` | `prompt` / `chosen` / `rejected` | fr | 1 507 / 201 / 448 | paires : corrigé contre une erreur construite |
+| `dpo_ultramedical` | `prompt` / `chosen` / `rejected` | en | 727 / 73 / 756 | paires ; `test` revu par des experts |
+
+Dans les configs `sft_mediqal_*`, une ligne contient plusieurs questions sur un même patient, chacune avec sa
+réponse : il y a donc moins de lignes que de questions.
 
 ```python
 from datasets import load_dataset

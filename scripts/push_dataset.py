@@ -27,7 +27,7 @@ def main() -> None:
     args = parser.parse_args()
 
     api = HfApi()
-    api.create_repo(REPO_ID, repo_type="dataset", private=True, exist_ok=True)
+    api.create_repo(REPO_ID, repo_type="dataset", private=False, exist_ok=True)  # public : livrable consultable
     with tempfile.TemporaryDirectory() as tmp:
         for folder, source in SOURCES.items():
             files = sorted(source.glob(f"{folder}_*.anonymized.jsonl"))

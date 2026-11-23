@@ -514,9 +514,10 @@ cas ni aucune question n’est commun aux deux.</p>
 <p><strong>Formats standard.</strong> JSONL lisible par Hugging Face
 <code>datasets</code> : <code>messages</code> pour le SFT,
 <code>prompt</code> / <code>chosen</code> / <code>rejected</code> pour
-le DPO. Chaque exemple garde ses métadonnées (source, langue,
-identifiants, cas, spécialité, corrigé, contrôle appliqué, critères de
-triage, noms anonymisés), documentées dans le README.</p>
+le DPO. Chaque exemple garde ses métadonnées, documentées dans le
+README. Le jeu est public sur Hugging Face Hub (<a href="https://huggingface.co/datasets/0biyohan/triage-medical-bilingual"><code>0biyohan/triage-medical-bilingual</code></a>,
+version <code>v1.0</code>, celle du modèle final), avec sources,
+licences et anonymisation.</p>
 <h2 id="sélection-pour-le-triage">3.3 Sélection pour le triage</h2>
 <p>Le corpus complet compte près de 30 000 questions en français. On
 garde les <strong>cas les plus proches du triage</strong>, par cas
@@ -1639,11 +1640,10 @@ donnée : c’est la trace de référence.</p>
 médicaux ; il n’a jamais appris à attribuer un niveau de priorité. Il
 sur-trie (36 cas sur 60 dans l’évaluation externe), et distingue mal une
 urgence vitale d’une urgence modérée.</li>
-<li><strong>Pas de questionnaire adaptatif</strong> : le modèle répond à
-une question complète, il ne mène pas d’entretien avec le patient.</li>
-<li><strong>Peu d’explications</strong> : en français, les réponses
-donnent la ou les propositions retenues, sans justification. Seule la
-partie anglaise a appris à raisonner.</li>
+<li><strong>Questionnaire par règles</strong> : questions fixes selon le
+motif ; le modèle ne mène pas d’entretien.</li>
+<li><strong>Peu d’explications</strong> : en français, le modèle donne
+la proposition retenue, sans justification.</li>
 <li><strong>Pas d’intégration au SIH</strong> : l’API reçoit une
 description du patient en JSON, pas un dossier patient.</li>
 </ul>
@@ -1666,9 +1666,8 @@ une proposition manquante n’est repérée qu’au hasard.</li>
 ne relit les données. La proximité avec le triage est repérée par des
 expressions régulières ; les erreurs DPO françaises sont construites à
 partir du corrigé, pas tirées des erreurs réelles du modèle.</li>
-<li><strong>Préférences jugées par GPT-4</strong> : en anglais, hors
-QCM, les préférences reposent sur les notes d’un autre LLM. Seul le jeu
-de test a été revu par des experts.</li>
+<li><strong>Préférences jugées par GPT-4</strong> : en anglais, hors QCM
+; seul le test a été revu par des experts.</li>
 <li><strong>Pas de données structurées</strong> : symptômes, antécédents
 et constantes figurent dans le texte libre des cas, pas dans des champs
 dédiés.</li>
@@ -1739,60 +1738,49 @@ pas trier.</p>
 <ul>
 <li>Construire avec les infirmiers d’accueil (IOA) du CHSA quelques
 milliers de cas annotés selon l’échelle de tri du service (par exemple
-FRENCH, de la SFMU).</li>
+FRENCH, de la SFMU), dont une partie par deux soignants : leur accord
+est le plafond de performance à viser.</li>
 <li>Structurer chaque cas : motif de recours, symptômes, antécédents,
 constantes vitales, niveau de priorité et justification (schéma de
 métadonnées prévu en phase 1).</li>
-<li>Partir de dossiers historiques pseudonymisés (accord du délégué à la
-protection des données, hébergement HDS), avec la chaîne d’anonymisation
-de ce POC.</li>
-<li>Faire annoter une partie des cas par deux soignants, pour mesurer
-leur accord : c’est le plafond de performance à viser.</li>
+<li>Partir de dossiers historiques pseudonymisés (accord du DPO,
+hébergement HDS), avec la chaîne d’anonymisation du POC.</li>
 </ul>
 <p><strong>Étape 2 : un modèle de triage.</strong></p>
 <ul>
-<li><strong>Sortie structurée</strong> : niveau, justification et
-signaux d’alerte, en JSON validé par l’API.</li>
-<li><strong>Garde-fous déterministes</strong> : étendre, avec l’équipe
-médicale, les règles de l’API (constantes hors seuils).</li>
-<li><strong>Abstention</strong> : le modèle doit pouvoir répondre « avis
-soignant requis » plutôt que d’inventer.</li>
-<li><strong>Protocoles du CHSA</strong> : fournis au modèle au moment de
+<li><strong>Sortie structurée et abstention</strong> : niveau,
+justification et alertes en JSON validé par l’API, ou « avis soignant
+requis » plutôt qu’une invention.</li>
+<li><strong>Règles validées</strong> : étendre avec l’équipe médicale
+les règles de l’API (constantes hors seuils, motifs bénins).</li>
+<li><strong>Protocoles du CHSA</strong> fournis au modèle au moment de
 répondre (RAG), plutôt que mémorisés.</li>
 <li><strong>DPO sur les vraies erreurs</strong> du modèle, validées par
-des soignants.</li>
-<li><strong>Montée en taille</strong> : 32B ou plus une fois le jeu de
-triage disponible, jugée d’abord sur le taux de sous-triage des urgences
-vitales, avant l’exactitude globale.</li>
+des soignants ; <strong>montée en taille</strong> (32B ou plus), jugée
+d’abord sur le sous-triage des urgences vitales.</li>
 </ul>
 <p><strong>Étape 3 : une infrastructure de production.</strong></p>
 <ul>
-<li><strong>Hébergement</strong> : GPU sur site ou chez un hébergeur
-certifié HDS ; un modèle de 32B demande environ 64 Go de mémoire GPU en
-bf16 (deux GPU de 48 Go), moins avec une quantification.</li>
+<li><strong>Hébergement</strong> : GPU sur site ou chez un hébergeur HDS
+; un 32B demande environ 64 Go de mémoire GPU (deux GPU de 48 Go), moins
+s’il est quantifié.</li>
 <li><strong>Intégration au SIH</strong> : HL7 FHIR, pour lire le dossier
 et y écrire la proposition de triage.</li>
-<li><strong>Sécurité</strong> : authentification par l’annuaire du CHSA
-plutôt qu’une clé partagée ; journal d’audit inaltérable, à durée de
-conservation définie.</li>
-<li><strong>Surveillance</strong> : tableaux de bord et alertes
-(latence, erreurs, répartition des niveaux) pour détecter une
-dérive.</li>
-<li><strong>Déploiement</strong> : registre des modèles et chaîne CI/CD
-de ce POC, avec un environnement de recette.</li>
+<li><strong>Sécurité et surveillance</strong> : authentification par
+l’annuaire du CHSA, journal d’audit inaltérable à durée de conservation
+définie ; tableaux de bord et alertes (latence, erreurs, répartition des
+niveaux).</li>
+<li><strong>Déploiement</strong> : registre des modèles, CI/CD du POC,
+environnement de recette.</li>
 </ul>
 <p><strong>Étape 4 : un pilote clinique.</strong></p>
 <ul>
-<li><strong>Étude « en parallèle »</strong> : pendant plusieurs
-semaines, le système propose un niveau sans que les soignants le voient
-; on compare ensuite ses propositions à leurs décisions.</li>
-<li><strong>Critères</strong> : concordance avec les IOA, taux de
-sous-triage, temps gagné, acceptabilité par les équipes.</li>
+<li><strong>Étude « en parallèle »</strong> : pendant quelques semaines,
+le système propose un niveau que les soignants ne voient pas ; on le
+compare à leurs décisions (concordance, sous-triage, temps gagné).</li>
 <li><strong>Cadre réglementaire</strong> : dispositif médical et IA à
-haut risque possibles (règlements européens), à instruire dès l’étape
-1.</li>
-<li><strong>Usage</strong> : l’outil reste une aide ; le soignant
-décide, et chaque proposition est tracée.</li>
+haut risque (règlements européens), à instruire dès l’étape 1 ; l’outil
+reste une aide, le soignant décide.</li>
 </ul>
 </body>
 </html>

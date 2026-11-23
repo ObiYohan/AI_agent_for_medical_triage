@@ -41,7 +41,7 @@ sans cas clinique). Ni l'un ni l'autre ne ressemble à l'entrée d'un triage.
 - **Données dérivées** : nettoyées, filtrées et anonymisées (Presidio), au format JSONL (`messages` pour le SFT,
   `prompt` / `chosen` / `rejected` pour le DPO), lisible par `datasets`. Elles ne sont pas versionnées dans git
   (`data/` est ignoré) et se régénèrent avec les notebooks.
-- **Publication** : dataset privé [`0biyohan/triage-medical-bilingual`](https://huggingface.co/datasets/0biyohan/triage-medical-bilingual),
+- **Publication** : dataset public [`0biyohan/triage-medical-bilingual`](https://huggingface.co/datasets/0biyohan/triage-medical-bilingual),
   une configuration par notebook, versionné par étiquette (`v1.0` : SFT v4 + DPO v5). Envoi des seuls fichiers
   anonymisés et de leurs rapports : `uv run python scripts/push_dataset.py --tag v1.0`. Fiche : `deploy/dataset/README.md` ;
   fiche du modèle : `deploy/model/README.md`.
