@@ -55,9 +55,16 @@ def vllm_headers(config: dict) -> dict:
     return {"Authorization": f"Bearer {config['vllm_api_key']}"} if config["vllm_api_key"] else {}
 
 
-def check_api_key(key: str | None = Security(APIKeyHeader(name="X-API-Key", auto_error=False))) -> None:
+API_KEY_HEADER = APIKeyHeader(name="X-API-Key", auto_error=False)
+
+
+def valid_key(key: str | None) -> bool:
     expected = settings()["api_key"]
-    if not expected or not key or not secrets.compare_digest(key, expected):
+    return bool(expected and key and secrets.compare_digest(key, expected))
+
+
+def check_api_key(key: str | None = Security(API_KEY_HEADER)) -> None:
+    if not valid_key(key):
         # Accès refusé : tracé aussi (sans la clé reçue)
         write_audit({"timestamp": datetime.now(timezone.utc).isoformat(), "status": "unauthorized"})
         raise HTTPException(status_code=401, detail="Clé d'API absente ou invalide")
@@ -115,9 +122,12 @@ def elapsed_ms(start: float) -> int:
 
 
 @app.get("/health")
-async def health() -> dict:
-    # L'API répond ; vLLM est-il prêt ?
+async def health(key: str | None = Security(API_KEY_HEADER)) -> dict:
+    # L'API répond ; vLLM est-il prêt ? vLLM n'est interrogé qu'avec une clé valide : /health est ouvert à tous, et
+    # une requête vers un Inference Endpoint en veille le réveille (facturé). Sans clé, seul l'état de l'API est donné.
     # Sans X-Scale-Up-Timeout ni long délai : un endpoint en veille est signalé « indisponible » sans attendre son réveil
+    if not valid_key(key):
+        return {"api": "ok"}
     config = settings()
     try:
         async with httpx.AsyncClient(timeout=5) as client:

@@ -111,8 +111,8 @@ EOF
 step1() {
   title "1. Le service est en ligne"
   say "L'API répond, et vérifie elle-même que le serveur d'inférence vLLM (GPU) est prêt."
-  cmd "curl $API_URL/health"
-  curl -s "${PLATFORM[@]}" "$API_URL/health" | python3 -m json.tool
+  cmd "curl $API_URL/health -H \"X-API-Key: \$API_KEY\""
+  curl -s "${PLATFORM[@]}" -H "X-API-Key: $API_KEY" "$API_URL/health" | python3 -m json.tool
 }
 
 step2() {

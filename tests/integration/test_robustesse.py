@@ -47,7 +47,8 @@ def post(body: dict, key: str | None = API_KEY) -> httpx.Response:
 
 
 def health() -> dict:
-    return httpx.get(f"{API_URL}/health", headers=PLATFORM_HEADERS, timeout=10).json()
+    # Avec la clé : l'état de vLLM n'est donné qu'aux détenteurs de la clé d'API
+    return httpx.get(f"{API_URL}/health", headers=PLATFORM_HEADERS | {"X-API-Key": API_KEY}, timeout=10).json()
 
 
 def patient(case: dict) -> dict:

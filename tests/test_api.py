@@ -362,8 +362,8 @@ def test_vllm_distant_avec_jeton(client, vllm_server, monkeypatch):
     assert request.headers["x-scale-up-timeout"] == "300"
     assert timeouts == [300.0]
 
-    # /health : même jeton, mais sans attendre un réveil
-    assert client.get("/health").json() == {"api": "ok", "vllm": "ok"}
+    # /health avec la clé d'API : même jeton, mais sans attendre un réveil
+    assert client.get("/health", headers={"X-API-Key": API_KEY}).json() == {"api": "ok", "vllm": "ok"}
     assert requests[-1].headers["authorization"] == "Bearer hf_jeton_de_test"
     assert "x-scale-up-timeout" not in requests[-1].headers
     assert timeouts[-1] == 5
@@ -371,7 +371,17 @@ def test_vllm_distant_avec_jeton(client, vllm_server, monkeypatch):
 
 def test_health_sans_vllm(client, monkeypatch):
     monkeypatch.setenv("VLLM_URL", "http://127.0.0.1:9")  # aucun serveur à cette adresse
-    assert client.get("/health").json() == {"api": "ok", "vllm": "indisponible"}
+    assert client.get("/health", headers={"X-API-Key": API_KEY}).json() == {"api": "ok", "vllm": "indisponible"}
+
+
+@pytest.mark.parametrize("headers", [{}, {"X-API-Key": "mauvaise"}])
+def test_health_sans_cle_n_interroge_pas_vllm(client, vllm_server, monkeypatch, headers):
+    # /health est ouvert à tous : sans clé valide, l'Inference Endpoint n'est pas contacté (une requête le réveillerait)
+    monkeypatch.setenv("VLLM_URL", "https://exemple.endpoints.huggingface.cloud")
+    requests, _ = vllm_server
+    response = client.get("/health", headers=headers)
+    assert (response.status_code, response.json()) == (200, {"api": "ok"})
+    assert requests == []
 
 
 def test_plus_de_point_d_acces_qcm(client):

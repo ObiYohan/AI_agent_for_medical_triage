@@ -1367,8 +1367,9 @@ sait répartir un grand modèle (32B et plus) sur plusieurs GPU.</li>
 <h2 id="lapi-et-la-sécurité-daccès">6.2 L’API et la sécurité
 d’accès</h2>
 <p>L’API FastAPI expose deux points d’accès : <code>POST /triage</code>
-et <code>GET /health</code> (état de l’API et de vLLM). vLLM n’est
-jamais exposé directement : seule l’API l’est.</p>
+et <code>GET /health</code> (état de l’API ; celui de vLLM avec la clé
+seulement, pour qu’un appel anonyme ne réveille pas l’endpoint cloud,
+facturé). vLLM n’est jamais exposé directement : seule l’API l’est.</p>
 <p><strong>Le point d’accès de triage.</strong> Le soignant décrit le
 patient en langage naturel : âge, motif, symptômes, antécédents et, s’il
 les a, les constantes. En question libre, le modèle produit en français

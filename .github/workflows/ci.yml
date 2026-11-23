@@ -75,7 +75,7 @@ jobs:
       - name: Attente de vLLM
         run: |
           for i in $(seq 1 90); do
-            curl -fs localhost:8080/health | grep -q '"vllm":"ok"' && exit 0
+            curl -fs -H "X-API-Key: $API_KEY" localhost:8080/health | grep -q '"vllm":"ok"' && exit 0
             sleep 10
           done
           echo "vLLM n'est pas prêt après 15 min" && exit 1

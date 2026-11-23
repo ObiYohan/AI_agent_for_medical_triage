@@ -138,13 +138,13 @@ dépôt public [`0biyohan/qwen3-1.7b-medical-triage-fr`](https://huggingface.co/
 ```bash
 cp .env.example .env          # puis définir API_KEY (HF_TOKEN facultatif)
 docker compose up -d          # premier lancement : image vLLM (~10 Go) et modèle (3,4 Go), mis en cache ensuite
-curl localhost:8080/health
+export API_KEY=$(grep '^API_KEY=' .env | cut -d= -f2-)   # la clé n'est lue que par docker compose : la charger
+curl localhost:8080/health -H "X-API-Key: $API_KEY"
 ```
 
 Requête :
 
 ```bash
-export API_KEY=$(grep '^API_KEY=' .env | cut -d= -f2-)   # la clé n'est lue que par docker compose : la charger
 curl -X POST localhost:8080/triage -H "X-API-Key: $API_KEY" -H "Content-Type: application/json" -d '{
   "age": 58, "sexe": "M", "motif": "douleur thoracique",
   "symptomes": "douleur constrictive depuis 40 minutes, irradiant dans le bras gauche, avec des sueurs",
@@ -156,7 +156,7 @@ curl -X POST localhost:8080/triage -H "X-API-Key: $API_KEY" -H "Content-Type: ap
 | Élément | Rôle |
 |---|---|
 | `POST /triage` | patient décrit en langage naturel (âge, motif, symptômes, antécédents, constantes) → niveau de priorité (maximale, modérée, différée), signes de gravité (constantes hors seuils), justification (dont la raison d'une absence de réorientation), conduite à tenir, questions complémentaires. Le modèle évalue le niveau sur un choix fermé (calibration expérimentale de son a priori avec `TRIAGE_CALIBRATION=1`, désactivée par défaut : elle sous-trie des urgences vitales) ; des garde-fous sur les constantes (seuils de démonstration) ne peuvent que le relever ; une liste fermée de motifs bénins (rhume, mal de gorge, petite plaie…), chez un adulte aux constantes complètes et normales sans signe d'alerte, donne une urgence différée. Clé obligatoire (`X-API-Key`) |
-| `GET /health` | état de l'API et de vLLM |
+| `GET /health` | état de l'API ; avec la clé (`X-API-Key`), aussi celui de vLLM (sans clé, l'endpoint cloud n'est jamais interrogé, donc jamais réveillé) |
 | `scripts/ui.py` | interface web de test (Gradio) : formulaire patient, cas de démonstration, niveau et explication ; cible locale ou cloud au choix dans la page. `uv run --with gradio python scripts/ui.py`, puis http://127.0.0.1:7860 (écoute sur la machine seulement : la clé d'API reste côté serveur) |
 | `logs/audit.jsonl` | une ligne par requête : identifiant, horodatage, modèle, niveau retenu et sa source, latence, empreinte SHA-256 de l'entrée (le texte du patient n'est pas conservé) |
 | `tests/test_api.py` | tests de l'API sans GPU (vLLM simulé), lancés aussi par la CI : `uv run --with-requirements api/requirements.txt --with pytest pytest tests` |

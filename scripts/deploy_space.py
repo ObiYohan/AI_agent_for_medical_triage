@@ -66,7 +66,7 @@ def wait_and_check(api: HfApi, sha: str, timeout: int = 900) -> None:
         if time.time() > deadline:
             sys.exit(f"Le Space ne fait pas tourner {sha[:7]} après {timeout} s (état : {runtime.stage})")
         time.sleep(10)
-    # Test de fumée : l'API répond (vLLM peut être en pause : seul « api: ok » est exigé)
+    # Test de fumée : l'API répond. Sans clé d'API, /health n'interroge pas l'endpoint : il n'est pas réveillé
     response = httpx.get(f"{SPACE_URL}/health", headers={"Authorization": f"Bearer {get_token()}"}, timeout=30)
     print(f"GET /health : {response.status_code} {response.text}")
     if response.status_code != 200 or response.json().get("api") != "ok":

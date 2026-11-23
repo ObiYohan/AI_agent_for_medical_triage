@@ -415,7 +415,7 @@ Pendant l'entraînement, la génération avec la bibliothèque Transformers trai
 
 ## 6.2 L'API et la sécurité d'accès
 
-L'API FastAPI expose deux points d'accès : `POST /triage` et `GET /health` (état de l'API et de vLLM). vLLM n'est jamais exposé directement : seule l'API l'est.
+L'API FastAPI expose deux points d'accès : `POST /triage` et `GET /health` (état de l'API ; celui de vLLM avec la clé seulement, pour qu'un appel anonyme ne réveille pas l'endpoint cloud, facturé). vLLM n'est jamais exposé directement : seule l'API l'est.
 
 **Le point d'accès de triage.** Le soignant décrit le patient en langage naturel : âge, motif, symptômes, antécédents et, s'il les a, les constantes. En question libre, le modèle produit en français des réponses incohérentes : il n'a appris cette langue que sur des QCM. Il n'est donc utilisé que là où il est fiable, et des briques déterministes l'encadrent :
 
