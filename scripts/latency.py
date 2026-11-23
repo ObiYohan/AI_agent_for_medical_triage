@@ -35,7 +35,7 @@ EXPERIMENT = "qwen3-1.7b-serving"
 DAGSHUB_REPO_OWNER, DAGSHUB_REPO_NAME = "obiyohan", "my-ml-mlflow"
 # Taille des prompts synthétiques de vllm bench : proche des nôtres (~300 tokens ; réponses courtes)
 BENCH_INPUT_TOKENS, BENCH_OUTPUT_TOKENS = 300, 32
-MODEL_REPO = "0biyohan/qwen3-1.7b-medical-qcm-fr"  # tokenizer des prompts synthétiques (déjà en cache dans vLLM)
+MODEL_REPO = "0biyohan/qwen3-1.7b-medical-triage-fr"  # tokenizer des prompts synthétiques (déjà en cache dans vLLM)
 
 
 def load_cases(n: int) -> list[dict]:

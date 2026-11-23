@@ -41,8 +41,12 @@ sans cas clinique). Ni l'un ni l'autre ne ressemble à l'entrée d'un triage.
 - **Données dérivées** : nettoyées, filtrées et anonymisées (Presidio), au format JSONL (`messages` pour le SFT,
   `prompt` / `chosen` / `rejected` pour le DPO), lisible par `datasets`. Elles ne sont pas versionnées dans git
   (`data/` est ignoré) et se régénèrent avec les notebooks.
+- **Publication** : dataset privé [`0biyohan/triage-medical-bilingual`](https://huggingface.co/datasets/0biyohan/triage-medical-bilingual),
+  une configuration par notebook, versionné par étiquette (`v1.0` : SFT v4 + DPO v5). Envoi des seuls fichiers
+  anonymisés et de leurs rapports : `uv run python scripts/push_dataset.py --tag v1.0`. Fiche : `deploy/dataset/README.md` ;
+  fiche du modèle : `deploy/model/README.md`.
 - **Obligations** : CC-BY-4.0 et MIT imposent de citer la source et sa licence, ce que fait ce tableau et la fiche du modèle publié.
-- **Modèle publié** : [`0biyohan/qwen3-1.7b-medical-qcm-fr`](https://huggingface.co/0biyohan/qwen3-1.7b-medical-qcm-fr) (dépôt privé, Apache 2.0),
+- **Modèle publié** : [`0biyohan/qwen3-1.7b-medical-triage-fr`](https://huggingface.co/0biyohan/qwen3-1.7b-medical-triage-fr) (dépôt privé, Apache 2.0),
   modèle final (SFT v4 + DPO v5, ci-dessous) à la révision `4af91a7`, servi en local et dans le cloud. Version
   précédente (données v3) : révision `476fed3`.
 
@@ -128,7 +132,7 @@ Le modèle fusionné (SFT + DPO, section 7.5 de `notebook/sft_lora.ipynb`) est s
 API **FastAPI**. Les deux services tournent dans Docker (`docker-compose.yml`).
 
 Prérequis : Docker avec accès au GPU (NVIDIA Container Toolkit) et un jeton Hugging Face en lecture. Le modèle
-est téléchargé depuis le dépôt privé [`0biyohan/qwen3-1.7b-medical-qcm-fr`](https://huggingface.co/0biyohan/qwen3-1.7b-medical-qcm-fr),
+est téléchargé depuis le dépôt privé [`0biyohan/qwen3-1.7b-medical-triage-fr`](https://huggingface.co/0biyohan/qwen3-1.7b-medical-triage-fr),
 à une révision fixée dans `docker-compose.yml` (variables `MODEL` et `MODEL_REVISION` pour en changer).
 
 ```bash

@@ -13,7 +13,7 @@ short_description: API de triage médical, inférence vLLM sur HF Endpoint
 
 API FastAPI du POC d'agent de triage médical. À partir d'un patient décrit en langage naturel (âge, motif,
 symptômes, antécédents, constantes), elle propose un niveau de priorité avec le modèle
-[`0biyohan/qwen3-1.7b-medical-qcm-fr`](https://huggingface.co/0biyohan/qwen3-1.7b-medical-qcm-fr) (Qwen3-1.7B-Base,
+[`0biyohan/qwen3-1.7b-medical-triage-fr`](https://huggingface.co/0biyohan/qwen3-1.7b-medical-triage-fr) (Qwen3-1.7B-Base,
 SFT LoRA + DPO), servi par vLLM sur un Inference Endpoint Hugging Face.
 
 | Point d'accès | Rôle |

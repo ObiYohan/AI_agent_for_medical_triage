@@ -15,7 +15,7 @@ import httpx
 from huggingface_hub import create_inference_endpoint, get_token
 
 NAME = os.environ.get("HF_ENDPOINT_NAME", "qwen3-medical-qcm-fr")
-REPOSITORY = "0biyohan/qwen3-1.7b-medical-qcm-fr"
+REPOSITORY = "0biyohan/qwen3-1.7b-medical-triage-fr"
 REVISION = "4af91a7aa052c092cfb64568d441b84f8f4a88e8"  # même révision que docker-compose.yml (SFT v4 + DPO v5)
 VLLM_IMAGE = "vllm/vllm-openai:v0.32.0"  # même version que la pile locale
 

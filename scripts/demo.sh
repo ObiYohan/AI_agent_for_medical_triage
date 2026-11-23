@@ -193,7 +193,7 @@ step8() {
   python3 - <<'EOF'
 links = {
     "Suivi des entraînements": "https://dagshub.com/obiyohan/my-ml-mlflow.mlflow",
-    "Modèle (poids finaux)": "https://huggingface.co/0biyohan/qwen3-1.7b-medical-qcm-fr",
+    "Modèle (poids finaux)": "https://huggingface.co/0biyohan/qwen3-1.7b-medical-triage-fr",
     "Pipeline CI/CD": "https://github.com/ObiYohan/AI_agent_for_medical_triage/actions",
     "Image de l'API (GHCR)": "https://github.com/ObiYohan?tab=packages",
     "Rapport technique": "reports/rapport.pdf",
